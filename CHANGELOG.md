@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.0
+- **Cost per outcome** in `mmco compare`: everything a setup spent, including failed and rescued attempts, divided by the requests whose final result passed the check and had no hard failure. It is now the first column, and "vs base" compares it. Also available as `summarize(report, setups)` and `is_outcome(row)`.
+- Docs: positioning around outcomes and value shipped (three layers), how this differs from routers, gateways and eval suites, and what to track after shipping.
+
 ## 0.2.1
 - Docs only, so the PyPI page matches GitHub: version text, install / import / command names side by side, a compact method diagram. No code changes.
 

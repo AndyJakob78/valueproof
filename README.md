@@ -1,10 +1,10 @@
 # AI Mixed Model Cost Optimization
 
-**Cut the running cost of AI features by letting cheap and strong models work together — and measure what each change does to quality before it ships.**
+**Prove an AI cost cut on your own traffic before you ship it. Let cheap and strong models work together, and measure cost per outcome — not cost per token.**
 
 **In 30 seconds:**
-- **What it is:** a method and sample code. A cheap model does the work first; a strong model steps in only when a check in code rejects the result (*Scout & Rescue*). Every change is tested side by side against your current setup, with a blind quality review.
-- **What we measured:** on a live app's web-search step, cost per article fell from 9.7 ¢ to 4.6–7.7 ¢, and quality held in a blind review. On 40 support tickets, replies cost 81–88% less than Claude Opus 5.5 alone.
+- **What it is:** a method and a small Python tool. A cheap model does the work first; a strong model steps in only when a check in code rejects the result (*Scout & Rescue*). Every change is tested side by side against your current setup on your own requests, with a blind quality review.
+- **What we measured:** on a live app's web-search step, cost per article fell from 9.7 ¢ to 4.6–7.7 ¢, and quality held in a blind review. On 40 support tickets, a usable, correct reply cost 0.12 ¢ instead of 1.05 ¢ with Claude Opus 5.5 alone — 89% less per outcome.
 - **The trade-off:** on the support tickets, quality was 2–6% lower, and one wrong refund rule slipped past the checks. Your checks decide how much quality you keep.
 
 ## When it fits
@@ -17,6 +17,18 @@ It fits when your product sends a lot of requests to a frontier model — such a
 - document summarizers
 
 And most of those requests are routine, and a bad result can be detected in code: an empty result, a missing field, an outdated date, or an invalid format.
+
+## What this measures
+
+Most cost tools stop at the first row. This method measures the second before you ship, and tells you how to track the third after.
+
+| Layer | The question | Who asks it | Where it is measured |
+|---|---|---|---|
+| Model output | What does a token cost? How fast is the model? | Engineers | Price lists, benchmarks |
+| **Outcome** (before shipping) | Did the user get a usable, correct result — and what did that result cost, including failed attempts? | Product, engineering | **The eval: `mmco compare` on your own requests** |
+| **Value shipped** (after shipping) | How much margin did we bank per user, without more complaints, escalations or refunds? | CFO, VP Product | Ship behind a switch, keep measuring — [method, step 9](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/docs/method.md#step-9--ship-behind-a-switch-keep-measuring) |
+
+**The eval proves you won't break the product. The switch and the ledger prove the margin you banked.**
 
 ## Target audience
 
@@ -104,6 +116,7 @@ We then ran the support-reply step of this idea for real: 40 made-up tickets (20
 | Cost per reply | **81–88% less** | — |
 | Quality (blind review, two runs) | **2–6% lower** | — |
 | Hard failures (run 2, 40 tickets) | 3 | 2 |
+| **Cost per outcome** (run 2) | **0.12 ¢** (36 of 40) | 1.05 ¢ (35 of 40) |
 
 **Good for cost, with a quality trade-off.** Most cheap replies were good, but some were weaker in ways no check saw, and one stated a wrong refund rule. Use it where a few percent of quality is acceptable, or where your checks catch the mistakes that matter; keep refund, money and legal answers on the strong model until they do. → [Full results, caveats and how to rerun it](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/docs/support-test.md)
 
@@ -148,7 +161,7 @@ outcome = scout_and_rescue(
 print(outcome.path, outcome.cost_usd)  # "scout" or "rescue" - how often each runs depends on your checks
 ```
 
-**Install** (version 0.2, early: the API may still change; Python 3.10+, Gemini adapter 3.11+):
+**Install** (version 0.3, early: the API may still change; Python 3.10+, Gemini adapter 3.11+):
 
 ```bash
 pip install "ai-mixed-model-cost-optimization[claude]"
@@ -194,6 +207,19 @@ The full flow, with the cost breakdown and the ledger: [method.md](https://githu
 
 → The step-by-step method: [docs/method.md](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/docs/method.md) · Templates: [templates/](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/templates/)
 
+## How this differs from other tools
+
+The technique is not new: a cheap model first and a strong one on failure is a well-known *LLM cascade* (see [FrugalGPT](https://github.com/stanford-futuredata/FrugalGPT)). What is less common is the workflow around it: prove the cut on your own traffic, one change at a time, and publish what failed.
+
+| Tool | What it does | How it relates |
+|---|---|---|
+| [RouteLLM](https://github.com/lm-sys/RouteLLM) | Trained routers that pick a model per request | A routing technique. You can test it against your setup with `mmco compare`. |
+| [cascadeflow](https://github.com/lemony-ai/cascadeflow) | A cascading runtime for agents, with streaming and tool-call routing | A runtime for production. Test it here first. |
+| [LiteLLM](https://github.com/BerriAI/litellm) | A gateway to 100+ model APIs | Infrastructure to call models. Works as the model behind a setup here. |
+| [promptfoo](https://github.com/promptfoo/promptfoo) | Broad testing of prompts, agents and RAG, plus red teaming | A general eval suite. This repo is narrower: one cost change at a time, judged by cost per outcome. |
+
+**Use this when** you want evidence on your own requests before you commit to a router or gateway — or to show that a cheaper setup really holds quality. **Use the others when** you need production routing at scale.
+
 ## The full story
 
 We tested 12 cost-saving ideas one at a time, and **7 raised cost or lowered quality**. For example, a shorter prompt made the model search *more*.
@@ -210,6 +236,8 @@ We tested 12 cost-saving ideas one at a time, and **7 raised cost or lowered qua
 - **Simple web search:** a search tool that hands the raw results straight to the model. Fewer steps; the model reads everything it gets, which is cheap on a small model but expensive on a large one.
 - **Blind review:** a reviewer scores two results labelled only A and B, without knowing which setup made which.
 - **Eval:** the fixed test that decides whether a change is kept — real requests, checks in code and a blind review, run the same way every time.
+- **Outcome:** a request whose final result passed your checks and, if reviewed, had no hard failure — a result a user could rely on.
+- **Cost per outcome:** everything a setup spent, including failed and rescued attempts, divided by its outcomes. The number to compare.
 - **Typical (median):** the middle value — half the requests cost less, half more. Unlike the average, a few expensive outliers don't move it.
 
 ## About

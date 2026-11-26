@@ -128,8 +128,21 @@ Then compare the winner against its strongest single competitor as well. In the 
 
 ## Step 9 — Ship behind a switch, keep measuring
 
-- Ship with the switch on by default and an off switch for emergencies.
-- Log per call which path ran (cheap or fallback), its cost and time.
+The eval proved the change won't break the product. Now prove the **value shipped**: the margin you banked, without hurting users.
+
+- Ship with the switch on by default and an off switch for emergencies. Where you can, start with a share of users and compare them with the rest.
+- Log per call which path ran (cheap or rescue), its cost and time, and whether the check passed.
+- **Track the business numbers, before and after:**
+
+| Number | Why | Switch back when |
+|---|---|---|
+| AI cost per active user (or per order, per seat) | The margin you banked | It rises above the old setup |
+| Cost per outcome in production | Failed and rescued attempts included | It drifts up week over week |
+| Rescue rate | The main cost driver over time | It climbs: inputs changed, the checks need work |
+| Support escalations, complaints, refund disputes, "talk to a human" | Quality as users feel it | Any of them rises against the users without the change |
+| Retention or repeat use of the feature | The long-term signal | It drops against the users without the change |
+
+- Report it as value shipped: *"AI cost per user −X%, complaints unchanged, over N weeks."* That is the sentence a CFO funds.
 - Re-run the fixed test set when prices or models change. A lever rejected today may win after the next price list.
 
 ---

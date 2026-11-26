@@ -1,6 +1,6 @@
 # Package and examples
 
-Python 3.10+ (Gemini adapter: 3.11+). Version 0.2.1, early: the API may still change.
+Python 3.10+ (Gemini adapter: 3.11+). Version 0.3, early: the API may still change.
 
 | You install | You import | You run |
 |---|---|---|

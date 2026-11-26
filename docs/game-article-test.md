@@ -29,6 +29,8 @@ Only aggregate numbers are published. The article texts and fact sheets come fro
 | Haiku, one attempt | same — never needed | | | | | |
 | Sonnet alone | 1.33 ¢ (**18×**) | 1.48 ¢ | 10.8 s | 30 of 36 | 25.0 / 40 (+13%) | 18 of 30 |
 
+**Cost per outcome** (AI text shown, not flagged by the reviewer): 0.14 ¢ today (19 of 36) vs. 3.98 ¢ for Sonnet alone (12 of 36) — 28× more per outcome. With a strict reviewer, read the outcome counts as a lower bound.
+
 Cost per round: 0.075–0.076 ¢ for today's setup, 1.19–1.47 ¢ for Sonnet alone. The reviewer cost $1.17 and is not in the table.
 
 ## What it means

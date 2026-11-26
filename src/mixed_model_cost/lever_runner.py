@@ -84,30 +84,63 @@ def run_levers(
     return report
 
 
-def print_table(report: Report, setups: list[str]) -> None:
-    base = setups[0]
-    base_cost = statistics.mean(r.run.cost_usd for r in report.for_setup(base))
-    head = f"{'setup':<28}{'avg cost':>10}{'median':>9}{'vs base':>9}{'rescued':>9}{'avg s':>7}{'check fail':>11}"
-    has_scores = any(r.score for r in report.rows)
-    if has_scores:
-        head += f"{'quality':>12}{'hard fail':>10}"
-    print(head)
+def is_outcome(row: Row) -> bool:
+    """A request counts as an outcome when the final result passes your check and,
+    if a judge ran, has no hard failure - the result a user could actually rely on."""
+    return row.run.final_check is None and not (row.score and row.score.hard_failure)
+
+
+def summarize(report: Report, setups: list[str]) -> list[dict]:
+    """The numbers behind the table, one dict per setup.
+
+    cost_per_outcome = everything the setup spent / requests that ended in an outcome.
+    Failed attempts and bad results still cost money, so they raise it.
+    """
+    out = []
     for name in setups:
         rows = report.for_setup(name)
         costs = [r.run.cost_usd for r in rows]
-        avg = statistics.mean(costs)
-        rescued = sum(r.run.path == "rescue" for r in rows)
+        outcomes = sum(is_outcome(r) for r in rows)
+        scored = [r.score for r in rows if r.score]
+        out.append({
+            "setup": name,
+            "requests": len(rows),
+            "avg_cost": statistics.mean(costs),
+            "median_cost": statistics.median(costs),
+            "outcomes": outcomes,
+            "cost_per_outcome": sum(costs) / outcomes if outcomes else float("inf"),
+            "rescued": sum(r.run.path == "rescue" for r in rows),
+            "avg_seconds": statistics.mean(r.run.seconds for r in rows),
+            "check_fail": sum(r.run.final_check is not None for r in rows),
+            "quality": sum(s.points for s in scored) if scored else None,
+            "quality_max": sum(s.max_points for s in scored) if scored else None,
+            "hard_fail": sum(s.hard_failure for s in scored) if scored else None,
+        })
+    return out
+
+
+def print_table(report: Report, setups: list[str]) -> None:
+    rows = summarize(report, setups)
+    base = rows[0]["cost_per_outcome"]
+    has_scores = rows[0]["quality"] is not None
+    head = (f"{'setup':<26}{'cost/outcome':>13}{'vs base':>9}{'outcomes':>10}{'avg cost':>10}{'median':>9}"
+            f"{'rescued':>9}{'avg s':>7}{'check fail':>11}")
+    if has_scores:
+        head += f"{'quality':>12}{'hard fail':>10}"
+    print(head)
+    for s in rows:
+        cpo = s["cost_per_outcome"]
+        vs = f"{(cpo / base - 1) * 100:>+8.0f}%" if cpo != float("inf") and base not in (0, float("inf")) else f"{'-':>9}"
         line = (
-            f"{name:<28}{avg * 100:>8.3f}c{statistics.median(costs) * 100:>8.3f}c"
-            f"{(avg / base_cost - 1) * 100:>+8.0f}%{rescued:>5}/{len(rows):<3}"
-            f"{statistics.mean(r.run.seconds for r in rows):>7.1f}"
-            f"{sum(r.run.final_check is not None for r in rows):>11}"
+            f"{s['setup']:<26}{(f'{cpo * 100:.3f}c' if cpo != float('inf') else 'none'):>13}{vs}"
+            f"{s['outcomes']:>6}/{s['requests']:<3}{s['avg_cost'] * 100:>9.3f}c{s['median_cost'] * 100:>8.3f}c"
+            f"{s['rescued']:>5}/{s['requests']:<3}{s['avg_seconds']:>7.1f}{s['check_fail']:>11}"
         )
         if has_scores:
-            pts = sum(r.score.points for r in rows)
-            mx = sum(r.score.max_points for r in rows)
-            line += f"{pts:>7}/{mx:<4}{sum(r.score.hard_failure for r in rows):>10}"
+            line += f"{s['quality']:>7}/{s['quality_max']:<4}{s['hard_fail']:>10}"
         print(line)
+    print("\ncost/outcome = everything spent / requests whose final result passed the check"
+          + (" and had no hard failure" if has_scores else "") + ". It is the number to compare.")
 
 
 def save(report: Report, cases: list[Any], out_dir: Path, describe: Callable[[Any], str]) -> None:

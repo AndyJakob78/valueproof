@@ -53,6 +53,7 @@ Costs are the reply step only, at the API prices in [claude.py](../src/mixed_mod
 | Quality (blind review) | **2–6% lower** | — |
 | Time per reply | 22–29% faster | — |
 | Hard failures, run 2 | 3 of 40 | 2 of 40 |
+| **Cost per outcome**, run 2 (passes the checks, no hard failure) | **0.12 ¢** (36 of 40) | 1.05 ¢ (35 of 40) — Scout & Rescue is **89% cheaper per outcome** |
 
 **Why quality is lower:** the rescuer only runs when a check fails — here on 3–4 of 20 tickets. The other replies come from the cheap model. Most are good, but some are weaker in ways a check in code doesn't see: one ignored the customer's refund request, another asked again for a photo on the customer's third message.
 
