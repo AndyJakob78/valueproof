@@ -138,7 +138,7 @@ print(outcome.path, outcome.cost_usd)  # "scout" or "rescue" - how often each ru
 **Install** (early version 0.1, Python 3.10+):
 
 ```bash
-pip install "ai-mixed-model-cost-optimization[claude] @ git+https://github.com/AndyJakob78/ai-mixed-model-cost-optimization"
+pip install "ai-mixed-model-cost-optimization[claude]"
 ```
 
 The core has no dependencies and works with any provider: a model is just a function `prompt -> ModelResult`. The `[claude]` extra adds the Claude adapter; for OpenAI, Gemini or a local model, write a function with the same shape.

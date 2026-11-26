@@ -82,7 +82,7 @@ Giving the rescuer the scout's rejected draft and the reason **cost 12% more** (
 ## Run it yourself
 
 ```bash
-pip install "ai-mixed-model-cost-optimization[claude] @ git+https://github.com/AndyJakob78/ai-mixed-model-cost-optimization"
+pip install "ai-mixed-model-cost-optimization[claude]"
 mmco compare examples/test_levers_support.py --live --hard
 ```
 

@@ -3,7 +3,7 @@
 Python 3.10+. Early version (0.1): the API may still change.
 
 ```bash
-pip install "ai-mixed-model-cost-optimization[claude] @ git+https://github.com/AndyJakob78/ai-mixed-model-cost-optimization"
+pip install "ai-mixed-model-cost-optimization[claude]"
 ```
 
 Leave out `[claude]` if you use another provider — the core has no dependencies. The examples also run straight from a clone without installing.
