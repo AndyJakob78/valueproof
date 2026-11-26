@@ -18,7 +18,7 @@ Leave out `[claude]` if you use another provider — the core has no dependencie
 | [cli.py](../src/mixed_model_cost/cli.py) | The `mmco compare` command. |
 | [claude.py](../src/mixed_model_cost/claude.py) | Adapter for Claude models (Haiku, Sonnet, Opus) with a simple cost estimate. Run live in the [support test](../docs/support-test.md). |
 | [openai.py](../src/mixed_model_cost/openai.py) | Adapter for OpenAI models (Responses API). You pass the prices. Tested against fake clients; not yet run live. |
-| [gemini.py](../src/mixed_model_cost/gemini.py) | Adapter for Google Gemini models (Python 3.11+); counts thinking tokens as output. You pass the prices. Tested against fake clients; not yet run live. |
+| [gemini.py](../src/mixed_model_cost/gemini.py) | Adapter for Google Gemini models (Python 3.11+); counts thinking tokens as output. You pass the prices. Tested against fake clients, and with a live call (Nov 2026), including a mixed Gemini/Claude Scout & Rescue. |
 
 Install the adapter you need: `[claude]`, `[openai]`, `[gemini]` or `[all]`. **Any other provider or a local model:** write a function with the same shape — prompt in, `ModelResult(text, cost_usd, model)` out. Everything else works unchanged.
 
