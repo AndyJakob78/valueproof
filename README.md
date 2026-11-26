@@ -166,7 +166,7 @@ outcome = scout_and_rescue(
 print(outcome.path, outcome.cost_usd)  # "scout" or "rescue" - how often each runs depends on your checks
 ```
 
-**Install** (version 0.5, early: the API may still change; Python 3.10+, Gemini adapter 3.11+):
+**Install** (version 0.6, early: the API may still change; Python 3.10+, Gemini adapter 3.11+):
 
 ```bash
 pip install "valueproof[claude]"
@@ -184,7 +184,7 @@ valueproof compare my_test.py --live --estimate     # runs 2 requests for real, 
 valueproof compare my_test.py --live --max-spend 5  # the full test, stops starting new requests at $5
 ```
 
-After the table it lists **which check rule fired most often**, so you see whether rescues come from formatting, missing fields or stale data.
+After the table it lists **which check rule fired most often**, and **how good your eval checks are**: how many of the judge's hard failures they caught, how many they missed, and how many false alarms they raised. In our own support test the answer was sobering: the checks caught 0 of 7 hard failures. → [Support test](https://github.com/AndyJakob78/valueproof/blob/main/docs/support-test.md)
 
 → How to write `my_test.py`, plus a support-ticket demo that works without an API key: [examples/](https://github.com/AndyJakob78/valueproof/blob/main/examples/). The live Claude mode was run in the [support test](https://github.com/AndyJakob78/valueproof/blob/main/docs/support-test.md).
 
@@ -232,7 +232,9 @@ We tested 12 cost-saving ideas one at a time, and **7 raised cost or lowered qua
 - **Token:** the unit AI providers bill by — roughly a short word of text the model reads or writes.
 - **Lever:** one change that should lower cost, such as a smaller model or a shorter prompt. Each lever is tested on its own.
 - **Scout:** the cheap, fast model that tries first.
-- **Rescuer:** the strong model that runs only when a check in code rejects the scout's result.
+- **Rescuer:** the strong model that runs only when an eval check rejects the scout's result.
+- **Eval check:** a rule in code that judges one answer at runtime (a code-based eval): is it empty, is a field missing, is the date too old? It decides whether the cheap answer is used or the rescuer runs. The pages here also call it a "check in code" or just "check".
+- **Check quality:** how well the eval checks agree with the blind review: caught, missed, false alarms.
 - **Full web search:** a search tool that filters the results with code before the model reads them. Fewer pages to read, but more steps.
 - **Simple web search:** a search tool that hands the raw results straight to the model. Fewer steps; the model reads everything it gets, which is cheap on a small model but expensive on a large one.
 - **Blind review:** a reviewer scores two results labelled only A and B, without knowing which setup made which.

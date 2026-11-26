@@ -171,6 +171,38 @@ def summarize(report: Report, setups: list[str]) -> list[dict]:
     return out
 
 
+def check_quality(report: Report, setups: list[str], weaker_by: float = 0.125) -> Optional[dict]:
+    """How good are your eval checks? Compares each check verdict with the judge's verdict.
+
+    Counted over every distinct reply in the run (the same reply from two setups counts once):
+      caught        the check failed a reply the judge called a hard failure
+      missed        the check passed a reply the judge called a hard failure   <- the costly case
+      false_alarms  the check failed a reply the judge found acceptable        <- pays for a rescue for nothing
+    Also: replies clearly weaker than the baseline's reply to the same request (by `weaker_by` of the
+    scale or more), and how many of those a check flagged. Returns None if no judge ran.
+    """
+    scored = [r for r in report.rows if r.score]
+    if not scored:
+        return None
+    base = {r.case: r.score.points for r in scored if r.setup == setups[0]}
+    seen, q = set(), dict(replies=0, hard_failures=0, caught=0, missed=0, false_alarms=0, weaker=0, weaker_flagged=0)
+    for r in scored:
+        key = (r.case, r.run.text)
+        if key in seen:
+            continue
+        seen.add(key)
+        flagged, bad = r.run.final_check is not None, r.score.hard_failure
+        q["replies"] += 1
+        q["hard_failures"] += bad
+        q["caught"] += flagged and bad
+        q["missed"] += (not flagged) and bad
+        q["false_alarms"] += flagged and not bad
+        if r.case in base and base[r.case] - r.score.points >= weaker_by * r.score.max_points:
+            q["weaker"] += 1
+            q["weaker_flagged"] += flagged
+    return q
+
+
 def print_table(report: Report, setups: list[str]) -> None:
     rows = summarize(report, setups)
     base = rows[0]["cost_per_outcome"]
@@ -202,6 +234,14 @@ def print_table(report: Report, setups: list[str]) -> None:
                 if counts:
                     top = ", ".join(f"{why} ({n})" for why, n in counts.most_common(5))
                     print(f"    {label}: {top}")
+    q = check_quality(report, setups)
+    if q:
+        print(f"\nHow good are the eval checks? (check verdict vs. the judge, over {q['replies']} distinct replies)")
+        print(f"  hard failures: {q['hard_failures']}  ->  caught {q['caught']}, missed {q['missed']}")
+        print(f"  false alarms (check failed a reply the judge accepted): {q['false_alarms']}")
+        print(f"  replies clearly weaker than '{setups[0]}': {q['weaker']}  ->  flagged by a check: {q['weaker_flagged']}")
+        if q["missed"] or q["weaker"] > q["weaker_flagged"]:
+            print("  Missed and unflagged replies reach users as they are: write checks for those mistakes.")
     if report.stopped:
         print(f"\nNote: {report.stopped}.")
     print(f"Spent on this run: ${report.spent_usd:.4f}")

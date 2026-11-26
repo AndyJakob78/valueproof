@@ -4,7 +4,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from valueproof import Run, Score, estimate, print_table, run_levers, save, summarize
+from valueproof import Run, Score, check_quality, estimate, print_table, run_levers, save, summarize
 from valueproof.cli import main
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -88,3 +88,26 @@ def test_rejection_reasons_are_grouped(capsys):
     assert s["first_try_rejections"]["does not cite #"] == 2 and s["first_try_pass"] == 1
     print_table(report, ["s&r"])
     assert "does not cite # (2)" in capsys.readouterr().out
+
+
+def test_check_quality_counts_caught_missed_and_false_alarms(capsys):
+    # request: (text, check verdict, judge points, judge hard failure) for the cheap setup
+    cheap = {0: ("a", None, 36, False),          # fine, passed
+             1: ("b", "too short", 20, True),    # bad, caught
+             2: ("c", None, 22, True),           # bad, missed
+             3: ("d", "no id", 35, False),       # fine, false alarm
+             4: ("e", None, 30, False)}          # passed, but clearly weaker than the baseline
+    setups = {"base": lambda c: Run("base" + str(c), 0.01, 0.1),
+              "cheap": lambda c: Run(cheap[c][0], 0.001, 0.1, final_check=cheap[c][1])}
+    def judge(c, text):
+        if text.startswith("base"):
+            return Score(36, 40)
+        _, _, pts, hard = cheap[c]
+        return Score(pts, 40, hard)
+    report = run_levers(list(range(5)), setups, judge=judge)
+    q = check_quality(report, list(setups))
+    assert (q["hard_failures"], q["caught"], q["missed"], q["false_alarms"]) == (2, 1, 1, 1)
+    assert (q["weaker"], q["weaker_flagged"]) == (3, 1)  # b, c and e are 5+ points below; only b was flagged
+    print_table(report, list(setups))
+    assert "caught 1, missed 1" in capsys.readouterr().out
+    assert check_quality(run_levers([0], setups), list(setups)) is None  # no judge, no verdict

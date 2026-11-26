@@ -65,7 +65,23 @@ Run 3 put the question directly: is the rescuer worth it, or would the cheap mod
 
 So for these tickets the honest finding is: **you don't need the strong model for most of them, at a cost of about 6% quality** — and the eval is what shows it. The rescuer earns its place where failures are common and a check can detect them: in the [case study](case-study.md) it ran on 2 to 5 of every 18 requests, and without it 1 in 18 learners got no article.
 
-### 2. Scout & Rescue vs. the strong model alone: much cheaper, a little lower quality
+### 2. How good were the eval checks? Not good: they caught none of the real problems
+
+The checks decide which replies go to the rescuer, so we measured the checks themselves: each check verdict against the judge's verdict, over every distinct reply in a run (`valueproof compare` prints this since version 0.6).
+
+| | Run 2 (124 replies) | Run 3 (82 replies) |
+|---|---|---|
+| Replies with a hard failure | 6 | 1 |
+| — caught by a check | **0** | **0** |
+| False alarms (check failed a reply the judge accepted) | 10 | 6 |
+| Replies clearly weaker than Opus's reply (5+ points of 40) | 8 | 9 |
+| — flagged by a check | **0** | **0** |
+
+**Our checks test form, and the cheap model gets form right.** Length, order number, cited policy section: Haiku passes them. Its weaknesses are in substance — a misread rule, an ignored request — and no check looked there. The false alarms came mostly from one over-strict rule ("must cite §5"), which even Opus failed.
+
+This is why the rescuer added so little: it was never sent the right tickets. The next step is not a better rescuer but better checks, for example a cheap model asked "does this reply apply the policy correctly?", measured the same way.
+
+### 3. Scout & Rescue vs. the strong model alone: much cheaper, a little lower quality
 
 | | Scout & Rescue | Opus medium alone |
 |---|---|---|
@@ -84,7 +100,7 @@ So for these tickets the honest finding is: **you don't need the strong model fo
 
 **Read with care:** the reviewer is Opus 5.5, the same model as the "alone" setups, and may favour its own style — the real gap may be smaller. Results vary between runs: the rescuer ran on 4 of the 40 tickets in run 2 and on 2 in run 3, and the cost saving ranged from 81% to 92%.
 
-### 3. Rescuer at low effort: keep it (for tasks like this)
+### 4. Rescuer at low effort: keep it (for tasks like this)
 
 - **24–25% cheaper in both runs**, with the same number of rescues.
 - Quality on the 7 rescued tickets across both runs: 247 vs. 245 for medium effort.
@@ -92,7 +108,7 @@ So for these tickets the honest finding is: **you don't need the strong model fo
 
 **Limits:** only 7 rescued tickets, and these are short replies. Effort may matter more for long reasoning — test it on your task.
 
-### 4. Handoff: rejected
+### 5. Handoff: rejected
 
 Giving the rescuer the scout's rejected draft and the reason **cost 12% more** (it reads more text) and scored the same or 1 point lower on the 3 rescued tickets. It stays in the code as an option, off by default.
 

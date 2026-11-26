@@ -48,6 +48,9 @@ In a second test — an AI-written game article where a cheap model was already 
 ### 13b. Test the cheap model alone, too
 We first compared Scout & Rescue only with the strong model alone, and credited the cascade with the saving. A third run added the cheap model with no rescuer: it was nearly as good, at a third of the cost. The rescuer had run on 2 of 40 tickets. Always include "cheap model alone" as a setup — it tells you whether the rescuer is doing the work or just riding along.
 
+### 13c. Measure the checks themselves
+A check is an alarm: count what it catches, what it misses, and how often it rings for nothing, against the blind review. Ours caught 0 of 7 hard failures and flagged none of the 17 clearly weaker replies across two runs, while raising 16 false alarms. We had been tuning the cascade around checks nobody had measured.
+
 ### 14. Try lower effort before a smaller model
 Running the strong model at effort low instead of medium cost 24–40% less with no measurable quality loss on short support replies. It is the cheapest lever to test, because nothing else in the setup changes.
 

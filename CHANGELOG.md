@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.0
+- **Check quality** in `valueproof compare`: when a judge ran, the output shows how the eval checks did against it, over every distinct reply: hard failures caught and missed, false alarms, and how many clearly weaker replies a check flagged. Also as `check_quality(report, setups)`.
+- The bundled support test has a "Haiku alone, no rescuer" setup, to show what the rescuer adds.
+- Docs: third support run (the cheap model alone was nearly as good), the check-quality finding, and the term "eval check".
+
 ## 0.5.0
 - **`--max-spend USD`**: stops starting new requests once runs (and reviews) have spent this much. A request in progress is finished, so results stay paired; the review is skipped if it would pass the limit.
 - **`--estimate`** (with `--sample N`, default 2): runs a small sample for real and prints the projected cost of the full run. It spends a little on purpose: a real call is the only reliable price.

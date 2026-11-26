@@ -1,6 +1,6 @@
 # Package and examples
 
-Python 3.10+ (Gemini adapter: 3.11+). Version 0.5, early: the API may still change.
+Python 3.10+ (Gemini adapter: 3.11+). Version 0.6, early: the API may still change.
 
 One name for everything: `pip install valueproof`, `import valueproof`, `valueproof compare`.
 
