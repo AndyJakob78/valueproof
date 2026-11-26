@@ -4,7 +4,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from valueproof import Run, Score, check_quality, estimate, print_table, run_levers, save, summarize
+from valueproof import Run, Score, check_quality, estimate, rate_checks, print_table, run_levers, save, summarize
 from valueproof.cli import main
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -111,3 +111,17 @@ def test_check_quality_counts_caught_missed_and_false_alarms(capsys):
     print_table(report, list(setups))
     assert "caught 1, missed 1" in capsys.readouterr().out
     assert check_quality(run_levers([0], setups), list(setups)) is None  # no judge, no verdict
+
+
+def test_rate_checks_compares_candidates_and_counts_their_cost():
+    setups = {"base": lambda c: Run("good", 0.01, 0.1), "cheap": lambda c: Run("bad" if c == 1 else "fine", 0.001, 0.1)}
+    judge = lambda c, text: Score(10 if text == "bad" else 36, 40, hard_failure=(text == "bad"))
+    report = run_levers([0, 1], setups, judge=judge)
+    before = report.spent_usd
+    ratings = rate_checks(report, [0, 1], list(setups), {
+        "blind check": lambda case, text: None,
+        "sharp check": lambda case, text: ("is bad", 0.002) if text == "bad" else (None, 0.002),
+    })
+    assert (ratings["blind check"]["caught"], ratings["blind check"]["missed"]) == (0, 1)
+    assert (ratings["sharp check"]["caught"], ratings["sharp check"]["missed"], ratings["sharp check"]["false_alarms"]) == (1, 0, 0)
+    assert abs(report.spent_usd - before - 0.008) < 1e-12  # 4 distinct replies x 0.002

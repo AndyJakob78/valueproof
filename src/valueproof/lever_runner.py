@@ -171,7 +171,8 @@ def summarize(report: Report, setups: list[str]) -> list[dict]:
     return out
 
 
-def check_quality(report: Report, setups: list[str], weaker_by: float = 0.125) -> Optional[dict]:
+def check_quality(report: Report, setups: list[str], weaker_by: float = 0.125,
+                  flagged_by: Optional[Callable[[Row], bool]] = None) -> Optional[dict]:
     """How good are your eval checks? Compares each check verdict with the judge's verdict.
 
     Counted over every distinct reply in the run (the same reply from two setups counts once):
@@ -191,7 +192,8 @@ def check_quality(report: Report, setups: list[str], weaker_by: float = 0.125) -
         if key in seen:
             continue
         seen.add(key)
-        flagged, bad = r.run.final_check is not None, r.score.hard_failure
+        flagged = flagged_by(r) if flagged_by else r.run.final_check is not None
+        bad = r.score.hard_failure
         q["replies"] += 1
         q["hard_failures"] += bad
         q["caught"] += flagged and bad
@@ -201,6 +203,53 @@ def check_quality(report: Report, setups: list[str], weaker_by: float = 0.125) -
             q["weaker"] += 1
             q["weaker_flagged"] += flagged
     return q
+
+
+def rate_checks(report: Report, cases: list[Any], setups: list[str],
+                checks: dict[str, Callable[[Any, str], Any]], weaker_by: float = 0.125) -> dict[str, dict]:
+    """Try candidate eval checks on every distinct reply of a finished run and rate each against the judge.
+
+    checks: {name: fn(case, text)}; fn returns None if the reply is usable, else a reason -
+    or a tuple (that, cost_usd) when the check itself costs money (a model call).
+    Lets you compare checks before you build a setup around one.
+    """
+    ratings = {}
+    for name, fn in checks.items():
+        verdicts: dict = {}
+        cost = 0.0
+
+        def flagged(r: Row) -> bool:
+            nonlocal cost
+            key = (r.case, r.run.text)
+            if key not in verdicts:
+                v = fn(cases[r.case], r.run.text)
+                if isinstance(v, tuple):
+                    v, c = v
+                    cost += c
+                verdicts[key] = v is not None
+            return verdicts[key]
+
+        q = check_quality(report, setups, weaker_by, flagged)
+        if q is None:
+            return {}
+        q["flagged"], q["cost_usd"] = sum(verdicts.values()), cost
+        report.spent_usd += cost
+        ratings[name] = q
+        print(f"  rated check: {name}", flush=True)
+    return ratings
+
+
+def print_check_ratings(ratings: dict[str, dict]) -> None:
+    if not ratings:
+        return
+    first = next(iter(ratings.values()))
+    print(f"\nCandidate eval checks, rated against the judge ({first['replies']} distinct replies, "
+          f"{first['hard_failures']} hard failures, {first['weaker']} clearly weaker):")
+    print(f"{'check':<34}{'caught':>8}{'missed':>8}{'false alarms':>14}{'weaker flagged':>16}{'cost per check':>16}")
+    for name, q in ratings.items():
+        per = q["cost_usd"] / q["replies"] * 100 if q["replies"] else 0
+        print(f"{name:<34}{q['caught']:>8}{q['missed']:>8}{q['false_alarms']:>14}"
+              f"{str(q['weaker_flagged']) + '/' + str(q['weaker']):>16}{per:>14.3f}c")
 
 
 def print_table(report: Report, setups: list[str]) -> None:

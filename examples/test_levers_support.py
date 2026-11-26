@@ -14,7 +14,8 @@ reply blind (it never sees the setup name) on a fixed 40-point rubric.
 
     valueproof compare examples/test_levers_support.py          # stub models, checks the wiring only
     valueproof compare examples/test_levers_support.py --live   # real calls, about $1-2
-    add --hard for 20 harder tickets, --setups "a|b" to run only some setups
+    add --hard for 20 harder tickets, --setups "a|b" to run only some setups,
+    --rate-checks to rate candidate eval checks (code only, + a policy check by Haiku or Sonnet)
     (without installing: python examples/test_levers_support.py, same flags)
 """
 
@@ -183,6 +184,39 @@ def make_judge(model):
     return judge
 
 
+POLICY_CHECK_PROMPT = """You check a customer-support reply against the shop's policy before it is sent.
+
+{policy}
+
+Ticket:
+{ticket}
+
+Reply:
+{reply}
+
+Is the reply safe to send? It is NOT safe if it states or applies a policy rule wrongly, promises something
+the policy does not allow, assumes facts the ticket does not give, or ignores one of the customer's requests.
+Reply with JSON only: {{"ok": true, "problem": ""}} or {{"ok": false, "problem": "max 12 words"}}"""
+
+
+def make_policy_check(model):
+    """An eval check done by a model: returns (reason or None, cost). Cached per reply."""
+    cache: dict = {}
+
+    def policy_check(t: Ticket, text: str):
+        key = (id(t), text)
+        if key not in cache:
+            result = model(POLICY_CHECK_PROMPT.format(policy=POLICY, ticket=t.text, reply=text))
+            raw = result.text
+            try:
+                ok = bool(json.loads(raw[raw.index("{"): raw.rindex("}") + 1])["ok"])
+            except (ValueError, KeyError):
+                ok = False  # an unreadable verdict counts as a failed check: better one rescue too many
+            cache[key] = (None if ok else "policy check failed", result.cost_usd)
+        return cache[key]
+    return policy_check
+
+
 def timed(model):
     def call(prompt):
         t0 = time.time()
@@ -191,7 +225,7 @@ def timed(model):
     return call
 
 
-def build_setups(scout, opus_medium, opus_low):
+def build_setups(scout, opus_medium, opus_low, policy_check=None):
     scout_cache: dict[int, tuple[ModelResult, float]] = {}
 
     def cascade(rescue, handoff):
@@ -220,8 +254,33 @@ def build_setups(scout, opus_medium, opus_low):
         first, scout_s = scout_cache[key]
         return Run(first.text, first.cost_usd, scout_s, "single", check(first.text, t))
 
+    def cascade_with_policy_check(t: Ticket) -> Run:
+        """Scout & Rescue where a reply must pass the code checks AND a policy check by a cheap model.
+        The policy check's own cost is added to the run."""
+        key = id(t)
+        if key not in scout_cache:
+            scout_cache[key] = timed(scout)(t.prompt)
+        first, scout_s = scout_cache[key]
+        extra = 0.0
+
+        def both(x: str):
+            nonlocal extra
+            reason = check(x, t)
+            if reason:
+                return reason
+            reason, cost = policy_check(t, x)
+            extra += cost
+            return reason
+
+        t0 = time.time()
+        out = scout_and_rescue(t.prompt, lambda p: first, opus_medium, both)
+        final = both(out.text) if out.path == "rescue" else None
+        return Run(out.text, out.cost_usd + extra, scout_s + time.time() - t0, out.path, final, out.rejected_because)
+
+    with_policy = {"S&R + policy check (Haiku)": cascade_with_policy_check} if policy_check else {}
     return {
         "baseline (published)": cascade(opus_medium, handoff=False),
+        **with_policy,
         "Haiku alone, no rescuer": scout_alone,
         "handoff": cascade(opus_medium, handoff=True),
         "rescuer effort low": cascade(opus_low, handoff=False),
@@ -244,7 +303,10 @@ def stub_models():
 
     judge = lambda p: ModelResult('{"policy_correct": 7, "solves": 7, "tone": 8, "clarity": 8, '
                                   '"hard_failure": false, "note": "stub"}', 0.0, "stub-judge")
-    return reply("stub-small", 0.0003, False), reply("stub-big", 0.0080, True), reply("stub-big-low", 0.0050, True), judge
+    checker = lambda p: ModelResult('{"ok": ' + ('false' if 'audit' in p or 'Third' in p else 'true') + ', "problem": "stub"}',
+                                    0.0002, "stub-checker")
+    return (reply("stub-small", 0.0003, False), reply("stub-big", 0.0080, True), reply("stub-big-low", 0.0050, True),
+            judge, checker, checker)
 
 
 def live_models():
@@ -255,20 +317,37 @@ def live_models():
         claude("claude-opus-5-5", effort="medium"),
         claude("claude-opus-5-5", effort="low"),
         claude("claude-opus-5-5", effort="medium"),  # judge
+        claude("claude-haiku-5-5", effort="low"),    # policy check, cheap
+        claude("claude-sonnet-5-5", effort="low"),   # policy check, mid-size (rated only)
     )
 
 
 def build(live: bool, args: list[str]) -> dict:
     """Entry point for `valueproof compare examples/test_levers_support.py [--live] [--hard] [--setups "a|b"]`."""
-    scout, opus_medium, opus_low, judge_model = live_models() if live else stub_models()
-    setups = build_setups(scout, opus_medium, opus_low)
+    scout, opus_medium, opus_low, judge_model, check_haiku, check_sonnet = live_models() if live else stub_models()
+    haiku_policy, sonnet_policy = make_policy_check(check_haiku), make_policy_check(check_sonnet)
+    setups = build_setups(scout, opus_medium, opus_low, haiku_policy)
+
+    def code_plus(policy):
+        def fn(t, text):
+            reason = check(text, t)
+            return (reason, 0.0) if reason else policy(t, text)
+        return fn
+
+    # --rate-checks: try candidate eval checks on every reply of the run and rate them against the judge
+    candidates = {
+        "code checks (published)": lambda t, text: check(text, t),
+        "code + policy check (Haiku)": code_plus(haiku_policy),
+        "code + policy check (Sonnet)": code_plus(sonnet_policy),
+    } if "--rate-checks" in args else None
     if "--setups" in args:  # e.g. --setups "baseline (published)|rescuer effort low"
         keep = args[args.index("--setups") + 1].split("|")
-        setups = {name: run for name, run in setups.items() if name in keep}
+        setups = {name: setups[name] for name in keep if name in setups}  # the first one named is the baseline
     return {
         "cases": TICKETS + HARD_TICKETS if "--hard" in args else TICKETS,
         "setups": setups,
         "judge": make_judge(judge_model),
+        "checks": candidates,
         "describe": lambda t: t.text,
     }
 

@@ -14,6 +14,7 @@ Your test file is plain Python and defines one function:
             "cases":    [...],                       # your test requests
             "setups":   {"baseline": run, ...},     # name -> run(case) -> Run; first is the baseline
             "judge":    judge,                       # optional: judge(case, text) -> Score
+            "checks":   {"my new check": fn},        # optional: candidate eval checks to rate, fn(case, text)
             "describe": lambda case: str(case),      # optional: how a case shows on the review sheet
         }
 
@@ -25,12 +26,13 @@ from __future__ import annotations
 
 import argparse
 import importlib.util
+import json
 import sys
 from datetime import datetime
 from pathlib import Path
 
 from . import __version__
-from .lever_runner import estimate, print_table, run_levers, save
+from .lever_runner import estimate, print_check_ratings, print_table, rate_checks, run_levers, save
 from .starter import STARTER
 
 
@@ -68,8 +70,13 @@ def compare(file: str, live: bool = False, out: str | None = None, extra: list[s
         return
     print()
     print_table(report, list(setups))
+    ratings = rate_checks(report, cases, list(setups), spec["checks"]) if spec.get("checks") and judge else {}
+    print_check_ratings(ratings)
     out_dir = Path(out) if out else path.parent / "results" / datetime.now().strftime("%Y%m%d-%H%M%S")
     save(report, cases, out_dir, describe=spec.get("describe", str))
+    if ratings:
+        (out_dir / "check_ratings.json").write_text(json.dumps(ratings, indent=2))
+        print(f"Spent including the check ratings: ${report.spent_usd:.4f}")
     print(f"\nSaved to {out_dir}")
 
 
