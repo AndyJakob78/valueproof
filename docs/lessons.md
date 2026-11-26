@@ -45,6 +45,9 @@ Scout & Rescue only fixes the mistakes a check catches. In our [support test](su
 
 In a second test — an AI-written game article where a cheap model was already in use — the cheap model passed every check, so the rescuer never ran, while a blind review flagged fact errors no check caught ([game article test](game-article-test.md)). Same lesson, from the other side.
 
+### 13b. Test the cheap model alone, too
+We first compared Scout & Rescue only with the strong model alone, and credited the cascade with the saving. A third run added the cheap model with no rescuer: it was nearly as good, at a third of the cost. The rescuer had run on 2 of 40 tickets. Always include "cheap model alone" as a setup — it tells you whether the rescuer is doing the work or just riding along.
+
 ### 14. Try lower effort before a smaller model
 Running the strong model at effort low instead of medium cost 24–40% less with no measurable quality loss on short support replies. It is the cheapest lever to test, because nothing else in the setup changes.
 

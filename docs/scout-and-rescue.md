@@ -40,7 +40,7 @@ Same 18 requests, run at the same moment, blind review:
 
 ## Results in a support test
 
-On 40 made-up support tickets, Scout & Rescue (Haiku 5.5 → Opus 5.5) cost 81–88% less than Opus 5.5 alone and scored 2–6% lower in a blind review. The quality cost comes from cheap replies that pass the checks but are weaker than the strong model's. Running the rescuer at effort low saved another 24–25% with no measurable loss. → [Support test](support-test.md)
+On 40 made-up support tickets, Scout & Rescue (Haiku 5.5 → Opus 5.5) cost 81–92% less than Opus 5.5 alone and scored 2–6% lower in a blind review. The quality cost comes from cheap replies that pass the checks but are weaker than the strong model's. Running the rescuer at effort low saved another 24–25% with no measurable loss. → [Support test](support-test.md) In a third run, the cheap model alone was nearly as good: the rescuer ran on 2 of 40 tickets.
 
 ## When it fits
 

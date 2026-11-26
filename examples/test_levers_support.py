@@ -3,11 +3,12 @@
 Setups (the reply step of the support demo):
     baseline             Haiku 5.5 scout -> Opus 5.5 rescuer (effort medium)  <- published setup
     handoff              same, but the rescuer also sees the scout's draft and why it failed
+    Haiku alone          the cheap model with no rescuer (shares the scout call): what does the rescuer add?
     rescuer effort low   same as baseline, rescuer at effort low
     Opus low, no scout   "lever 0": the strong model for every ticket, at effort low
     Opus medium, no scout  the "before" setup: the strong model for every ticket
 
-The three Scout & Rescue setups share ONE scout call per ticket, so they differ
+The Scout & Rescue setups and Haiku alone share ONE scout call per ticket, so they differ
 only in what happens after a rejection. Quality: Opus 5.5 scores every distinct
 reply blind (it never sees the setup name) on a fixed 40-point rubric.
 
@@ -210,8 +211,18 @@ def build_setups(scout, opus_medium, opus_low):
             return Run(result.text, result.cost_usd, s, "single", check(result.text, t))
         return run
 
+    def scout_alone(t: Ticket) -> Run:
+        """The cheap model with no rescuer: the same scout call the cascades use, kept even if a check fails.
+        Compared with the baseline, it shows exactly what the rescuer adds."""
+        key = id(t)
+        if key not in scout_cache:
+            scout_cache[key] = timed(scout)(t.prompt)
+        first, scout_s = scout_cache[key]
+        return Run(first.text, first.cost_usd, scout_s, "single", check(first.text, t))
+
     return {
         "baseline (published)": cascade(opus_medium, handoff=False),
+        "Haiku alone, no rescuer": scout_alone,
         "handoff": cascade(opus_medium, handoff=True),
         "rescuer effort low": cascade(opus_low, handoff=False),
         "Opus low, no scout": single(opus_low),

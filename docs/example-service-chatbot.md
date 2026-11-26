@@ -59,6 +59,6 @@ Prompt caching would lower both "before" and "after", since the instructions and
 
 Keep the split only if quality holds. If it doesn't, the checks are usually what needs work, not the model.
 
-**What a real test showed:** we ran the answer step on 40 made-up support tickets. Scout & Rescue cost 81–88% less than Opus 5.5 alone and scored 2–6% lower in a blind review; one cheap reply promised a refund the policy didn't allow, and no check caught it. → [Support test](support-test.md)
+**What a real test showed:** we ran the answer step on 40 made-up support tickets. Scout & Rescue cost 81–92% less than Opus 5.5 alone and scored 2–6% lower in a blind review; one cheap reply promised a refund the policy didn't allow, and no check caught it. → [Support test](support-test.md)
 
 → Runnable code for a support-ticket version of this: [examples/demo_support.py](../examples/demo_support.py) · The full method: [method.md](method.md)

@@ -6,8 +6,8 @@
 
 **In 30 seconds:**
 - **What it is:** a method and a small Python tool that cuts what AI features cost on live user traffic, and proves output quality before you ship the change. A cheap model does the work first; a strong model steps in only when a check in code rejects the result (*Scout & Rescue*). Every change is tested side by side against your current setup on your own requests, with a blind quality review.
-- **What we measured:** on a live app's web-search step, cost per article fell from 9.7 ¢ to 4.6–7.7 ¢, and quality held in a blind review. On 40 support tickets, a usable, correct reply cost 0.12 ¢ instead of 1.05 ¢ with Claude Opus 5.5 alone — 89% less per outcome.
-- **The trade-off:** on the support tickets, quality was 2–6% lower, and one wrong refund rule slipped past the checks. Your checks decide how much quality you keep.
+- **What we measured:** on a live app's web-search step, cost per article fell from 9.7 ¢ to 4.6–7.7 ¢, and quality held in a blind review. On 40 support tickets, a usable reply cost 82–92% less than with Claude Opus 5.5 alone, over three runs.
+- **The trade-off:** on the support tickets, quality was 2–6% lower, and one wrong refund rule slipped past the checks. The test also showed that the cheap model alone was nearly as good there: the rescuer pays off only where failures are common and a check can catch them.
 
 ## When it fits
 
@@ -116,10 +116,12 @@ We then ran the support-reply step of this idea for real: 40 made-up tickets (20
 
 | | Scout & Rescue | Opus 5.5 alone |
 |---|---|---|
-| Cost per reply | **81–88% less** | — |
-| Quality (blind review, two runs) | **2–6% lower** | — |
+| Cost per reply (three runs) | **81–92% less** | — |
+| Quality (blind review, three runs) | **2–6% lower** | — |
 | Hard failures (run 2, 40 tickets) | 3 | 2 |
-| **Cost per outcome** (run 2) | **0.12 ¢** (36 of 40) | 1.05 ¢ (35 of 40) |
+| **Cost per outcome** (three runs) | **82–92% less** | — |
+
+**Is the rescuer worth it? Here, barely.** In a third run we added the cheap model alone: it cost 0.025 ¢ per outcome against 0.069 ¢ for Scout & Rescue and 0.92 ¢ for Opus, with nearly the same quality as Scout & Rescue. The rescuer ran on 2 of 40 tickets. On this task the saving comes from the cheap model; the rescuer is cheap insurance.
 
 **Good for cost, with a quality trade-off.** Most cheap replies were good, but some were weaker in ways no check saw, and one stated a wrong refund rule. Use it where a few percent of quality is acceptable, or where your checks catch the mistakes that matter; keep refund, money and legal answers on the strong model until they do. → [Full results, caveats and how to rerun it](https://github.com/AndyJakob78/valueproof/blob/main/docs/support-test.md)
 
@@ -149,7 +151,7 @@ flowchart LR
 
 The checks decide the quality: a mistake no check catches goes straight to the user at the cheap price.
 
-**Expect a small quality cost.** Requests that pass the check are only as good as the cheap model's answer. In our support test, Scout & Rescue cost 81–88% less than the strong model alone and scored 2–6% lower in a blind review — a much stronger cost lever than tuning the strong model, with a quality trade-off you should measure for your own task. How much quality you keep depends mostly on your checks.
+**Expect a small quality cost.** Requests that pass the check are only as good as the cheap model's answer. In our support test, Scout & Rescue cost 81–92% less than the strong model alone and scored 2–6% lower in a blind review — a much stronger cost lever than tuning the strong model, with a quality trade-off you should measure for your own task. How much quality you keep depends mostly on your checks.
 
 ```python
 from valueproof import scout_and_rescue
