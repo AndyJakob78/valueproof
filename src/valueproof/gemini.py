@@ -1,8 +1,8 @@
 """Gemini adapter: turns a Google Gemini model into a `Model` function.
 
-Requires: pip install "costproof[gemini]", and GEMINI_API_KEY.
+Requires: pip install "valueproof[gemini]", and GEMINI_API_KEY.
 
-    from costproof.gemini import gemini_model
+    from valueproof.gemini import gemini_model
     cheap = gemini_model("<model id>", price_in=..., price_out=..., thinking_level="low")
 
 Prices are USD per million tokens and must be passed in: they change often, so

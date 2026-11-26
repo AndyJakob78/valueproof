@@ -4,8 +4,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-from costproof import Run, Score, print_table, run_levers, save, summarize
-from costproof.cli import main
+from valueproof import Run, Score, print_table, run_levers, save, summarize
+from valueproof.cli import main
 
 ROOT = Path(__file__).resolve().parent.parent
 

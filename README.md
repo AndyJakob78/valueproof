@@ -1,4 +1,4 @@
-# Costproof
+# Valueproof
 
 *AI mixed-model cost optimization, proven per outcome.*
 
@@ -27,8 +27,8 @@ Most cost tools stop at the first row. This method measures the second before yo
 | Layer | The question | Who asks it | Where it is measured |
 |---|---|---|---|
 | Model output | What does a token cost? How fast is the model? | Engineers | Price lists, benchmarks |
-| **Outcome** (before shipping) | Did the user get a usable, correct result — and what did that result cost, including failed attempts? | Product, engineering | **The eval: `costproof compare` on your own requests** |
-| **Value shipped** (after shipping) | How much margin did we bank per user, without more complaints, escalations or refunds? | CFO, VP Product | Ship behind a switch, keep measuring — [method, step 9](https://github.com/AndyJakob78/costproof/blob/main/docs/method.md#step-9--ship-behind-a-switch-keep-measuring) |
+| **Outcome** (before shipping) | Did the user get a usable, correct result — and what did that result cost, including failed attempts? | Product, engineering | **The eval: `valueproof compare` on your own requests** |
+| **Value shipped** (after shipping) | How much margin did we bank per user, without more complaints, escalations or refunds? | CFO, VP Product | Ship behind a switch, keep measuring — [method, step 9](https://github.com/AndyJakob78/valueproof/blob/main/docs/method.md#step-9--ship-behind-a-switch-keep-measuring) |
 
 **The eval proves you won't break the product. The switch and the ledger prove the margin you banked.**
 
@@ -38,7 +38,7 @@ Most cost tools stop at the first row. This method measures the second before yo
 |---|---|
 | **Product Manager** | A way to cut AI cost per user with evidence, and to defend every keep-or-drop decision |
 | **System Designer** | A pattern for splitting one AI job into steps, each with the right model |
-| **AI Engineer** | A small Python package: Scout & Rescue, multi-model pipelines, and a test runner (`costproof compare`) |
+| **AI Engineer** | A small Python package: Scout & Rescue, multi-model pipelines, and a test runner (`valueproof compare`) |
 | **Prompt & Context Engineer** | A test routine that shows whether a prompt change really saves tokens — or quietly costs more |
 | **AI Builder** | A way to test cheaper setups for an AI app on a small budget, and keep only those that hold quality |
 | **AI Evaluation** | A blind A/B review setup and a fixed scoring sheet |
@@ -107,7 +107,7 @@ An online shop's chatbot sends every turn to Claude Opus 5.5: **2.6 cents per tu
 | 1 in 5 turns | $36,200 | **$119,800 (−77%)** |
 | 2 in 5 turns | $67,400 | **$88,600 (−57%)** |
 
-These numbers come from assumptions, not a measurement, and are an upper estimate: they leave out prompt caching, which would make the "before" setup cheaper and the saving smaller. → [Full chatbot example, with the checks and how to prove it](https://github.com/AndyJakob78/costproof/blob/main/docs/example-service-chatbot.md)
+These numbers come from assumptions, not a measurement, and are an upper estimate: they leave out prompt caching, which would make the "before" setup cheaper and the saving smaller. → [Full chatbot example, with the checks and how to prove it](https://github.com/AndyJakob78/valueproof/blob/main/docs/example-service-chatbot.md)
 
 ### Measured: support replies
 
@@ -120,9 +120,9 @@ We then ran the support-reply step of this idea for real: 40 made-up tickets (20
 | Hard failures (run 2, 40 tickets) | 3 | 2 |
 | **Cost per outcome** (run 2) | **0.12 ¢** (36 of 40) | 1.05 ¢ (35 of 40) |
 
-**Good for cost, with a quality trade-off.** Most cheap replies were good, but some were weaker in ways no check saw, and one stated a wrong refund rule. Use it where a few percent of quality is acceptable, or where your checks catch the mistakes that matter; keep refund, money and legal answers on the strong model until they do. → [Full results, caveats and how to rerun it](https://github.com/AndyJakob78/costproof/blob/main/docs/support-test.md)
+**Good for cost, with a quality trade-off.** Most cheap replies were good, but some were weaker in ways no check saw, and one stated a wrong refund rule. Use it where a few percent of quality is acceptable, or where your checks catch the mistakes that matter; keep refund, money and legal answers on the strong model until they do. → [Full results, caveats and how to rerun it](https://github.com/AndyJakob78/valueproof/blob/main/docs/support-test.md)
 
-**And where a cheap model is already in use:** in a game that writes an AI newspaper article per match day, the cheap model passed every check, so the rescuer never ran. The strong model alone cost 18× more for 13% better text, and the blind review found fact errors in both that no check caught. The better lever there is a better check, not a bigger model. → [Game article test](https://github.com/AndyJakob78/costproof/blob/main/docs/game-article-test.md)
+**And where a cheap model is already in use:** in a game that writes an AI newspaper article per match day, the cheap model passed every check, so the rescuer never ran. The strong model alone cost 18× more for 13% better text, and the blind review found fact errors in both that no check caught. The better lever there is a better check, not a bigger model. → [Game article test](https://github.com/AndyJakob78/valueproof/blob/main/docs/game-article-test.md)
 
 ## The solution
 
@@ -151,8 +151,8 @@ The checks decide the quality: a mistake no check catches goes straight to the u
 **Expect a small quality cost.** Requests that pass the check are only as good as the cheap model's answer. In our support test, Scout & Rescue cost 81–88% less than the strong model alone and scored 2–6% lower in a blind review — a much stronger cost lever than tuning the strong model, with a quality trade-off you should measure for your own task. How much quality you keep depends mostly on your checks.
 
 ```python
-from costproof import scout_and_rescue
-from costproof.claude import claude
+from valueproof import scout_and_rescue
+from valueproof.claude import claude
 
 outcome = scout_and_rescue(
     prompt,                      # your request
@@ -166,14 +166,14 @@ print(outcome.path, outcome.cost_usd)  # "scout" or "rescue" - how often each ru
 **Install** (version 0.3, early: the API may still change; Python 3.10+, Gemini adapter 3.11+):
 
 ```bash
-pip install "costproof[claude]"
+pip install "valueproof[claude]"
 ```
 
-One name for everything: `pip install costproof`, `import costproof`, `costproof compare`. (Until version 0.3 the package was called `ai-mixed-model-cost-optimization`; the old name still installs and pulls in `costproof`.)
+One name for everything: `pip install valueproof`, `import valueproof`, `valueproof compare`. (Until version 0.3 the package was called `ai-mixed-model-cost-optimization`; the old name still installs and pulls in `valueproof`.)
 
 ```python
-from costproof import scout_and_rescue
-from costproof.claude import claude   # or .openai / .gemini
+from valueproof import scout_and_rescue
+from valueproof.claude import claude   # or .openai / .gemini
 ```
 
 The core has no dependencies and works with any provider: a model is just a function `prompt -> ModelResult`. Adapters come as extras: `[claude]`, `[openai]`, `[gemini]` or `[all]`. For a local model, write a function with the same shape.
@@ -181,11 +181,11 @@ The core has no dependencies and works with any provider: a model is just a func
 **Test a change on your own requests** with one command — it runs every setup on every request, side by side, and prints cost (average and median), rescue rate, time, check failures and blind-review quality:
 
 ```bash
-costproof init my_test.py            # a starter test that runs straight away, with fake models
-costproof compare my_test.py --live
+valueproof init my_test.py            # a starter test that runs straight away, with fake models
+valueproof compare my_test.py --live
 ```
 
-→ How to write `my_test.py`, plus a support-ticket demo that works without an API key: [examples/](https://github.com/AndyJakob78/costproof/blob/main/examples/). The live Claude mode was run in the [support test](https://github.com/AndyJakob78/costproof/blob/main/docs/support-test.md).
+→ How to write `my_test.py`, plus a support-ticket demo that works without an API key: [examples/](https://github.com/AndyJakob78/valueproof/blob/main/examples/). The live Claude mode was run in the [support test](https://github.com/AndyJakob78/valueproof/blob/main/docs/support-test.md).
 
 **A second, smaller lever: lower effort on the strong model.** In the same test, running the rescuer at effort low instead of medium cost 24–25% less in two runs, with no measurable quality loss on the rescued tickets. Measured on short support replies only.
 
@@ -196,16 +196,16 @@ The test setup is an **eval**: a fixed set of real requests, checks in code and 
 ```mermaid
 flowchart LR
     E["1. Build the eval<br/>real requests, checks in code,<br/>blind review"] --> L["2. Pick the next lever<br/>e.g. Scout & Rescue, lower effort"]
-    L --> T["3. Test it against today<br/>same requests, same moment<br/>costproof compare"]
+    L --> T["3. Test it against today<br/>same requests, same moment<br/>valueproof compare"]
     T --> D{"Cheaper AND<br/>quality holds?"}
     D -- "yes: keep" --> L
     D -- "no: drop" --> L
     L -- "no levers left" --> S["4. Test all kept levers together,<br/>ship, keep measuring"]
 ```
 
-The full flow, with the cost breakdown and the ledger: [method.md](https://github.com/AndyJakob78/costproof/blob/main/docs/method.md#the-flow)
+The full flow, with the cost breakdown and the ledger: [method.md](https://github.com/AndyJakob78/valueproof/blob/main/docs/method.md#the-flow)
 
-→ The step-by-step method: [docs/method.md](https://github.com/AndyJakob78/costproof/blob/main/docs/method.md) · Templates: [templates/](https://github.com/AndyJakob78/costproof/blob/main/templates/)
+→ The step-by-step method: [docs/method.md](https://github.com/AndyJakob78/valueproof/blob/main/docs/method.md) · Templates: [templates/](https://github.com/AndyJakob78/valueproof/blob/main/templates/)
 
 ## How this differs from other tools
 
@@ -213,7 +213,7 @@ The technique is not new: a cheap model first and a strong one on failure is a w
 
 | Tool | What it does | How it relates |
 |---|---|---|
-| [RouteLLM](https://github.com/lm-sys/RouteLLM) | Trained routers that pick a model per request | A routing technique. You can test it against your setup with `costproof compare`. |
+| [RouteLLM](https://github.com/lm-sys/RouteLLM) | Trained routers that pick a model per request | A routing technique. You can test it against your setup with `valueproof compare`. |
 | [cascadeflow](https://github.com/lemony-ai/cascadeflow) | A cascading runtime for agents, with streaming and tool-call routing | A runtime for production. Test it here first. |
 | [LiteLLM](https://github.com/BerriAI/litellm) | A gateway to 100+ model APIs | Infrastructure to call models. Works as the model behind a setup here. |
 | [promptfoo](https://github.com/promptfoo/promptfoo) | Broad testing of prompts, agents and RAG, plus red teaming | A general eval suite. This repo is narrower: one cost change at a time, judged by cost per outcome. |
@@ -224,7 +224,7 @@ The technique is not new: a cheap model first and a strong one on failure is a w
 
 We tested 12 cost-saving ideas one at a time, and **7 raised cost or lowered quality**. For example, a shorter prompt made the model search *more*.
 
-→ [Case study](https://github.com/AndyJakob78/costproof/blob/main/docs/case-study.md) · [Support test](https://github.com/AndyJakob78/costproof/blob/main/docs/support-test.md) · [Game article test](https://github.com/AndyJakob78/costproof/blob/main/docs/game-article-test.md) · [Scout & Rescue in detail](https://github.com/AndyJakob78/costproof/blob/main/docs/scout-and-rescue.md) · [Lessons](https://github.com/AndyJakob78/costproof/blob/main/docs/lessons.md)
+→ [Case study](https://github.com/AndyJakob78/valueproof/blob/main/docs/case-study.md) · [Support test](https://github.com/AndyJakob78/valueproof/blob/main/docs/support-test.md) · [Game article test](https://github.com/AndyJakob78/valueproof/blob/main/docs/game-article-test.md) · [Scout & Rescue in detail](https://github.com/AndyJakob78/valueproof/blob/main/docs/scout-and-rescue.md) · [Lessons](https://github.com/AndyJakob78/valueproof/blob/main/docs/lessons.md)
 
 ## Terms used on this page
 
@@ -244,4 +244,4 @@ We tested 12 cost-saving ideas one at a time, and **7 raised cost or lowered qua
 
 Built from a real cost-reduction project on a live language-learning app. Engineering, testing and blind reviews were done with an AI coding assistant (Claude); a product owner made every keep-or-drop decision from the results.
 
-Text: [CC BY 4.0](https://github.com/AndyJakob78/costproof/blob/main/LICENSE). Code in [src/](https://github.com/AndyJakob78/costproof/blob/main/src/) and [examples/](https://github.com/AndyJakob78/costproof/blob/main/examples/): [MIT](https://github.com/AndyJakob78/costproof/blob/main/LICENSE-CODE). Use it, adapt it, credit it.
+Text: [CC BY 4.0](https://github.com/AndyJakob78/valueproof/blob/main/LICENSE). Code in [src/](https://github.com/AndyJakob78/valueproof/blob/main/src/) and [examples/](https://github.com/AndyJakob78/valueproof/blob/main/examples/): [MIT](https://github.com/AndyJakob78/valueproof/blob/main/LICENSE-CODE). Use it, adapt it, credit it.

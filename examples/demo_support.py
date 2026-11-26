@@ -20,7 +20,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))  # works without pip install
 
-from costproof import ModelResult, Step, run_pipeline  # noqa: E402
+from valueproof import ModelResult, Step, run_pipeline  # noqa: E402
 
 TICKETS = [
     "Hi, order #48213 arrived with a cracked screen. Can I get a replacement?",
@@ -107,7 +107,7 @@ def stub_models():
 
 
 def live_models():
-    from costproof.claude import claude
+    from valueproof.claude import claude
 
     return {
         "cheap": claude("claude-haiku-5-5", effort="low"),

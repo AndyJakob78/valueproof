@@ -1,10 +1,10 @@
-"""Costproof: let cheap and strong models work together,
+"""Valueproof: let cheap and strong models work together,
 and measure what each change does to cost and quality before it ships.
 
-    from costproof import scout_and_rescue, ModelResult
-    from costproof.claude import claude              # [claude] extra
-    from costproof.openai import openai_model        # [openai] extra
-    from costproof.gemini import gemini_model        # [gemini] extra
+    from valueproof import scout_and_rescue, ModelResult
+    from valueproof.claude import claude              # [claude] extra
+    from valueproof.openai import openai_model        # [openai] extra
+    from valueproof.gemini import gemini_model        # [gemini] extra
 
 Any provider works: a model is just a function `prompt -> ModelResult`.
 """

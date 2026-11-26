@@ -1,9 +1,9 @@
 # Changelog
 
-## 0.4.0 — renamed to costproof
-- **One name for everything:** `pip install costproof`, `import costproof`, `costproof compare`.
-- The old names keep working until 1.0, with a deprecation note: `pip install ai-mixed-model-cost-optimization` now installs `costproof`; `import mixed_model_cost` and the `mmco` command still work.
-- `costproof init` writes `costproof_test.py` by default.
+## 0.4.0 — renamed to valueproof
+- **One name for everything:** `pip install valueproof`, `import valueproof`, `valueproof compare`.
+- The old names keep working until 1.0, with a deprecation note: `pip install ai-mixed-model-cost-optimization` now installs `valueproof`; `import mixed_model_cost` and the `mmco` command still work.
+- `valueproof init` writes `valueproof_test.py` by default.
 
 ## 0.3.0
 - **Cost per outcome** in `mmco compare`: everything a setup spent, including failed and rescued attempts, divided by the requests whose final result passed the check and had no hard failure. It is now the first column, and "vs base" compares it. Also available as `summarize(report, setups)` and `is_outcome(row)`.

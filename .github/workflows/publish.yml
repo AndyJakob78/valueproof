@@ -16,7 +16,7 @@ jobs:
         run: |
           pip install ".[all,dev]"
           pytest -q tests
-      - name: Build costproof, and the old package name that points to it
+      - name: Build valueproof, and the old package name that points to it
         run: |
           pip install build
           python -m build

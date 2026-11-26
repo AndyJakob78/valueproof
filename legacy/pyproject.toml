@@ -1,4 +1,4 @@
-# The old package name. It installs nothing of its own and pulls in `costproof`,
+# The old package name. It installs nothing of its own and pulls in `valueproof`,
 # so `pip install ai-mixed-model-cost-optimization` keeps working.
 [build-system]
 requires = ["setuptools>=69"]
@@ -7,20 +7,20 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "ai-mixed-model-cost-optimization"
 version = "0.4.0"
-description = "Renamed to costproof - this package now just installs costproof."
+description = "Renamed to valueproof - this package now just installs valueproof."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
-dependencies = ["costproof>=0.4.0"]
+dependencies = ["valueproof>=0.4.0"]
 
 [project.optional-dependencies]
-claude = ["costproof[claude]>=0.4.0"]
-openai = ["costproof[openai]>=0.4.0"]
-gemini = ["costproof[gemini]>=0.4.0"]
-all = ["costproof[all]>=0.4.0"]
+claude = ["valueproof[claude]>=0.4.0"]
+openai = ["valueproof[openai]>=0.4.0"]
+gemini = ["valueproof[gemini]>=0.4.0"]
+all = ["valueproof[all]>=0.4.0"]
 
 [project.urls]
-Homepage = "https://pypi.org/project/costproof/"
+Homepage = "https://pypi.org/project/valueproof/"
 
 [tool.setuptools]
 packages = []
