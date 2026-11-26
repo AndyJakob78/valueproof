@@ -4,8 +4,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-from mixed_model_cost import Run, Score, print_table, run_levers, save, summarize
-from mixed_model_cost.cli import main
+from costproof import Run, Score, print_table, run_levers, save, summarize
+from costproof.cli import main
 
 ROOT = Path(__file__).resolve().parent.parent
 

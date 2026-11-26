@@ -1,22 +1,22 @@
-"""AI Mixed Model Cost Optimization: let cheap and strong models work together,
-and measure what each change does to cost and quality before it ships.
+"""Old name of `costproof`. Kept so existing code keeps working; removed in version 1.0.
 
-    from mixed_model_cost import scout_and_rescue, ModelResult
-    from mixed_model_cost.claude import claude              # [claude] extra
-    from mixed_model_cost.openai import openai_model        # [openai] extra
-    from mixed_model_cost.gemini import gemini_model        # [gemini] extra
-
-Any provider works: a model is just a function `prompt -> ModelResult`.
+    import mixed_model_cost              ->  import costproof
+    from mixed_model_cost.claude import  ->  from costproof.claude import
 """
+import importlib
+import sys
+import warnings
 
-from .lever_runner import Report, Run, Score, is_outcome, print_table, run_levers, save, summarize
-from .pipeline import RunResult, Step, StepLog, run_pipeline
-from .scout_rescue import Check, Model, ModelResult, Outcome, handoff_prompt, scout_and_rescue
+warnings.warn(
+    "`mixed_model_cost` is now `costproof` - use `import costproof`. The old name will be removed in version 1.0.",
+    DeprecationWarning,
+    stacklevel=2,
+)
 
-__version__ = "0.3.0"
+from costproof import *  # noqa: E402,F401,F403
+from costproof import __all__, __version__  # noqa: E402,F401
 
-__all__ = [
-    "Check", "Model", "ModelResult", "Outcome", "handoff_prompt", "scout_and_rescue",
-    "RunResult", "Step", "StepLog", "run_pipeline",
-    "Report", "Run", "Score", "is_outcome", "print_table", "run_levers", "save", "summarize",
-]
+# Old submodule paths: mixed_model_cost.claude, .openai, .gemini, ... point to costproof's.
+# Adapters import their provider SDK only when called, so this needs no extra packages.
+for _name in ("scout_rescue", "pipeline", "lever_runner", "cli", "starter", "claude", "openai", "gemini"):
+    sys.modules[f"{__name__}.{_name}"] = importlib.import_module(f"costproof.{_name}")

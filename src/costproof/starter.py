@@ -1,16 +1,16 @@
-"""The file `mmco init` writes: a test that runs offline straight away, ready to edit."""
+"""The file `costproof init` writes: a test that runs offline straight away, ready to edit."""
 
 STARTER = '''"""My cost test: compare today's setup with a cheaper one on the same requests.
 
-    mmco compare {name}           # fake models: checks the wiring, no cost
-    mmco compare {name} --live    # real models: costs money
+    costproof compare {name}           # fake models: checks the wiring, no cost
+    costproof compare {name} --live    # real models: costs money
 
 Edit the four parts marked EDIT, from top to bottom.
 """
 
 import time
 
-from mixed_model_cost import ModelResult, Run, Score, scout_and_rescue
+from costproof import ModelResult, Run, Score, scout_and_rescue
 
 # EDIT 1 - your test requests: 20-100 real ones from your logs, including the hard ones.
 CASES = [
@@ -46,13 +46,13 @@ def fake(name, cost, good=True):
 def models(live: bool):
     if not live:
         return {{"cheap": fake("fake-cheap", 0.0004, good=False), "strong": fake("fake-strong", 0.0100)}}
-    # Pick one provider; pip install "ai-mixed-model-cost-optimization[claude]" (or [openai], [gemini]).
-    from mixed_model_cost.claude import claude
+    # Pick one provider; pip install "costproof[claude]" (or [openai], [gemini]).
+    from costproof.claude import claude
     return {{"cheap": claude("claude-haiku-5-5"), "strong": claude("claude-opus-5-5", effort="medium")}}
-    # from mixed_model_cost.openai import openai_model
+    # from costproof.openai import openai_model
     # return {{"cheap": openai_model("<cheap model>", price_in=..., price_out=...),
     #          "strong": openai_model("<strong model>", price_in=..., price_out=...)}}
-    # from mixed_model_cost.gemini import gemini_model
+    # from costproof.gemini import gemini_model
     # return {{"cheap": gemini_model("<cheap model>", price_in=..., price_out=...),
     #          "strong": gemini_model("<strong model>", price_in=..., price_out=...)}}
 

@@ -1,4 +1,4 @@
-from mixed_model_cost import ModelResult, Step, handoff_prompt, run_pipeline, scout_and_rescue
+from costproof import ModelResult, Step, handoff_prompt, run_pipeline, scout_and_rescue
 
 
 def model(name, cost, text):

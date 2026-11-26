@@ -16,10 +16,11 @@ jobs:
         run: |
           pip install ".[all,dev]"
           pytest -q tests
-      - name: Build
+      - name: Build costproof, and the old package name that points to it
         run: |
           pip install build
           python -m build
+          python -m build legacy --outdir dist
       - uses: actions/upload-artifact@v4
         with:
           name: dist

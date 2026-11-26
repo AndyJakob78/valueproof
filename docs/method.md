@@ -1,4 +1,4 @@
-# The AI Mixed Model Cost Optimization method
+# The Costproof method
 
 A way to cut the running cost of an AI feature with evidence instead of intuition. It assumes nothing about the model vendor, the language or the framework. You need: the feature, a fixed set of test requests, a way to log tokens per call, and a reviewer for blind judging.
 
@@ -18,7 +18,7 @@ flowchart TD
     end
     C["Break today's cost into parts<br/>where does the money go?"]
     L["List levers, each with a guess<br/>Scout & Rescue, lower effort, shorter prompt, caching"]
-    T["Test ONE lever against today<br/>same requests, same moment: mmco compare"]
+    T["Test ONE lever against today<br/>same requests, same moment: costproof compare"]
     LG["Write it in the ledger<br/>cost, speed, quality, hard failures"]
     D{"Cheaper AND<br/>quality holds?"}
     K["Keep"]

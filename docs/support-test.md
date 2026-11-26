@@ -41,7 +41,7 @@ A live test of the Scout & Rescue code in [examples/](../examples/), against the
 | Opus low alone | 0.550 ¢ | +411% | — | 2.4 s | 1,380 | 1 |
 | Opus medium alone | 0.916 ¢ | +752% | — | 4.1 s | 1,380 | 2 |
 
-Costs are the reply step only, at the API prices in [claude.py](../src/mixed_model_cost/claude.py); the reviewer's own cost is not included. Raw results: [run 1](data/support-test-run1.json) · [run 2](data/support-test-run2.json).
+Costs are the reply step only, at the API prices in [claude.py](../src/costproof/claude.py); the reviewer's own cost is not included. Raw results: [run 1](data/support-test-run1.json) · [run 2](data/support-test-run2.json).
 
 ## What it means
 
@@ -83,8 +83,8 @@ Giving the rescuer the scout's rejected draft and the reason **cost 12% more** (
 ## Run it yourself
 
 ```bash
-pip install "ai-mixed-model-cost-optimization[claude]"
-mmco compare examples/test_levers_support.py --live --hard
+pip install "costproof[claude]"
+costproof compare examples/test_levers_support.py --live --hard
 ```
 
 About $2–3 per run with all setups, including the reviewer. Without `--live` it runs on stub models to check the wiring, at no cost. Replace the policy, tickets and checks with your own — see [examples/README.md](../examples/README.md).

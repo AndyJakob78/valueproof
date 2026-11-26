@@ -1,8 +1,8 @@
 """OpenAI adapter: turns an OpenAI model into a `Model` function (Responses API).
 
-Requires: pip install "ai-mixed-model-cost-optimization[openai]", and OPENAI_API_KEY.
+Requires: pip install "costproof[openai]", and OPENAI_API_KEY.
 
-    from mixed_model_cost.openai import openai_model
+    from costproof.openai import openai_model
     cheap = openai_model("<model id>", price_in=..., price_out=..., effort="low")
 
 Prices are USD per million tokens and must be passed in: they change often, so

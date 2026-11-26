@@ -11,8 +11,8 @@ The three Scout & Rescue setups share ONE scout call per ticket, so they differ
 only in what happens after a rejection. Quality: Opus 5.5 scores every distinct
 reply blind (it never sees the setup name) on a fixed 40-point rubric.
 
-    mmco compare examples/test_levers_support.py          # stub models, checks the wiring only
-    mmco compare examples/test_levers_support.py --live   # real calls, about $1-2
+    costproof compare examples/test_levers_support.py          # stub models, checks the wiring only
+    costproof compare examples/test_levers_support.py --live   # real calls, about $1-2
     add --hard for 20 harder tickets, --setups "a|b" to run only some setups
     (without installing: python examples/test_levers_support.py, same flags)
 """
@@ -28,7 +28,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))  # works without pip install
 
-from mixed_model_cost import ModelResult, Run, Score, scout_and_rescue  # noqa: E402
+from costproof import ModelResult, Run, Score, scout_and_rescue  # noqa: E402
 
 POLICY = """Shop support policy
 §1 Damaged item: free replacement or full refund. We need a photo of the damage. Report within 14 days of delivery.
@@ -236,7 +236,7 @@ def stub_models():
 
 
 def live_models():
-    from mixed_model_cost.claude import claude
+    from costproof.claude import claude
 
     return (
         claude("claude-haiku-5-5", effort="low"),
@@ -247,7 +247,7 @@ def live_models():
 
 
 def build(live: bool, args: list[str]) -> dict:
-    """Entry point for `mmco compare examples/test_levers_support.py [--live] [--hard] [--setups "a|b"]`."""
+    """Entry point for `costproof compare examples/test_levers_support.py [--live] [--hard] [--setups "a|b"]`."""
     scout, opus_medium, opus_low, judge_model = live_models() if live else stub_models()
     setups = build_setups(scout, opus_medium, opus_low)
     if "--setups" in args:  # e.g. --setups "baseline (published)|rescuer effort low"
@@ -262,6 +262,6 @@ def build(live: bool, args: list[str]) -> dict:
 
 
 if __name__ == "__main__":
-    from mixed_model_cost.cli import compare
+    from costproof.cli import compare
 
     compare(__file__, live="--live" in sys.argv, extra=sys.argv[1:])

@@ -1,9 +1,9 @@
-"""The `mmco` command.
+"""The `costproof` command.
 
-    mmco init my_test.py               # write a starter test that runs offline straight away
-    mmco compare my_test.py            # run every setup on every case, print the table
-    mmco compare my_test.py --live     # your file decides what "live" means (real API calls)
-    mmco compare my_test.py --out dir  # where results and the blind review sheet go
+    costproof init my_test.py               # write a starter test that runs offline straight away
+    costproof compare my_test.py            # run every setup on every case, print the table
+    costproof compare my_test.py --live     # your file decides what "live" means (real API calls)
+    costproof compare my_test.py --out dir  # where results and the blind review sheet go
 
 Your test file is plain Python and defines one function:
 
@@ -41,7 +41,7 @@ def _load(path: Path):
     sys.modules[spec.name] = module  # dataclasses in the test file need this
     spec.loader.exec_module(module)
     if not hasattr(module, "build"):
-        raise SystemExit(f"{path} must define build(live, args) -> dict. See: mmco compare --help")
+        raise SystemExit(f"{path} must define build(live, args) -> dict. See: costproof compare --help")
     return module
 
 
@@ -61,14 +61,14 @@ def compare(file: str, live: bool = False, out: str | None = None, extra: list[s
 def init(file: str) -> None:
     path = Path(file)
     if path.exists():
-        raise SystemExit(f"{path} already exists - pick another name: mmco init my_test.py")
+        raise SystemExit(f"{path} already exists - pick another name: costproof init my_test.py")
     path.write_text(STARTER.format(name=path.name))
-    print(f"Wrote {path}. Try it: mmco compare {path}\nThen edit the four parts marked EDIT.")
+    print(f"Wrote {path}. Try it: costproof compare {path}\nThen edit the four parts marked EDIT.")
 
 
 def main(argv: list[str] | None = None) -> None:
-    parser = argparse.ArgumentParser(prog="mmco", description="Test cheaper AI setups against your current one.")
-    parser.add_argument("--version", action="version", version=f"mmco {__version__}")
+    parser = argparse.ArgumentParser(prog="costproof", description="Test cheaper AI setups against your current one.")
+    parser.add_argument("--version", action="version", version=f"costproof {__version__}")
     sub = parser.add_subparsers(dest="command", required=True)
     cmp_ = sub.add_parser("compare", help="run setups side by side and print a keep-or-drop table",
                           description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -76,12 +76,19 @@ def main(argv: list[str] | None = None) -> None:
     cmp_.add_argument("--live", action="store_true", help="tell build() to use real models")
     cmp_.add_argument("--out", help="folder for results (default: results/<time> next to the file)")
     ini = sub.add_parser("init", help="write a starter test file that runs offline straight away")
-    ini.add_argument("file", nargs="?", default="mmco_test.py", help="file to create (default: mmco_test.py)")
+    ini.add_argument("file", nargs="?", default="costproof_test.py", help="file to create (default: costproof_test.py)")
     args, extra = parser.parse_known_args(argv)
     if args.command == "compare":
         compare(args.file, args.live, args.out, extra)
     elif args.command == "init":
         init(args.file)
+
+
+
+def main_mmco(argv: list[str] | None = None) -> None:
+    """The old command name. Kept so existing scripts keep working; removed in version 1.0."""
+    print("Note: the `mmco` command is now `costproof`. `mmco` will be removed in version 1.0.", file=sys.stderr)
+    main(argv)
 
 
 if __name__ == "__main__":

@@ -3,9 +3,9 @@ from types import SimpleNamespace as NS
 
 import pytest
 
-from mixed_model_cost.claude import claude
-from mixed_model_cost.gemini import gemini_model
-from mixed_model_cost.openai import openai_model
+from costproof.claude import claude
+from costproof.gemini import gemini_model
+from costproof.openai import openai_model
 
 
 class Recorder:

@@ -2,7 +2,7 @@
 scout_rescue and pipeline. Other providers need only a function with the
 same shape (prompt in, ModelResult out).
 
-Requires: pip install "ai-mixed-model-cost-optimization[claude]" (or anthropic), and credentials (ANTHROPIC_API_KEY or `ant auth login`).
+Requires: pip install "costproof[claude]" (or anthropic), and credentials (ANTHROPIC_API_KEY or `ant auth login`).
 """
 
 from __future__ import annotations
