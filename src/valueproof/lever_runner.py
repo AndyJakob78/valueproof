@@ -237,6 +237,8 @@ def rate_checks(report: Report, cases: list[Any], setups: list[str],
                     v, c = v
                     cost += c
                 verdicts[key] = v is not None
+                if len(verdicts) % 20 == 0:
+                    print(f"    {name}: {len(verdicts)} replies checked", flush=True)
             return verdicts[key]
 
         q = check_quality(report, setups, weaker_by, flagged)

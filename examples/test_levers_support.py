@@ -251,7 +251,7 @@ def timed(model):
     return call
 
 
-def build_setups(scout, opus_medium, opus_low, policy_check=None, sonnet_medium=None):
+def build_setups(scout, opus_medium, opus_low, policy_check=None, sonnet_medium=None, policy_check_v2=None):
     scout_cache: dict[int, tuple[ModelResult, float]] = {}
 
     def cascade(rescue, handoff):
@@ -280,7 +280,7 @@ def build_setups(scout, opus_medium, opus_low, policy_check=None, sonnet_medium=
         first, scout_s = scout_cache[key]
         return Run(first.text, first.cost_usd, scout_s, "single", check(first.text, t))
 
-    def policy_cascade(rescue, require_cite=True, only_high_risk=False):
+    def policy_cascade(rescue, require_cite=True, only_high_risk=False, policy=None):
         """Scout & Rescue where a reply must pass the code checks AND a policy check by a cheap model.
         The policy check's own cost is added to the run. Options are the levers under test."""
         def run(t: Ticket) -> Run:
@@ -295,7 +295,7 @@ def build_setups(scout, opus_medium, opus_low, policy_check=None, sonnet_medium=
                 reason = check(x, t, require_cite)
                 if reason or (only_high_risk and not high_risk(t)):
                     return reason
-                reason, cost = policy_check(t, x)
+                reason, cost = (policy or policy_check)(t, x)
                 extra += cost
                 return reason
 
@@ -309,9 +309,11 @@ def build_setups(scout, opus_medium, opus_low, policy_check=None, sonnet_medium=
         "S&R + policy check (Haiku)": policy_cascade(opus_medium),
         "L1 no cite rule": policy_cascade(opus_medium, require_cite=False),
         "L2 rescuer effort low": policy_cascade(opus_low),
+        "L3 sharper check prompt": policy_cascade(opus_medium, policy=policy_check_v2),
         "L4 check high-risk only": policy_cascade(opus_medium, only_high_risk=True),
         "L5 Sonnet as rescuer": policy_cascade(sonnet_medium),
         "combined L1+L2+L4": policy_cascade(opus_low, require_cite=False, only_high_risk=True),
+        "combined L1+L2+L3+L4": policy_cascade(opus_low, require_cite=False, only_high_risk=True, policy=policy_check_v2),
     } if policy_check else {}
     return {
         "baseline (published)": cascade(opus_medium, handoff=False),
@@ -364,7 +366,7 @@ def build(live: bool, args: list[str]) -> dict:
      sonnet_medium) = live_models() if live else stub_models()
     haiku_policy, sonnet_policy = make_policy_check(check_haiku), make_policy_check(check_sonnet)
     haiku_policy_v2 = make_policy_check(check_haiku, POLICY_CHECK_PROMPT_V2)
-    setups = build_setups(scout, opus_medium, opus_low, haiku_policy, sonnet_medium)
+    setups = build_setups(scout, opus_medium, opus_low, haiku_policy, sonnet_medium, haiku_policy_v2)
 
     def code_plus(policy):
         def fn(t, text):
