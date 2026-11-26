@@ -3,7 +3,8 @@
 STARTER = '''"""My cost test: compare today's setup with a cheaper one on the same requests.
 
     valueproof compare {name}           # fake models: checks the wiring, no cost
-    valueproof compare {name} --live    # real models: costs money
+    valueproof compare {name} --live --estimate      # real models, 2 cases: prints the projected bill
+    valueproof compare {name} --live --max-spend 5   # real models, stops once $5 is spent
 
 Edit the four parts marked EDIT, from top to bottom.
 """
@@ -69,7 +70,7 @@ def build(live: bool, args: list) -> dict:
     def scout_rescue(case) -> Run:
         t0 = time.time()
         out = scout_and_rescue(prompt_for(case), m["cheap"], m["strong"], lambda t: check(t, case))
-        return Run(out.text, out.cost_usd, time.time() - t0, out.path, check(out.text, case))
+        return Run(out.text, out.cost_usd, time.time() - t0, out.path, check(out.text, case), out.rejected_because)
 
     return {{
         "cases": CASES,

@@ -16,7 +16,9 @@ from __future__ import annotations
 import csv
 import json
 import random
+import re
 import statistics
+from collections import Counter
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Optional
@@ -29,6 +31,7 @@ class Run:
     seconds: float
     path: str = "single"  # "scout", "rescue" or "single"
     final_check: Optional[str] = None  # None if the final text passes your check
+    rejected_because: Optional[str] = None  # why the first attempt failed its check, if it did
 
 
 @dataclass
@@ -37,6 +40,7 @@ class Score:
     max_points: int
     hard_failure: bool = False  # wrong policy, invented promise, no answer ...
     note: str = ""
+    cost_usd: float = 0.0  # what the review itself cost, if a model did it
 
 
 @dataclass
@@ -50,6 +54,8 @@ class Row:
 @dataclass
 class Report:
     rows: list[Row] = field(default_factory=list)
+    spent_usd: float = 0.0  # runs plus reviews
+    stopped: Optional[str] = None  # why the run stopped early, if it did
 
     def for_setup(self, name: str) -> list[Row]:
         return [r for r in self.rows if r.setup == name]
@@ -60,15 +66,28 @@ def run_levers(
     setups: dict[str, Callable[[Any], Run]],
     judge: Optional[Callable[[Any, str], Score]] = None,
     seed: int = 1,
+    max_spend: Optional[float] = None,
 ) -> Report:
+    """Run every setup on every case, then review blind.
+
+    max_spend (USD): stop starting new cases once runs have spent this much, and
+    skip the review if it would push past it. A case in progress is finished, so
+    the results stay paired. The table then covers the finished cases only.
+    """
     rng = random.Random(seed)
     report = Report()
     for i, case in enumerate(cases):
+        if max_spend is not None and report.spent_usd >= max_spend:
+            report.stopped = f"spend limit ${max_spend:.2f} reached after {i} of {len(cases)} cases"
+            print(f"  STOPPED: {report.stopped}", flush=True)
+            break
         names = list(setups)
         rng.shuffle(names)  # no setup always goes first
         for name in names:
-            report.rows.append(Row(i, name, setups[name](case)))
-        print(f"  case {i + 1}/{len(cases)} done", flush=True)
+            run = setups[name](case)
+            report.spent_usd += run.cost_usd
+            report.rows.append(Row(i, name, run))
+        print(f"  case {i + 1}/{len(cases)} done, ${report.spent_usd:.4f} spent", flush=True)
 
     if judge:
         # Score each distinct reply once, in random order, without the setup name.
@@ -77,17 +96,47 @@ def run_levers(
         rng.shuffle(order)
         scores = {}
         for n, (i, text) in enumerate(order, 1):
+            if max_spend is not None and report.spent_usd >= max_spend:
+                report.stopped = f"spend limit ${max_spend:.2f} reached during the review; no quality scores shown"
+                print(f"  STOPPED: {report.stopped}", flush=True)
+                scores = None
+                break
             scores[(i, text)] = judge(cases[i], text)
+            report.spent_usd += scores[(i, text)].cost_usd
             print(f"  reviewed {n}/{len(order)}", flush=True)
-        for r in report.rows:
-            r.score = scores[(r.case, r.run.text)]
+        if scores is not None:
+            for r in report.rows:
+                r.score = scores[(r.case, r.run.text)]
     return report
+
+
+def estimate(
+    cases: list[Any],
+    setups: dict[str, Callable[[Any], Run]],
+    judge: Optional[Callable[[Any, str], Score]] = None,
+    sample: int = 2,
+) -> dict:
+    """Run the first `sample` cases for real and project the cost of the full run.
+
+    This spends a little money on purpose: a real call is the only reliable price.
+    """
+    trial = run_levers(cases[:sample], setups, judge)
+    done = len({r.case for r in trial.rows})
+    per_case = trial.spent_usd / done if done else 0.0
+    return {"sample_cases": done, "sample_spent": trial.spent_usd, "per_case": per_case,
+            "projected_total": per_case * len(cases), "cases": len(cases)}
 
 
 def is_outcome(row: Row) -> bool:
     """A request counts as an outcome when the final result passes your check and,
     if a judge ran, has no hard failure - the result a user could actually rely on."""
     return row.run.final_check is None and not (row.score and row.score.hard_failure)
+
+
+def _reason(text: str) -> str:
+    """Group similar reasons: 'does not cite §1, §6' and 'does not cite §5' are the same rule."""
+    short = re.sub(r"[§#]?\d[\d.,§ ]*", "#", text)
+    return short.strip(" :,")
 
 
 def summarize(report: Report, setups: list[str]) -> list[dict]:
@@ -115,6 +164,9 @@ def summarize(report: Report, setups: list[str]) -> list[dict]:
             "quality": sum(s.points for s in scored) if scored else None,
             "quality_max": sum(s.max_points for s in scored) if scored else None,
             "hard_fail": sum(s.hard_failure for s in scored) if scored else None,
+            "first_try_pass": sum(r.run.rejected_because is None and r.run.path != "rescue" for r in rows),
+            "first_try_rejections": Counter(_reason(r.run.rejected_because) for r in rows if r.run.rejected_because),
+            "final_failures": Counter(_reason(r.run.final_check) for r in rows if r.run.final_check),
         })
     return out
 
@@ -141,6 +193,18 @@ def print_table(report: Report, setups: list[str]) -> None:
         print(line)
     print("\ncost/outcome = everything spent / requests whose final result passed the check"
           + (" and had no hard failure" if has_scores else "") + ". It is the number to compare.")
+    reasons = [s for s in rows if s["first_try_rejections"] or s["final_failures"]]
+    if reasons:
+        print("\nWhy results were rejected (which check rule fired, most frequent first):")
+        for s in reasons:
+            print(f"  {s['setup']}: first try passed {s['first_try_pass']}/{s['requests']}")
+            for label, counts in (("first try rejected", s["first_try_rejections"]), ("final result failed", s["final_failures"])):
+                if counts:
+                    top = ", ".join(f"{why} ({n})" for why, n in counts.most_common(5))
+                    print(f"    {label}: {top}")
+    if report.stopped:
+        print(f"\nNote: {report.stopped}.")
+    print(f"Spent on this run: ${report.spent_usd:.4f}")
 
 
 def save(report: Report, cases: list[Any], out_dir: Path, describe: Callable[[Any], str]) -> None:

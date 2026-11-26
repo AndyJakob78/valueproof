@@ -4,6 +4,8 @@
     valueproof compare my_test.py            # run every setup on every case, print the table
     valueproof compare my_test.py --live     # your file decides what "live" means (real API calls)
     valueproof compare my_test.py --out dir  # where results and the blind review sheet go
+    valueproof compare my_test.py --live --estimate        # run 2 cases, print the projected bill
+    valueproof compare my_test.py --live --max-spend 5     # stop once $5 is spent
 
 Your test file is plain Python and defines one function:
 
@@ -28,7 +30,7 @@ from datetime import datetime
 from pathlib import Path
 
 from . import __version__
-from .lever_runner import print_table, run_levers, save
+from .lever_runner import estimate, print_table, run_levers, save
 from .starter import STARTER
 
 
@@ -45,12 +47,25 @@ def _load(path: Path):
     return module
 
 
-def compare(file: str, live: bool = False, out: str | None = None, extra: list[str] | None = None) -> None:
+def compare(file: str, live: bool = False, out: str | None = None, extra: list[str] | None = None,
+            max_spend: float | None = None, estimate_only: bool = False, sample: int = 2) -> None:
     path = Path(file).resolve()
     spec = _load(path).build(live, extra or [])
-    cases, setups = spec["cases"], spec["setups"]
-    print(f"{'LIVE' if live else 'OFFLINE'}: {len(cases)} cases x {len(setups)} setups")
-    report = run_levers(cases, setups, judge=spec.get("judge"))
+    cases, setups, judge = spec["cases"], spec["setups"], spec.get("judge")
+    mode = "LIVE" if live else "OFFLINE"
+    if estimate_only:
+        print(f"{mode} ESTIMATE: running {min(sample, len(cases))} of {len(cases)} cases x {len(setups)} setups for real")
+        e = estimate(cases, setups, judge, sample)
+        print(f"\nSpent on the sample: ${e['sample_spent']:.4f} for {e['sample_cases']} cases (${e['per_case']:.4f} per case)")
+        print(f"Projected full run:  ${e['projected_total']:.2f} for {e['cases']} cases, including the review")
+        print("A rough guide: hard cases and rescues cost more. Set a ceiling with --max-spend.")
+        return
+    limit = f", stops at ${max_spend:.2f}" if max_spend is not None else ""
+    print(f"{mode}: {len(cases)} cases x {len(setups)} setups{limit}")
+    report = run_levers(cases, setups, judge=judge, max_spend=max_spend)
+    if not report.rows:
+        print(f"Nothing ran: {report.stopped}")
+        return
     print()
     print_table(report, list(setups))
     out_dir = Path(out) if out else path.parent / "results" / datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -75,11 +90,16 @@ def main(argv: list[str] | None = None) -> None:
     cmp_.add_argument("file", help="your test file, defining build(live, args)")
     cmp_.add_argument("--live", action="store_true", help="tell build() to use real models")
     cmp_.add_argument("--out", help="folder for results (default: results/<time> next to the file)")
+    cmp_.add_argument("--max-spend", type=float, metavar="USD",
+                      help="stop starting new cases once this much is spent (runs + review)")
+    cmp_.add_argument("--estimate", action="store_true",
+                      help="run only a small sample for real and print the projected cost of the full run")
+    cmp_.add_argument("--sample", type=int, default=2, help="cases to run for --estimate (default: 2)")
     ini = sub.add_parser("init", help="write a starter test file that runs offline straight away")
     ini.add_argument("file", nargs="?", default="valueproof_test.py", help="file to create (default: valueproof_test.py)")
     args, extra = parser.parse_known_args(argv)
     if args.command == "compare":
-        compare(args.file, args.live, args.out, extra)
+        compare(args.file, args.live, args.out, extra, args.max_spend, args.estimate, args.sample)
     elif args.command == "init":
         init(args.file)
 

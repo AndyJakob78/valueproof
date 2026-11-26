@@ -171,13 +171,14 @@ invents an order number, or does not answer. Reply with JSON only:
 
 def make_judge(model):
     def judge(t: Ticket, reply: str) -> Score:
-        raw = model(JUDGE_PROMPT.format(policy=POLICY, ticket=t.text, reply=reply)).text
+        result = model(JUDGE_PROMPT.format(policy=POLICY, ticket=t.text, reply=reply))
+        raw = result.text
         try:
             d = json.loads(raw[raw.index("{"): raw.rindex("}") + 1])
             pts = sum(int(d[k]) for k in ("policy_correct", "solves", "tone", "clarity"))
-            return Score(pts, 40, bool(d["hard_failure"]), d.get("note", ""))
+            return Score(pts, 40, bool(d["hard_failure"]), d.get("note", ""), result.cost_usd)
         except (ValueError, KeyError):
-            return Score(0, 40, True, "judge reply not readable")
+            return Score(0, 40, True, "judge reply not readable", result.cost_usd)
     return judge
 
 
@@ -200,7 +201,7 @@ def build_setups(scout, opus_medium, opus_low):
             first, scout_s = scout_cache[key]
             t0 = time.time()
             out = scout_and_rescue(t.prompt, lambda p: first, rescue, lambda x: check(x, t), handoff=handoff)
-            return Run(out.text, out.cost_usd, scout_s + time.time() - t0, out.path, check(out.text, t))
+            return Run(out.text, out.cost_usd, scout_s + time.time() - t0, out.path, check(out.text, t), out.rejected_because)
         return run
 
     def single(model):

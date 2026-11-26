@@ -5,7 +5,7 @@
 **Prove an AI cost cut on your own traffic before you ship it. Let cheap and strong models work together, and measure cost per outcome — not cost per token.**
 
 **In 30 seconds:**
-- **What it is:** a method and a small Python tool. A cheap model does the work first; a strong model steps in only when a check in code rejects the result (*Scout & Rescue*). Every change is tested side by side against your current setup on your own requests, with a blind quality review.
+- **What it is:** a method and a small Python tool that cuts what AI features cost on live user traffic, and proves output quality before you ship the change. A cheap model does the work first; a strong model steps in only when a check in code rejects the result (*Scout & Rescue*). Every change is tested side by side against your current setup on your own requests, with a blind quality review.
 - **What we measured:** on a live app's web-search step, cost per article fell from 9.7 ¢ to 4.6–7.7 ¢, and quality held in a blind review. On 40 support tickets, a usable, correct reply cost 0.12 ¢ instead of 1.05 ¢ with Claude Opus 5.5 alone — 89% less per outcome.
 - **The trade-off:** on the support tickets, quality was 2–6% lower, and one wrong refund rule slipped past the checks. Your checks decide how much quality you keep.
 
@@ -17,6 +17,7 @@ It fits when your product sends a lot of requests to a frontier model — such a
 - data extraction
 - search and research assistants
 - document summarizers
+- code translation and migration (e.g. Java to Kotlin) — the checks are exact: does it compile, do the tests pass
 
 And most of those requests are routine, and a bad result can be detected in code: an empty result, a missing field, an outdated date, or an invalid format.
 
@@ -163,7 +164,7 @@ outcome = scout_and_rescue(
 print(outcome.path, outcome.cost_usd)  # "scout" or "rescue" - how often each runs depends on your checks
 ```
 
-**Install** (version 0.3, early: the API may still change; Python 3.10+, Gemini adapter 3.11+):
+**Install** (version 0.5, early: the API may still change; Python 3.10+, Gemini adapter 3.11+):
 
 ```bash
 pip install "valueproof[claude]"
@@ -181,9 +182,12 @@ The core has no dependencies and works with any provider: a model is just a func
 **Test a change on your own requests** with one command — it runs every setup on every request, side by side, and prints cost (average and median), rescue rate, time, check failures and blind-review quality:
 
 ```bash
-valueproof init my_test.py            # a starter test that runs straight away, with fake models
-valueproof compare my_test.py --live
+valueproof init my_test.py                          # a starter test that runs straight away, with fake models
+valueproof compare my_test.py --live --estimate     # runs 2 requests for real, prints the projected bill
+valueproof compare my_test.py --live --max-spend 5  # the full test, stops starting new requests at $5
 ```
+
+After the table it lists **which check rule fired most often**, so you see whether rescues come from formatting, missing fields or stale data.
 
 → How to write `my_test.py`, plus a support-ticket demo that works without an API key: [examples/](https://github.com/AndyJakob78/valueproof/blob/main/examples/). The live Claude mode was run in the [support test](https://github.com/AndyJakob78/valueproof/blob/main/docs/support-test.md).
 

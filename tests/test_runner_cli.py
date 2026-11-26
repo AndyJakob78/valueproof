@@ -4,7 +4,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from valueproof import Run, Score, print_table, run_levers, save, summarize
+from valueproof import Run, Score, estimate, print_table, run_levers, save, summarize
 from valueproof.cli import main
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -56,3 +56,35 @@ def test_bundled_examples_run_offline(tmp_path):
         assert r.returncode == 0, r.stderr
     for new in set(results.iterdir()) - before:  # remove only what this test wrote
         shutil.rmtree(new)
+
+
+def test_max_spend_stops_between_cases_and_keeps_pairs():
+    setups = {"a": lambda c: Run("x", 0.01, 0.1), "b": lambda c: Run("y", 0.02, 0.1)}
+    report = run_levers(list(range(10)), setups, max_spend=0.05)
+    # each case costs 0.03; after 2 cases (0.06) no new case starts
+    assert len({r.case for r in report.rows}) == 2 and len(report.rows) == 4
+    assert report.stopped and abs(report.spent_usd - 0.06) < 1e-12
+
+
+def test_review_skipped_when_it_would_pass_the_limit():
+    setups = {"a": lambda c: Run("x" + str(c), 0.01, 0.1)}
+    report = run_levers([1, 2], setups, judge=lambda c, t: Score(30, 40, cost_usd=0.05), max_spend=0.04)
+    assert all(r.score is None for r in report.rows) and "review" in report.stopped
+
+
+def test_estimate_projects_from_a_sample():
+    setups = {"a": lambda c: Run("x", 0.01, 0.1), "b": lambda c: Run("y", 0.03, 0.1)}
+    e = estimate(list(range(50)), setups, judge=lambda c, t: Score(30, 40, cost_usd=0.005), sample=2)
+    # per case: 0.04 runs + 2 reviews x 0.005 = 0.05 -> 50 cases = 2.50
+    assert e["sample_cases"] == 2 and abs(e["projected_total"] - 2.5) < 1e-9
+
+
+def test_rejection_reasons_are_grouped(capsys):
+    reasons = ["does not cite §1", "does not cite §5, §6", None, "too short"]
+    setups = {"s&r": lambda c: Run("t", 0.01, 0.1, "rescue" if reasons[c] else "scout",
+                                    rejected_because=reasons[c])}
+    report = run_levers(list(range(4)), setups)
+    s = summarize(report, ["s&r"])[0]
+    assert s["first_try_rejections"]["does not cite #"] == 2 and s["first_try_pass"] == 1
+    print_table(report, ["s&r"])
+    assert "does not cite # (2)" in capsys.readouterr().out

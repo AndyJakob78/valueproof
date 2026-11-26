@@ -9,14 +9,14 @@ and measure what each change does to cost and quality before it ships.
 Any provider works: a model is just a function `prompt -> ModelResult`.
 """
 
-from .lever_runner import Report, Run, Score, is_outcome, print_table, run_levers, save, summarize
+from .lever_runner import Report, Run, Score, estimate, is_outcome, print_table, run_levers, save, summarize
 from .pipeline import RunResult, Step, StepLog, run_pipeline
 from .scout_rescue import Check, Model, ModelResult, Outcome, handoff_prompt, scout_and_rescue
 
-__version__ = "0.4.0"
+__version__ = "0.5.0"
 
 __all__ = [
     "Check", "Model", "ModelResult", "Outcome", "handoff_prompt", "scout_and_rescue",
     "RunResult", "Step", "StepLog", "run_pipeline",
-    "Report", "Run", "Score", "is_outcome", "print_table", "run_levers", "save", "summarize",
+    "Report", "Run", "Score", "estimate", "is_outcome", "print_table", "run_levers", "save", "summarize",
 ]

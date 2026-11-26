@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.0
+- **`--max-spend USD`**: stops starting new requests once runs (and reviews) have spent this much. A request in progress is finished, so results stay paired; the review is skipped if it would pass the limit.
+- **`--estimate`** (with `--sample N`, default 2): runs a small sample for real and prints the projected cost of the full run. It spends a little on purpose: a real call is the only reliable price.
+- **Why results were rejected**: after the table, the check rules that fired most often, for the first try and the final result, plus the first-try pass rate. `Run(..., rejected_because=...)` carries the scout's reason; `Score(..., cost_usd=...)` counts what the review cost.
+
 ## 0.4.0 — renamed to valueproof
 - **One name for everything:** `pip install valueproof`, `import valueproof`, `valueproof compare`.
 - The old names keep working until 1.0, with a deprecation note: `pip install ai-mixed-model-cost-optimization` now installs `valueproof`; `import mixed_model_cost` and the `mmco` command still work.

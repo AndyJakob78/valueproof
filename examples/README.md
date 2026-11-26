@@ -1,6 +1,6 @@
 # Package and examples
 
-Python 3.10+ (Gemini adapter: 3.11+). Version 0.3, early: the API may still change.
+Python 3.10+ (Gemini adapter: 3.11+). Version 0.5, early: the API may still change.
 
 One name for everything: `pip install valueproof`, `import valueproof`, `valueproof compare`.
 
@@ -44,8 +44,9 @@ The quickest start: `valueproof init` writes a starter test that runs straight a
 
 ```bash
 valueproof init my_test.py
-valueproof compare my_test.py          # fake models, no cost
-valueproof compare my_test.py --live   # your real models
+valueproof compare my_test.py                          # fake models, no cost
+valueproof compare my_test.py --live --estimate        # 2 requests for real: the projected bill for the full run
+valueproof compare my_test.py --live --max-spend 5     # stops starting new requests once $5 is spent
 ```
 
 Or start from the bundled support test:
