@@ -9,6 +9,33 @@
 - **What we measured:** on a live app's web-search step, cost per article fell from 9.7 ¢ to 4.6–7.7 ¢, and quality held in a blind review. On 40 support tickets, a usable reply cost 82–92% less than with Claude Opus 5.5 alone, over three runs.
 - **The trade-off:** on the support tickets, quality was 2–6% lower, and one wrong refund rule slipped past the checks. The test also showed that the cheap model alone was nearly as good there: the rescuer pays off only where failures are common and a check can catch them.
 
+## Quick start
+
+```bash
+pip install "valueproof[claude]"      # or [openai], [gemini], [all]
+```
+
+```python
+from valueproof import scout_and_rescue
+from valueproof.claude import claude
+
+ticket = "Where is my order 48213?"
+out = scout_and_rescue(
+    "Reply to this support ticket: " + ticket,
+    scout=claude("claude-haiku-5-5"),      # the cheap model tries first
+    rescue=claude("claude-opus-5-5"),      # the frontier model runs only if the check fails
+    check=lambda text: None if "48213" in text else "order number missing",
+)
+print(out.path, out.cost_usd)              # "scout" or "rescue", and what it cost
+```
+
+Then compare setups on your own requests — offline first, with fake models:
+
+```bash
+valueproof init my_test.py
+valueproof compare my_test.py
+```
+
 ## When it fits
 
 It fits when your product sends a lot of requests to a frontier model — such as Claude Opus 5.5 or Fable 5.2, GPT-6.2 Astra, or Gemini 4 Carbon — to read, analyze, review or summarize data. For example:
@@ -42,7 +69,7 @@ Most cost tools stop at the first row. This method measures the second before yo
 | **AI Engineer** | A small Python package: Scout & Rescue, multi-model pipelines, and a test runner (`valueproof compare`) |
 | **Prompt & Context Engineer** | A test routine that shows whether a prompt change really saves tokens — or quietly costs more |
 | **AI Builder** | A way to test cheaper setups for an AI app on a small budget, and keep only those that hold quality |
-| **AI Evaluation** | A blind A/B review setup and a fixed scoring sheet |
+| **AI Evaluation** | A blind review (LLM-as-judge or a person) on a fixed rubric, plus a measure of how good your eval checks are |
 | **LLMOps** | Code checks and logging that track how often the expensive model runs |
 | **FinOps** | A clear before-and-after cost per request, and the yearly saving at your scale |
 
@@ -153,18 +180,7 @@ The checks decide the quality: a mistake no check catches goes straight to the u
 
 **Expect a small quality cost.** Requests that pass the check are only as good as the cheap model's answer. In our support test, Scout & Rescue cost 81–92% less than the strong model alone and scored 2–6% lower in a blind review — a much stronger cost lever than tuning the strong model, with a quality trade-off you should measure for your own task. How much quality you keep depends mostly on your checks.
 
-```python
-from valueproof import scout_and_rescue
-from valueproof.claude import claude   # or valueproof.openai / valueproof.gemini
-
-outcome = scout_and_rescue(
-    prompt,                      # your request
-    scout=claude("claude-haiku-5-5"),
-    rescue=claude("claude-opus-5-5"),
-    check=lambda text: None if order_id in text else "does not mention the order id",  # order_id from your data
-)
-print(outcome.path, outcome.cost_usd)  # "scout" or "rescue" - how often each runs depends on your checks
-```
+The code for this is in the [quick start](#quick-start) at the top.
 
 **Install** (version 0.6, early: the API may still change; Python 3.10+, Gemini adapter 3.11+):
 
@@ -190,7 +206,7 @@ After the table it lists **which check rule fired most often**, and **how good y
 
 **A second, smaller lever: lower effort on the strong model.** In the same test, running the rescuer at effort low instead of medium cost 24–25% less in two runs, with no measurable quality loss on the rescued tickets. Measured on short support replies only.
 
-**3. Prove every change before you ship it.** Change one thing at a time. Run the old and new versions side by side on the same requests. Review quality blind, as A vs. B. Keep only what saves money *and* holds quality.
+**3. Prove every change before you ship it.** Change one thing at a time. Run the old and new versions side by side on the same requests. Review quality blind: the reviewer never knows which setup wrote a result. Keep only what saves money *and* holds quality.
 
 The test setup is an **eval**: a fixed set of real requests, checks in code and a blind review, built once and reused for every change. Without it you can't tell a saving from a quality loss.
 
@@ -203,6 +219,23 @@ flowchart LR
     D -- "no: drop" --> L
     L -- "no levers left" --> S["4. Test all kept levers together,<br/>ship, keep measuring"]
 ```
+
+**How the blind review works.** `valueproof compare` supports two reviewers, and you can use both:
+
+- **LLM-as-judge:** you pass a `judge(case, text) -> Score` function. It gets one result at a time, in random order, and never the setup's name. Give it the reference that defines "right" (the policy, the fact sheet, the help article); without it a judge can only tell whether an answer looks usable, not whether it is correct.
+- **A person:** every run also writes `blind_review.csv` (the results, shuffled, no setup names) and `blind_key.csv` (which setup wrote which). Score the sheet, then map it back with the key.
+
+The rubric from our support test, as an example — four criteria, 0–10 each, plus one flag:
+
+| Criterion | The question |
+|---|---|
+| Policy correct | Does the reply follow the policy exactly, with no wrong rule? |
+| Solves | Does it answer every issue in the ticket and name the next step? |
+| Tone | Friendly, calm, fitting the customer's mood? |
+| Clarity | Short and clear? |
+| **Hard failure** (yes/no) | A wrong policy rule, a promise the policy doesn't allow, an invented order number, or no answer |
+
+Hard failures are counted separately, so no average can hide them. For scoring two results side by side as A and B by hand, see the [rubric template](https://github.com/AndyJakob78/valueproof/blob/main/templates/blind-review-rubric.md).
 
 The full flow, with the cost breakdown and the ledger: [method.md](https://github.com/AndyJakob78/valueproof/blob/main/docs/method.md#the-flow)
 
@@ -237,7 +270,7 @@ We tested 12 cost-saving ideas one at a time, and **7 raised cost or lowered qua
 - **Check quality:** how well the eval checks agree with the blind review: caught, missed, false alarms.
 - **Full web search:** a search tool that filters the results with code before the model reads them. Fewer pages to read, but more steps.
 - **Simple web search:** a search tool that hands the raw results straight to the model. Fewer steps; the model reads everything it gets, which is cheap on a small model but expensive on a large one.
-- **Blind review:** a reviewer scores two results labelled only A and B, without knowing which setup made which.
+- **Blind review:** a reviewer scores results on a fixed rubric without knowing which setup wrote them. The reviewer can be a model (LLM-as-judge) or a person.
 - **Eval:** the fixed test that decides whether a change is kept — real requests, checks in code and a blind review, run the same way every time.
 - **Outcome:** a request whose final result passed your checks and, if reviewed, had no hard failure — a result a user could rely on.
 - **Cost per outcome:** everything a setup spent, including failed and rescued attempts, divided by its outcomes. The number to compare.

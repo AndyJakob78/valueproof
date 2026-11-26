@@ -91,6 +91,8 @@ Writing the estimate down first matters: in the case study the estimates were wr
 
 ## Step 5 — Judge quality blind
 
+*Two ways to review blind: side by side as A and B (described here, good for a person), or one result at a time with the setup hidden (what `valueproof compare` does with a judge function, and what its review sheet contains). Both work; keep to one within a project.*
+
 - Put the two outputs for each request side by side as **A and B**, randomly swapped, with no label saying which setup produced them.
 - Let a reviewer score each on a **fixed rubric** — the same rubric for every lever (see [templates/blind-review-rubric.md](../templates/blind-review-rubric.md)).
 - Map the scores back to the setups only afterwards.
