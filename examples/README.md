@@ -17,7 +17,7 @@ Without an API key (stub models, made-up costs, no charges):
 python examples/demo_support.py
 ```
 
-Against Claude (real calls, a few cents):
+Against Claude (real calls, a few cents). The live mode follows the current Anthropic SDK and was checked with simulated responses, but has not yet been run against the real API:
 
 ```bash
 pip install anthropic

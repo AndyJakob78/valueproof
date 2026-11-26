@@ -1,6 +1,6 @@
 # Example: a customer-service chatbot
 
-An illustrative example of how to apply the method to a typical service chatbot. **The numbers are an estimate from assumptions, not a measurement.** Use them to see where the money goes, then measure your own feature.
+An illustrative example of how to apply the method to a typical service chatbot. **The numbers are an estimate from assumptions, not a measurement — and an upper estimate:** they assume the small model handles most turns well enough, which you must test, and they leave out prompt caching. Use them to see where the money goes, then measure your own feature.
 
 ## The setup today
 
@@ -43,9 +43,11 @@ The main unknown is how often the rescuer runs. Three cases:
 | 1 in 5 turns | 0.60 ¢ | $36,200 | **$119,800 (−77%)** |
 | 2 in 5 turns | 1.12 ¢ | $67,400 | **$88,600 (−57%)** |
 
-Even when the strong model is still needed for 40% of turns, the cost falls by more than half, because routine turns cost about **40 times less** on the small model.
+Even when the strong model is still needed for 40% of turns, the estimated cost falls by more than half, because routine turns cost about **40 times less** on the small model.
 
-Prompt caching would lower both "before" and "after", since the instructions and policy documents repeat in every turn. It is left out here to keep the comparison simple.
+Prompt caching would lower both "before" and "after", since the instructions and policy documents repeat in every turn. It is left out here to keep the comparison simple — but it helps the expensive "before" setup most, so the real saving would be smaller than shown.
+
+**What the checks cannot catch:** an answer that names the right order and quotes a policy section, but applies the policy wrongly. For refunds, billing and anything with legal weight, test those cases by hand in the blind review — and if the small model gets them wrong, route those topics straight to the strong model.
 
 ## How to prove it before you ship
 

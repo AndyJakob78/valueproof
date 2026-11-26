@@ -19,9 +19,9 @@ And most of those requests are routine, and a bad result can be detected in code
 |---|---|
 | **Product Manager** | A way to cut AI cost per user with evidence, and to defend every keep-or-drop decision |
 | **System Designer** | A pattern for splitting one AI job into steps, each with the right model |
-| **AI Engineer** | Ready-to-copy code for Scout & Rescue and multi-model pipelines |
+| **AI Engineer** | Sample code for Scout & Rescue and multi-model pipelines to start from |
 | **Prompt & Context Engineer** | A test routine that shows whether a prompt change really saves tokens — or quietly costs more |
-| **AI Builder** | A cheaper way to run an AI app on a small budget without losing quality |
+| **AI Builder** | A way to test cheaper setups for an AI app on a small budget, and keep only those that hold quality |
 | **AI Evaluation** | A blind A/B review setup and a fixed scoring sheet |
 | **LLMOps** | Code checks and logging that track how often the expensive model runs |
 | **FinOps** | A clear before-and-after cost per request, and the yearly saving at your scale |
@@ -35,11 +35,13 @@ So teams do the safe thing: **one strong model does the whole job, end to end, f
 - **The cost grows with every user.** At scale, a request can cost more than it earns.
 - **The usual fixes put quality at risk.** "Switch to a smaller model" or "shorten the prompt" may save money, or may quietly lower quality, or may even raise cost. Without a test, you can't tell.
 
+**What this method can and cannot do:** it saves money on the requests where a cheap model's mistakes can be caught by a check in code — an empty result, a missing field, an old date, an invalid format. It does **not** catch an answer that looks right but is wrong, such as a plausible but false refund rule. Where such errors carry legal or safety risk, either build a check that really catches them, or keep that step on the strong model.
+
 ### Real-world signals (2026)
 
 **AI cost is squeezing companies:**
 - **Harvey** (legal AI): in March it updated its AI agents, and customers began using them far more — token use grew about 20× during the year. Harvey mostly charges customers a fixed price per seat but pays the model providers per token, so its gross margin reportedly fell from about **+50% to −50%** by June: serving customers cost about $1.50 for every $1 of revenue. In August it moved its flagship to its own model built on an open-weight model, and margins reportedly turned positive again. [Bloomberg](https://www.bloomberg.com/news/articles/2026-09-21/startups-like-harvey-embrace-open-models-to-cut-reliance-on-anthropic-openai) · [Artificial Lawyer](https://artificiallawyer.com/2026/07/08/harvey-increases-token-use-14x-in-just-6-months)
-- **Industry survey** (Mavvrik & Benchmarkit, 396 companies, April–May 2026):
+- **Industry survey** (Mavvrik, a cost-management vendor, with Benchmarkit; 396 companies, April–May 2026):
   - **62%** say an unexpected AI cost changed a business decision in the past year. Of those, 40% had to escalate it to the board, 33% froze spending, and 25% delayed or cancelled an AI project.
   - **49%** had to raise prices of their AI products because costs rose more than expected.
   - Only **11%** can forecast their AI spend within ±10% (down from 15% in 2025).
@@ -61,21 +63,21 @@ The lesson: cut cost **and** prove quality, one change at a time — with tests 
 | | Before | After | What it means |
 |---|---|---|---|
 | Setup | Claude Sonnet 5.5 + full web search, for every article | **Scout:** Claude Haiku 5.5 + simple web search. **Rescue:** Sonnet 5.5 + full web search | The rescuer runs only when a code check finds no usable story or only an old one — 2 to 5 of every 18 articles. |
-| Cost per article (average) | 9.7 ¢ | **4.6 ¢ (−53%)** | Includes the articles that needed the rescuer, which pay for both attempts. |
-| Cost per article (typical) | 9.2 ¢ | **2.6 ¢ (−71%)** | Median: what most articles cost, because most finish on the scout. |
-| Quality, blind review (18 articles, max 540) | 434 | **472** | Likely reasons: the freshness check sends old stories to the rescuer, and new fact rules keep contact details, guessed descriptions and facts that sources disagree on out of the lesson. We did not measure each reason separately. |
-| Time per search (average) | 34 s | 34 s | Same average, wide spread: a typical article takes about 14 s on the scout; a rescued article takes the scout's time plus the rescuer's, which pulls the average up. The same setup run twice varies by about ±10%. |
-| Lessons without an article | 0 | 0 | Every test request ended with a usable story. Two cheaper ideas failed here: the scout alone left 1 of 18 learners without a story, and a "lazier" rescuer was 22% cheaper but let old stories through (quality 440 vs 470). |
+| Cost per article (average) | 9.7 ¢ | **4.6 – 7.7 ¢ (−53% to −21%)** | Depends on how often the rescuer runs (2 to 5 of every 18 articles across our runs); rescued articles pay for both attempts. The final combined test against production gave 4.6 ¢. |
+| Cost per article (typical) | 9.2 ¢ | **2.6 ¢ (−71%)** | Median from the final combined test: most articles finish on the scout. |
+| Quality, blind review (18 articles, max 540) | 434 | **472** | Quality held or improved. This is one blind review of 18 articles, scored by an AI model on a fixed rubric; we did not measure how much this score varies between runs, and in another paired run Scout & Rescue scored level with its competitor (437 vs 429). Likely reasons for the gain: the freshness check sends old stories to the rescuer, and new fact rules keep contact details, guessed descriptions and facts that sources disagree on out of the lesson. We did not measure each reason separately. |
+| Time per search (average) | 34 s | 34 s | Same average, wide spread: in a second comparison run, a typical article took about 14 s on the scout; a rescued article takes the scout's time plus the rescuer's, which pulls the average up. The same setup run twice varies by about ±10%. |
+| Lessons without an article | 0 | 0 | Every one of the 18 test requests ended with a usable story — a test result, not a guarantee. Two cheaper ideas failed here: the scout alone left 1 of 18 learners without a story, and a "lazier" rescuer was 22% cheaper but let old stories through (quality 440 vs 470). |
 
 **Over a year:** 1,000 users reading one article a day is 365,000 articles.
 
-| | Per year |
-|---|---|
-| Before (9.7 ¢ per article) | $35,405 |
-| After (4.6 ¢ per article) | $16,790 |
-| **Saved** | **$18,615** |
+| | Best run (4.6 ¢) | Most rescues (7.7 ¢) |
+|---|---|---|
+| Before (9.7 ¢ per article) | $35,405 | $35,405 |
+| After | $16,790 | $28,105 |
+| **Saved** | **$18,615** | **$7,300** |
 
-Costs cover the search step only, at the API prices of our test.
+Costs cover the search step only, at the API prices of our test, extrapolated from 18 test requests. Your own rescue rate decides where you land.
 
 ### A second example: a service chatbot (estimate)
 
@@ -86,35 +88,35 @@ An online shop's chatbot sends every turn to Claude Opus 5.5: **2.6 cents per tu
 | 1 in 5 turns | $36,200 | **$119,800 (−77%)** |
 | 2 in 5 turns | $67,400 | **$88,600 (−57%)** |
 
-These numbers come from assumptions, not a measurement. → [Full chatbot example, with the checks and how to prove it](docs/example-service-chatbot.md)
+These numbers come from assumptions, not a measurement, and are an upper estimate: they assume the small model handles most turns well enough (untested), and they leave out prompt caching, which would make the "before" setup cheaper and the saving smaller. → [Full chatbot example, with the checks and how to prove it](docs/example-service-chatbot.md)
 
 ## The solution
 
-**1. Break the job into steps, and give each step the right model.**
+**1. Break the job into steps, and give each step the right model.** A recommended starting point — our case study tested this on one step (the search), not a full pipeline.
 
-| Step | Typical model |
+| Step | Recommended starting point |
 |---|---|
 | Read / extract | small, cheap model |
 | Analyze / draft | **Scout & Rescue** (see below) |
 | Review | a check in code where possible |
 | Aggregate | mid-size model, once per batch |
 
-**2. Scout & Rescue for the steps that are usually easy but sometimes hard.** A cheap model (the scout) tries first. A strong model (the rescuer) runs only when a check in code says the scout's result is unusable. Most requests finish at the cheap price, and none end without an answer.
+**2. Scout & Rescue for the steps that are usually easy but sometimes hard.** A cheap model (the scout) tries first. A strong model (the rescuer) runs only when a check in code says the scout's result is unusable. When most requests pass the check, most finish at the cheap price; the rest get the same strong model you use today, so the result should be no worse than your current setup.
 
 ```python
 from scout_rescue import scout_and_rescue
 from claude_models import claude
 
 outcome = scout_and_rescue(
-    prompt,
+    prompt,                      # your request
     scout=claude("claude-haiku-5-5"),
     rescue=claude("claude-opus-5-5"),
-    check=lambda text: None if order_id in text else "does not mention the order id",
+    check=lambda text: None if order_id in text else "does not mention the order id",  # order_id from your data
 )
-print(outcome.path, outcome.cost_usd)  # "scout" most of the time
+print(outcome.path, outcome.cost_usd)  # "scout" or "rescue" - how often each runs depends on your checks
 ```
 
-→ Runnable sample code, with a support-ticket demo that works without an API key: [examples/](examples/)
+→ Sample code, with a support-ticket demo that works without an API key: [examples/](examples/). The demo mode is tested; the live Claude mode has not yet been run against the real API.
 
 **3. Prove every change before you ship it.** Change one thing at a time. Run the old and new versions side by side on the same requests. Review quality blind, as A vs. B. Keep only what saves money *and* holds quality.
 
