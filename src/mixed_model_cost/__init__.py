@@ -13,7 +13,7 @@ from .lever_runner import Report, Run, Score, print_table, run_levers, save
 from .pipeline import RunResult, Step, StepLog, run_pipeline
 from .scout_rescue import Check, Model, ModelResult, Outcome, handoff_prompt, scout_and_rescue
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 
 __all__ = [
     "Check", "Model", "ModelResult", "Outcome", "handoff_prompt", "scout_and_rescue",
