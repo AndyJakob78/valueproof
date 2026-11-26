@@ -1,4 +1,5 @@
 import json
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -35,7 +36,10 @@ def test_init_then_compare(tmp_path, capsys, monkeypatch):
 
 
 def test_bundled_examples_run_offline(tmp_path):
+    results = ROOT / "examples" / "results"
+    before = set(results.iterdir()) if results.exists() else set()
     for args in (["examples/demo_support.py"], ["examples/test_levers_support.py", "--hard"]):
         r = subprocess.run([sys.executable, *args], cwd=ROOT, capture_output=True, text=True)
         assert r.returncode == 0, r.stderr
-    subprocess.run(["rm", "-rf", str(ROOT / "examples" / "results")], check=False)
+    for new in set(results.iterdir()) - before:  # remove only what this test wrote
+        shutil.rmtree(new)
