@@ -36,14 +36,30 @@ class Outcome:
     rejected_because: Optional[str] = None  # why the scout's result failed the check
 
 
-def scout_and_rescue(prompt: str, scout: Model, rescue: Model, check: Check) -> Outcome:
-    """Run the cheap scout first; call the strong rescuer only if the check fails."""
+def handoff_prompt(prompt: str, draft: str, problem: str) -> str:
+    """The rescuer's prompt when it is told what the scout tried and why it failed."""
+    return (
+        f"{prompt}\n\n---\nA first draft of this answer was rejected by an automatic check.\n"
+        f"Reason: {problem}\nRejected draft:\n{draft}\n---\n"
+        "Write the answer again, fixing that problem. Do not copy mistakes from the draft."
+    )
+
+
+def scout_and_rescue(
+    prompt: str, scout: Model, rescue: Model, check: Check, handoff: bool = False
+) -> Outcome:
+    """Run the cheap scout first; call the strong rescuer only if the check fails.
+
+    handoff=True also gives the rescuer the scout's draft and the reason it was
+    rejected. It may help the rescuer, or make it copy the scout's mistakes and
+    read more tokens - treat it as a lever and test it before you turn it on.
+    """
     first = scout(prompt)
     problem = check(first.text)
     if problem is None:
         return Outcome(first.text, "scout", first.cost_usd, first.model)
 
-    second = rescue(prompt)
+    second = rescue(handoff_prompt(prompt, first.text, problem) if handoff else prompt)
     return Outcome(
         text=second.text,
         path="rescue",

@@ -1,6 +1,6 @@
 # AI Mixed Model Cost Optimization
 
-**Cut the running cost of AI features while keeping output quality — by letting cheap and strong models work together, and proving each change before it ships.**
+**Cut the running cost of AI features by letting cheap and strong models work together — and measure what each change does to quality before it ships.**
 
 ## When it fits
 
@@ -88,7 +88,19 @@ An online shop's chatbot sends every turn to Claude Opus 5.5: **2.6 cents per tu
 | 1 in 5 turns | $36,200 | **$119,800 (−77%)** |
 | 2 in 5 turns | $67,400 | **$88,600 (−57%)** |
 
-These numbers come from assumptions, not a measurement, and are an upper estimate: they assume the small model handles most turns well enough (untested), and they leave out prompt caching, which would make the "before" setup cheaper and the saving smaller. → [Full chatbot example, with the checks and how to prove it](docs/example-service-chatbot.md)
+These numbers come from assumptions, not a measurement, and are an upper estimate: they leave out prompt caching, which would make the "before" setup cheaper and the saving smaller. → [Full chatbot example, with the checks and how to prove it](docs/example-service-chatbot.md)
+
+### Measured: support replies
+
+We then ran the support-reply step of this idea for real: 40 made-up tickets (20 of them hard), Claude Haiku 5.5 as the scout, Opus 5.5 as the rescuer, against Opus 5.5 alone, with a blind review.
+
+| | Scout & Rescue | Opus 5.5 alone |
+|---|---|---|
+| Cost per reply | **81–88% less** | — |
+| Quality (blind review, two runs) | **2–6% lower** | — |
+| Hard failures (run 2, 40 tickets) | 3 | 2 |
+
+**Good for cost, with a quality trade-off.** Most cheap replies were good, but some were weaker in ways no check saw, and one stated a wrong refund rule. Use it where a few percent of quality is acceptable, or where your checks catch the mistakes that matter; keep refund, money and legal answers on the strong model until they do. → [Full results, caveats and how to rerun it](docs/support-test.md)
 
 ## The solution
 
@@ -101,7 +113,9 @@ These numbers come from assumptions, not a measurement, and are an upper estimat
 | Review | a check in code where possible |
 | Aggregate | mid-size model, once per batch |
 
-**2. Scout & Rescue for the steps that are usually easy but sometimes hard.** A cheap model (the scout) tries first. A strong model (the rescuer) runs only when a check in code says the scout's result is unusable. When most requests pass the check, most finish at the cheap price; the rest get the same strong model you use today, so the result should be no worse than your current setup.
+**2. Scout & Rescue for the steps that are usually easy but sometimes hard.** A cheap model (the scout) tries first. A strong model (the rescuer) runs only when a check in code says the scout's result is unusable. When most requests pass the check, most finish at the cheap price; the rest get the same strong model you use today.
+
+**Expect a small quality cost.** Requests that pass the check are only as good as the cheap model's answer. In our support test, Scout & Rescue cost 81–88% less than the strong model alone and scored 2–6% lower in a blind review — a much stronger cost lever than tuning the strong model, with a quality trade-off you should measure for your own task. How much quality you keep depends mostly on your checks.
 
 ```python
 from scout_rescue import scout_and_rescue
@@ -116,7 +130,9 @@ outcome = scout_and_rescue(
 print(outcome.path, outcome.cost_usd)  # "scout" or "rescue" - how often each runs depends on your checks
 ```
 
-→ Sample code, with a support-ticket demo that works without an API key: [examples/](examples/). The demo mode is tested; the live Claude mode has not yet been run against the real API.
+→ Sample code, with a support-ticket demo that works without an API key, and a test runner that compares setups on your own requests: [examples/](examples/). The live Claude mode was run in the [support test](docs/support-test.md).
+
+**A second, smaller lever: lower effort on the strong model.** In the same test, running the rescuer at effort low instead of medium cost 24–25% less in two runs, with no measurable quality loss on the rescued tickets. Measured on short support replies only.
 
 **3. Prove every change before you ship it.** Change one thing at a time. Run the old and new versions side by side on the same requests. Review quality blind, as A vs. B. Keep only what saves money *and* holds quality.
 
@@ -126,7 +142,7 @@ print(outcome.path, outcome.cost_usd)  # "scout" or "rescue" - how often each ru
 
 We tested 12 cost-saving ideas one at a time, and **7 raised cost or lowered quality**. For example, a shorter prompt made the model search *more*.
 
-→ [Case study](docs/case-study.md) · [Scout & Rescue in detail](docs/scout-and-rescue.md) · [Lessons](docs/lessons.md)
+→ [Case study](docs/case-study.md) · [Support test](docs/support-test.md) · [Scout & Rescue in detail](docs/scout-and-rescue.md) · [Lessons](docs/lessons.md)
 
 ## Terms used on this page
 

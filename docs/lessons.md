@@ -37,3 +37,15 @@ The single most effective quality-and-cost change for small towns came from the 
 
 ### 12. An AI coding agent makes this method cheap
 Every lever here was implemented, run, reviewed blind and written to the ledger by an AI coding agent, with the product owner deciding from a phone. Twelve levers, roughly 450 test searches and over a dozen blind reviews cost in the order of $40 in API fees, done in one working day.
+
+## From the support test
+
+### 13. The checks decide the quality
+Scout & Rescue only fixes the mistakes a check catches. In our [support test](support-test.md) the rescuer ran on just 2 of 20 hard tickets, and one cheap reply that passed every check promised a refund the policy didn't allow. Put your effort into checks for the costly mistakes, not into a better rescuer.
+
+### 14. Try lower effort before a smaller model
+Running the strong model at effort low instead of medium cost 24–40% less with no measurable quality loss on short support replies. It is the cheapest lever to test, because nothing else in the setup changes.
+
+### 15. More context for the rescuer is not free
+Giving the rescuer the cheap model's rejected draft sounded smart. It cost 12% more and did not improve quality. Test "obvious" improvements like any other lever.
+
