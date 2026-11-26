@@ -4,7 +4,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from valueproof import Run, Score, check_quality, estimate, rate_checks, print_table, run_levers, save, summarize
+from valueproof import Run, Score, check_quality, estimate, load_report, rate_checks, print_table, run_levers, save, summarize
 from valueproof.cli import main
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -125,3 +125,13 @@ def test_rate_checks_compares_candidates_and_counts_their_cost():
     assert (ratings["blind check"]["caught"], ratings["blind check"]["missed"]) == (0, 1)
     assert (ratings["sharp check"]["caught"], ratings["sharp check"]["missed"], ratings["sharp check"]["false_alarms"]) == (1, 0, 0)
     assert abs(report.spent_usd - before - 0.008) < 1e-12  # 4 distinct replies x 0.002
+
+
+def test_saved_results_can_be_rated_again(tmp_path):
+    setups = {"base": lambda c: Run("good", 0.01, 0.1), "cheap": lambda c: Run("bad", 0.001, 0.1)}
+    report = run_levers([0], setups, judge=lambda c, t: Score(10 if t == "bad" else 36, 40, hard_failure=(t == "bad")))
+    save(report, [0], tmp_path, describe=str)
+    again = load_report(tmp_path / "results.json")
+    assert len(again.rows) == 2 and again.rows[0].score.max_points == 40
+    r = rate_checks(again, [0], ["base", "cheap"], {"sharp": lambda case, text: "bad" if text == "bad" else None})
+    assert (r["sharp"]["caught"], r["sharp"]["missed"]) == (1, 0)

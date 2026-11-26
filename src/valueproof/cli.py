@@ -32,7 +32,7 @@ from datetime import datetime
 from pathlib import Path
 
 from . import __version__
-from .lever_runner import estimate, print_check_ratings, print_table, rate_checks, run_levers, save
+from .lever_runner import estimate, load_report, print_check_ratings, print_table, rate_checks, run_levers, save
 from .starter import STARTER
 
 
@@ -50,7 +50,8 @@ def _load(path: Path):
 
 
 def compare(file: str, live: bool = False, out: str | None = None, extra: list[str] | None = None,
-            max_spend: float | None = None, estimate_only: bool = False, sample: int = 2) -> None:
+            max_spend: float | None = None, estimate_only: bool = False, sample: int = 2,
+            from_results: str | None = None) -> None:
     path = Path(file).resolve()
     spec = _load(path).build(live, extra or [])
     cases, setups, judge = spec["cases"], spec["setups"], spec.get("judge")
@@ -61,6 +62,15 @@ def compare(file: str, live: bool = False, out: str | None = None, extra: list[s
         print(f"\nSpent on the sample: ${e['sample_spent']:.4f} for {e['sample_cases']} cases (${e['per_case']:.4f} per case)")
         print(f"Projected full run:  ${e['projected_total']:.2f} for {e['cases']} cases, including the review")
         print("A rough guide: hard cases and rescues cost more. Set a ceiling with --max-spend.")
+        return
+    if from_results:  # no model runs: rate the candidate checks on saved replies
+        report = load_report(Path(from_results))
+        present = list(dict.fromkeys(r.setup for r in report.rows))
+        names = [n for n in setups if n in present] + [n for n in present if n not in setups]  # first = baseline
+        print(f"{mode}: rating checks on {len(report.rows)} saved results from {from_results}")
+        ratings = rate_checks(report, cases, names, spec.get("checks") or {})
+        print_check_ratings(ratings)
+        print(f"Spent on the checks: ${report.spent_usd:.4f}")
         return
     limit = f", stops at ${max_spend:.2f}" if max_spend is not None else ""
     print(f"{mode}: {len(cases)} cases x {len(setups)} setups{limit}")
@@ -102,11 +112,13 @@ def main(argv: list[str] | None = None) -> None:
     cmp_.add_argument("--estimate", action="store_true",
                       help="run only a small sample for real and print the projected cost of the full run")
     cmp_.add_argument("--sample", type=int, default=2, help="cases to run for --estimate (default: 2)")
+    cmp_.add_argument("--from-results", metavar="FILE",
+                      help="skip the runs: rate the test file's candidate checks on a saved results.json")
     ini = sub.add_parser("init", help="write a starter test file that runs offline straight away")
     ini.add_argument("file", nargs="?", default="valueproof_test.py", help="file to create (default: valueproof_test.py)")
     args, extra = parser.parse_known_args(argv)
     if args.command == "compare":
-        compare(args.file, args.live, args.out, extra, args.max_spend, args.estimate, args.sample)
+        compare(args.file, args.live, args.out, extra, args.max_spend, args.estimate, args.sample, args.from_results)
     elif args.command == "init":
         init(args.file)
 

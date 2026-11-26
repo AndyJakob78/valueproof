@@ -110,6 +110,16 @@ def run_levers(
     return report
 
 
+def load_report(path: Path) -> Report:
+    """Read a results.json written by save(). Lets you rate new eval checks on replies you already paid for."""
+    report = Report()
+    for r in json.loads(Path(path).read_text()):
+        run = Run(**{k: v for k, v in r["run"].items() if k in Run.__dataclass_fields__})
+        score = Score(**{k: v for k, v in r["score"].items() if k in Score.__dataclass_fields__}) if r.get("score") else None
+        report.rows.append(Row(r["case"], r["setup"], run, score))
+    return report
+
+
 def estimate(
     cases: list[Any],
     setups: dict[str, Callable[[Any], Run]],

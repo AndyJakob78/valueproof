@@ -124,13 +124,23 @@ HARD_TICKETS = [
 ]
 
 
+# Risk level, set by the product owner: which topics must always get the policy check?
+# High risk here = money back, legal or escalation, promises (double charge, escalation, vouchers and dates).
+# In a real system the topic comes from the "understand" step; here each test ticket carries its sections.
+HIGH_RISK_SECTIONS = {"§3", "§6", "§7"}
+
+
+def high_risk(t: "Ticket") -> bool:
+    return any(sec in HIGH_RISK_SECTIONS for sec in t.sections)
+
+
 FORBIDDEN = ["voucher", "discount", "guarantee", "tomorrow", "within 24 hours", "[", "TODO"]
 SOFT = {"voucher", "discount", "guarantee"}  # allowed when the reply says no to them
 NEGATIONS = ("can't", "cannot", "can not", "unable", "not able", "don't offer", "do not offer",
              "not offer", "no voucher", "no discount", "not guarantee")
 
 
-def check(text: str, t: Ticket) -> str | None:
+def check(text: str, t: Ticket, require_cite: bool = True) -> str | None:
     """Plain-code check of a reply. None = usable."""
     low = text.lower()
     if not 150 <= len(text) <= 1200:
@@ -143,7 +153,7 @@ def check(text: str, t: Ticket) -> str | None:
         if re.search(r"\b\d{5}\b", text):
             return "invents an order number"
     missing = [s for s in t.sections if s not in text]
-    if missing:
+    if missing and require_cite:
         return f"does not cite {', '.join(missing)}"
     negated = any(n in low for n in NEGATIONS)  # "we can't offer a voucher" is fine
     for word in FORBIDDEN:
@@ -199,14 +209,30 @@ the policy does not allow, assumes facts the ticket does not give, or ignores on
 Reply with JSON only: {{"ok": true, "problem": ""}} or {{"ok": false, "problem": "max 12 words"}}"""
 
 
-def make_policy_check(model):
+POLICY_CHECK_PROMPT_V2 = """You check a customer-support reply against the shop's policy before it is sent.
+
+{policy}
+
+Ticket:
+{ticket}
+
+Reply:
+{reply}
+
+Fail the reply ONLY for one of these: (1) it states a policy rule wrongly, (2) it promises something the
+policy does not allow, (3) it treats something as a fact that the ticket does not say.
+Do NOT fail it for style, length, tone, section numbers, or for being less complete than it could be.
+Reply with JSON only: {{"ok": true, "problem": ""}} or {{"ok": false, "problem": "max 12 words"}}"""
+
+
+def make_policy_check(model, prompt=None):
     """An eval check done by a model: returns (reason or None, cost). Cached per reply."""
     cache: dict = {}
 
     def policy_check(t: Ticket, text: str):
         key = (id(t), text)
         if key not in cache:
-            result = model(POLICY_CHECK_PROMPT.format(policy=POLICY, ticket=t.text, reply=text))
+            result = model((prompt or POLICY_CHECK_PROMPT).format(policy=POLICY, ticket=t.text, reply=text))
             raw = result.text
             try:
                 ok = bool(json.loads(raw[raw.index("{"): raw.rindex("}") + 1])["ok"])
@@ -225,7 +251,7 @@ def timed(model):
     return call
 
 
-def build_setups(scout, opus_medium, opus_low, policy_check=None):
+def build_setups(scout, opus_medium, opus_low, policy_check=None, sonnet_medium=None):
     scout_cache: dict[int, tuple[ModelResult, float]] = {}
 
     def cascade(rescue, handoff):
@@ -254,30 +280,39 @@ def build_setups(scout, opus_medium, opus_low, policy_check=None):
         first, scout_s = scout_cache[key]
         return Run(first.text, first.cost_usd, scout_s, "single", check(first.text, t))
 
-    def cascade_with_policy_check(t: Ticket) -> Run:
+    def policy_cascade(rescue, require_cite=True, only_high_risk=False):
         """Scout & Rescue where a reply must pass the code checks AND a policy check by a cheap model.
-        The policy check's own cost is added to the run."""
-        key = id(t)
-        if key not in scout_cache:
-            scout_cache[key] = timed(scout)(t.prompt)
-        first, scout_s = scout_cache[key]
-        extra = 0.0
+        The policy check's own cost is added to the run. Options are the levers under test."""
+        def run(t: Ticket) -> Run:
+            key = id(t)
+            if key not in scout_cache:
+                scout_cache[key] = timed(scout)(t.prompt)
+            first, scout_s = scout_cache[key]
+            extra = 0.0
 
-        def both(x: str):
-            nonlocal extra
-            reason = check(x, t)
-            if reason:
+            def both(x: str):
+                nonlocal extra
+                reason = check(x, t, require_cite)
+                if reason or (only_high_risk and not high_risk(t)):
+                    return reason
+                reason, cost = policy_check(t, x)
+                extra += cost
                 return reason
-            reason, cost = policy_check(t, x)
-            extra += cost
-            return reason
 
-        t0 = time.time()
-        out = scout_and_rescue(t.prompt, lambda p: first, opus_medium, both)
-        final = both(out.text) if out.path == "rescue" else None
-        return Run(out.text, out.cost_usd + extra, scout_s + time.time() - t0, out.path, final, out.rejected_because)
+            t0 = time.time()
+            out = scout_and_rescue(t.prompt, lambda p: first, rescue, both)
+            final = both(out.text) if out.path == "rescue" else None
+            return Run(out.text, out.cost_usd + extra, scout_s + time.time() - t0, out.path, final, out.rejected_because)
+        return run
 
-    with_policy = {"S&R + policy check (Haiku)": cascade_with_policy_check} if policy_check else {}
+    with_policy = {
+        "S&R + policy check (Haiku)": policy_cascade(opus_medium),
+        "L1 no cite rule": policy_cascade(opus_medium, require_cite=False),
+        "L2 rescuer effort low": policy_cascade(opus_low),
+        "L4 check high-risk only": policy_cascade(opus_medium, only_high_risk=True),
+        "L5 Sonnet as rescuer": policy_cascade(sonnet_medium),
+        "combined L1+L2+L4": policy_cascade(opus_low, require_cite=False, only_high_risk=True),
+    } if policy_check else {}
     return {
         "baseline (published)": cascade(opus_medium, handoff=False),
         **with_policy,
@@ -306,7 +341,7 @@ def stub_models():
     checker = lambda p: ModelResult('{"ok": ' + ('false' if 'audit' in p or 'Third' in p else 'true') + ', "problem": "stub"}',
                                     0.0002, "stub-checker")
     return (reply("stub-small", 0.0003, False), reply("stub-big", 0.0080, True), reply("stub-big-low", 0.0050, True),
-            judge, checker, checker)
+            judge, checker, checker, reply("stub-mid", 0.0040, True))
 
 
 def live_models():
@@ -319,14 +354,17 @@ def live_models():
         claude("claude-opus-5-5", effort="medium"),  # judge
         claude("claude-haiku-5-5", effort="low"),    # policy check, cheap
         claude("claude-sonnet-5-5", effort="low"),   # policy check, mid-size (rated only)
+        claude("claude-sonnet-5-5", effort="medium"),  # rescuer candidate (lever 5)
     )
 
 
 def build(live: bool, args: list[str]) -> dict:
     """Entry point for `valueproof compare examples/test_levers_support.py [--live] [--hard] [--setups "a|b"]`."""
-    scout, opus_medium, opus_low, judge_model, check_haiku, check_sonnet = live_models() if live else stub_models()
+    (scout, opus_medium, opus_low, judge_model, check_haiku, check_sonnet,
+     sonnet_medium) = live_models() if live else stub_models()
     haiku_policy, sonnet_policy = make_policy_check(check_haiku), make_policy_check(check_sonnet)
-    setups = build_setups(scout, opus_medium, opus_low, haiku_policy)
+    haiku_policy_v2 = make_policy_check(check_haiku, POLICY_CHECK_PROMPT_V2)
+    setups = build_setups(scout, opus_medium, opus_low, haiku_policy, sonnet_medium)
 
     def code_plus(policy):
         def fn(t, text):
@@ -338,7 +376,10 @@ def build(live: bool, args: list[str]) -> dict:
     candidates = {
         "code checks (published)": lambda t, text: check(text, t),
         "code + policy check (Haiku)": code_plus(haiku_policy),
-        "code + policy check (Sonnet)": code_plus(sonnet_policy),
+        "code + policy check v2 (Haiku)": code_plus(haiku_policy_v2),  # lever 3: fail only for wrong rule, promise, assumed fact
+        "no cite rule + policy check (Haiku)": lambda t, text: (
+            (check(text, t, False), 0.0) if check(text, t, False) else haiku_policy(t, text)),
+        **({"code + policy check (Sonnet)": code_plus(sonnet_policy)} if "--rate-sonnet" in args else {}),
     } if "--rate-checks" in args else None
     if "--setups" in args:  # e.g. --setups "baseline (published)|rescuer effort low"
         keep = args[args.index("--setups") + 1].split("|")
