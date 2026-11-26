@@ -153,7 +153,7 @@ The checks decide the quality: a mistake no check catches goes straight to the u
 
 ```python
 from valueproof import scout_and_rescue
-from valueproof.claude import claude
+from valueproof.claude import claude   # or valueproof.openai / valueproof.gemini
 
 outcome = scout_and_rescue(
     prompt,                      # your request
@@ -171,11 +171,6 @@ pip install "valueproof[claude]"
 ```
 
 One name for everything: `pip install valueproof`, `import valueproof`, `valueproof compare`. (Until version 0.3 the package was called `ai-mixed-model-cost-optimization`; the old name still installs and pulls in `valueproof`.)
-
-```python
-from valueproof import scout_and_rescue
-from valueproof.claude import claude   # or .openai / .gemini
-```
 
 The core has no dependencies and works with any provider: a model is just a function `prompt -> ModelResult`. Adapters come as extras: `[claude]`, `[openai]`, `[gemini]` or `[all]`. For a local model, write a function with the same shape.
 
