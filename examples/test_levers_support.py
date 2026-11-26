@@ -11,9 +11,10 @@ The three Scout & Rescue setups share ONE scout call per ticket, so they differ
 only in what happens after a rejection. Quality: Opus 5.5 scores every distinct
 reply blind (it never sees the setup name) on a fixed 40-point rubric.
 
-    python examples/test_levers_support.py          # stub models, checks the wiring only
-    python examples/test_levers_support.py --live   # real calls, about $1-2
+    mmco compare examples/test_levers_support.py          # stub models, checks the wiring only
+    mmco compare examples/test_levers_support.py --live   # real calls, about $1-2
     add --hard for 20 harder tickets, --setups "a|b" to run only some setups
+    (without installing: python examples/test_levers_support.py, same flags)
 """
 
 from __future__ import annotations
@@ -23,13 +24,11 @@ import re
 import sys
 import time
 from dataclasses import dataclass, field
-from datetime import datetime
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).parent.parent / "src"))  # works without pip install
 
-from lever_runner import Run, Score, print_table, run_levers, save  # noqa: E402
-from scout_rescue import ModelResult, scout_and_rescue  # noqa: E402
+from mixed_model_cost import ModelResult, Run, Score, scout_and_rescue  # noqa: E402
 
 POLICY = """Shop support policy
 §1 Damaged item: free replacement or full refund. We need a photo of the damage. Report within 14 days of delivery.
@@ -121,8 +120,7 @@ HARD_TICKETS = [
     Ticket("I don't have the order number at hand, but the coffee machine I got last week leaks.", None, ["§1"]),
     Ticket("Order 26114 must arrive by Saturday or I cancel. Can you promise that?", "26114", ["§2", "§7"]),
 ]
-if "--hard" in sys.argv:
-    TICKETS = TICKETS + HARD_TICKETS
+
 
 FORBIDDEN = ["voucher", "discount", "guarantee", "tomorrow", "within 24 hours", "[", "TODO"]
 SOFT = {"voucher", "discount", "guarantee"}  # allowed when the reply says no to them
@@ -224,7 +222,7 @@ def stub_models():
     """Fake models so the wiring can be checked offline. Their numbers mean nothing."""
     def reply(model, cost, good):
         def call(prompt):
-            t = next(x for x in TICKETS if f"Ticket:\n{x.text}" in prompt)
+            t = next(x for x in TICKETS + HARD_TICKETS if f"Ticket:\n{x.text}" in prompt)
             cites = " ".join(f"({s})" for s in t.sections) if good or len(t.sections) == 1 else ""
             num = t.order_id or "order number"
             text = (f"Thanks for writing about {num}. We're sorry for the trouble and follow our policy {cites}. "
@@ -238,7 +236,7 @@ def stub_models():
 
 
 def live_models():
-    from claude_models import claude
+    from mixed_model_cost.claude import claude
 
     return (
         claude("claude-haiku-5-5", effort="low"),
@@ -248,21 +246,22 @@ def live_models():
     )
 
 
-def main() -> None:
-    live = "--live" in sys.argv
+def build(live: bool, args: list[str]) -> dict:
+    """Entry point for `mmco compare examples/test_levers_support.py [--live] [--hard] [--setups "a|b"]`."""
     scout, opus_medium, opus_low, judge_model = live_models() if live else stub_models()
     setups = build_setups(scout, opus_medium, opus_low)
-    if "--setups" in sys.argv:  # e.g. --setups "baseline (published)|rescuer effort low"
-        keep = sys.argv[sys.argv.index("--setups") + 1].split("|")
+    if "--setups" in args:  # e.g. --setups "baseline (published)|rescuer effort low"
+        keep = args[args.index("--setups") + 1].split("|")
         setups = {name: run for name, run in setups.items() if name in keep}
-    print(f"{'LIVE' if live else 'STUB (numbers mean nothing)'}: {len(TICKETS)} tickets x {len(setups)} setups")
-    report = run_levers(TICKETS, setups, judge=make_judge(judge_model))
-    print()
-    print_table(report, list(setups))
-    out = Path(__file__).parent / "results" / datetime.now().strftime("%Y%m%d-%H%M%S")
-    save(report, TICKETS, out, describe=lambda t: t.text)
-    print(f"\nSaved to {out}")
+    return {
+        "cases": TICKETS + HARD_TICKETS if "--hard" in args else TICKETS,
+        "setups": setups,
+        "judge": make_judge(judge_model),
+        "describe": lambda t: t.text,
+    }
 
 
 if __name__ == "__main__":
-    main()
+    from mixed_model_cost.cli import compare
+
+    compare(__file__, live="--live" in sys.argv, extra=sys.argv[1:])

@@ -2,6 +2,11 @@
 
 **Cut the running cost of AI features by letting cheap and strong models work together — and measure what each change does to quality before it ships.**
 
+**In 30 seconds:**
+- **What it is:** a method and sample code. A cheap model does the work first; a strong model steps in only when a check in code rejects the result (*Scout & Rescue*). Every change is tested side by side against your current setup, with a blind quality review.
+- **What we measured:** on a live app's web-search step, cost per article fell from 9.7 ¢ to 4.6–7.7 ¢, and quality held in a blind review. On 40 support tickets, replies cost 81–88% less than Claude Opus 5.5 alone.
+- **The trade-off:** on the support tickets, quality was 2–6% lower, and one wrong refund rule slipped past the checks. Your checks decide how much quality you keep.
+
 ## When it fits
 
 It fits when your product sends a lot of requests to a frontier model — such as Claude Opus 5.5 or Fable 5.2, GPT-6.2 Astra, or Gemini 4 Carbon — to read, analyze, review or summarize data. For example:
@@ -19,7 +24,7 @@ And most of those requests are routine, and a bad result can be detected in code
 |---|---|
 | **Product Manager** | A way to cut AI cost per user with evidence, and to defend every keep-or-drop decision |
 | **System Designer** | A pattern for splitting one AI job into steps, each with the right model |
-| **AI Engineer** | Sample code for Scout & Rescue and multi-model pipelines to start from |
+| **AI Engineer** | A small Python package: Scout & Rescue, multi-model pipelines, and a test runner (`mmco compare`) |
 | **Prompt & Context Engineer** | A test routine that shows whether a prompt change really saves tokens — or quietly costs more |
 | **AI Builder** | A way to test cheaper setups for an AI app on a small budget, and keep only those that hold quality |
 | **AI Evaluation** | A blind A/B review setup and a fixed scoring sheet |
@@ -118,8 +123,8 @@ We then ran the support-reply step of this idea for real: 40 made-up tickets (20
 **Expect a small quality cost.** Requests that pass the check are only as good as the cheap model's answer. In our support test, Scout & Rescue cost 81–88% less than the strong model alone and scored 2–6% lower in a blind review — a much stronger cost lever than tuning the strong model, with a quality trade-off you should measure for your own task. How much quality you keep depends mostly on your checks.
 
 ```python
-from scout_rescue import scout_and_rescue
-from claude_models import claude
+from mixed_model_cost import scout_and_rescue
+from mixed_model_cost.claude import claude
 
 outcome = scout_and_rescue(
     prompt,                      # your request
@@ -130,7 +135,21 @@ outcome = scout_and_rescue(
 print(outcome.path, outcome.cost_usd)  # "scout" or "rescue" - how often each runs depends on your checks
 ```
 
-→ Sample code, with a support-ticket demo that works without an API key, and a test runner that compares setups on your own requests: [examples/](examples/). The live Claude mode was run in the [support test](docs/support-test.md).
+**Install** (early version 0.1, Python 3.10+):
+
+```bash
+pip install "ai-mixed-model-cost-optimization[claude] @ git+https://github.com/AndyJakob78/ai-mixed-model-cost-optimization"
+```
+
+The core has no dependencies and works with any provider: a model is just a function `prompt -> ModelResult`. The `[claude]` extra adds the Claude adapter; for OpenAI, Gemini or a local model, write a function with the same shape.
+
+**Test a change on your own requests** with one command — it runs every setup on every request, side by side, and prints cost (average and median), rescue rate, time, check failures and blind-review quality:
+
+```bash
+mmco compare my_test.py --live
+```
+
+→ How to write `my_test.py`, plus a support-ticket demo that works without an API key: [examples/](examples/). The live Claude mode was run in the [support test](docs/support-test.md).
 
 **A second, smaller lever: lower effort on the strong model.** In the same test, running the rescuer at effort low instead of medium cost 24–25% less in two runs, with no measurable quality loss on the rescued tickets. Measured on short support replies only.
 
@@ -159,4 +178,4 @@ We tested 12 cost-saving ideas one at a time, and **7 raised cost or lowered qua
 
 Built from a real cost-reduction project on a live language-learning app. Engineering, testing and blind reviews were done with an AI coding assistant (Claude); a product owner made every keep-or-drop decision from the results.
 
-Text: [CC BY 4.0](LICENSE). Code in [examples/](examples/): MIT. Use it, adapt it, credit it.
+Text: [CC BY 4.0](LICENSE). Code in [src/](src/) and [examples/](examples/): [MIT](LICENSE-CODE). Use it, adapt it, credit it.

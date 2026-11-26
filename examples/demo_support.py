@@ -18,10 +18,9 @@ import json
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).parent.parent / "src"))  # works without pip install
 
-from pipeline import Step, run_pipeline  # noqa: E402
-from scout_rescue import ModelResult  # noqa: E402
+from mixed_model_cost import ModelResult, Step, run_pipeline  # noqa: E402
 
 TICKETS = [
     "Hi, order #48213 arrived with a cracked screen. Can I get a replacement?",
@@ -108,7 +107,7 @@ def stub_models():
 
 
 def live_models():
-    from claude_models import claude
+    from mixed_model_cost.claude import claude
 
     return {
         "cheap": claude("claude-haiku-5-5", effort="low"),

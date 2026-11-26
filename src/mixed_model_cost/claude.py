@@ -1,13 +1,13 @@
 """Claude adapter: turns a Claude model into a `Model` function for
-scout_rescue.py and pipeline.py. Other providers need only a function with the
+scout_rescue and pipeline. Other providers need only a function with the
 same shape (prompt in, ModelResult out).
 
-Requires: pip install anthropic, and credentials (ANTHROPIC_API_KEY or `ant auth login`).
+Requires: pip install "ai-mixed-model-cost-optimization[claude]" (or anthropic), and credentials (ANTHROPIC_API_KEY or `ant auth login`).
 """
 
 from __future__ import annotations
 
-from scout_rescue import Model, ModelResult
+from .scout_rescue import Model, ModelResult
 
 # USD per million tokens: (input, output). Prices change - check the current
 # price list before you trust any cost number. Haiku 5.5 price is for prompts
