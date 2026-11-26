@@ -107,6 +107,8 @@ We then ran the support-reply step of this idea for real: 40 made-up tickets (20
 
 **Good for cost, with a quality trade-off.** Most cheap replies were good, but some were weaker in ways no check saw, and one stated a wrong refund rule. Use it where a few percent of quality is acceptable, or where your checks catch the mistakes that matter; keep refund, money and legal answers on the strong model until they do. → [Full results, caveats and how to rerun it](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/docs/support-test.md)
 
+**And where a cheap model is already in use:** in a game that writes an AI newspaper article per match day, the cheap model passed every check, so the rescuer never ran. The strong model alone cost 18× more for 13% better text, and the blind review found fact errors in both that no check caught. The better lever there is a better check, not a bigger model. → [Game article test](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/docs/game-article-test.md)
+
 ## The solution
 
 **1. Break the job into steps, and give each step the right model.** A recommended starting point — our case study tested this on one step (the search), not a full pipeline.
@@ -119,6 +121,17 @@ We then ran the support-reply step of this idea for real: 40 made-up tickets (20
 | Aggregate | mid-size model, once per batch |
 
 **2. Scout & Rescue for the steps that are usually easy but sometimes hard.** A cheap model (the scout) tries first. A strong model (the rescuer) runs only when a check in code says the scout's result is unusable. When most requests pass the check, most finish at the cheap price; the rest get the same strong model you use today.
+
+```mermaid
+flowchart LR
+    R["Request"] --> SC["Scout<br/>cheap model"] --> C1{"Check in code:<br/>usable?"}
+    C1 -- yes --> A["Answer<br/>at the cheap price"]
+    C1 -- no --> RS["Rescuer<br/>strong model"] --> C2{"Check:<br/>usable?"}
+    C2 -- yes --> A2["Answer<br/>pays for both calls"]
+    C2 -- no --> F["Fallback<br/>template, human, or error"]
+```
+
+The checks decide the quality: a mistake no check catches goes straight to the user at the cheap price.
 
 **Expect a small quality cost.** Requests that pass the check are only as good as the cheap model's answer. In our support test, Scout & Rescue cost 81–88% less than the strong model alone and scored 2–6% lower in a blind review — a much stronger cost lever than tuning the strong model, with a quality trade-off you should measure for your own task. How much quality you keep depends mostly on your checks.
 
@@ -155,13 +168,44 @@ mmco compare my_test.py --live
 
 **3. Prove every change before you ship it.** Change one thing at a time. Run the old and new versions side by side on the same requests. Review quality blind, as A vs. B. Keep only what saves money *and* holds quality.
 
+The test setup is an **eval**: a fixed set of real requests, checks in code and a blind review, built once and reused for every change. Without it you can't tell a saving from a quality loss.
+
+```mermaid
+flowchart TD
+    subgraph EVAL["The eval: build it once, reuse it for every change"]
+        E0["Define good enough<br/>what users must keep getting"]
+        E1["Fixed test set<br/>20-100 real requests, incl. hard ones"]
+        E2["Checks in code<br/>the mistakes that must never ship"]
+        E3["Blind review<br/>fixed rubric, A/B labels, hard-failure count"]
+    end
+    C["Break today's cost into parts<br/>where does the money go?"]
+    L["List levers, each with a guess<br/>Scout & Rescue, lower effort, shorter prompt, caching"]
+    T["Test ONE lever against today<br/>same requests, same moment: mmco compare"]
+    LG["Write it in the ledger<br/>cost, speed, quality, hard failures"]
+    D{"Cheaper AND<br/>quality holds?"}
+    K["Keep"]
+    X["Drop: anti-levers list"]
+    M{"More levers?"}
+    CT["Combined test of all kept levers<br/>against what is live"]
+    S["Ship behind a switch, keep measuring<br/>cost per request, rescue rate, check failures"]
+    E0 --> C --> L --> T
+    E1 --> T
+    E2 --> T
+    T --> E3 --> LG --> D
+    D -- yes --> K --> M
+    D -- no --> X --> M
+    M -- yes --> T
+    M -- no --> CT --> S
+    S -. "new model, new prices, drift" .-> C
+```
+
 → The step-by-step method: [docs/method.md](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/docs/method.md) · Templates: [templates/](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/templates/)
 
 ## The full story
 
 We tested 12 cost-saving ideas one at a time, and **7 raised cost or lowered quality**. For example, a shorter prompt made the model search *more*.
 
-→ [Case study](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/docs/case-study.md) · [Support test](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/docs/support-test.md) · [Scout & Rescue in detail](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/docs/scout-and-rescue.md) · [Lessons](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/docs/lessons.md)
+→ [Case study](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/docs/case-study.md) · [Support test](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/docs/support-test.md) · [Game article test](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/docs/game-article-test.md) · [Scout & Rescue in detail](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/docs/scout-and-rescue.md) · [Lessons](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/docs/lessons.md)
 
 ## Terms used on this page
 
@@ -172,6 +216,7 @@ We tested 12 cost-saving ideas one at a time, and **7 raised cost or lowered qua
 - **Full web search:** a search tool that filters the results with code before the model reads them. Fewer pages to read, but more steps.
 - **Simple web search:** a search tool that hands the raw results straight to the model. Fewer steps; the model reads everything it gets, which is cheap on a small model but expensive on a large one.
 - **Blind review:** a reviewer scores two results labelled only A and B, without knowing which setup made which.
+- **Eval:** the fixed test that decides whether a change is kept — real requests, checks in code and a blind review, run the same way every time.
 - **Typical (median):** the middle value — half the requests cost less, half more. Unlike the average, a few expensive outliers don't move it.
 
 ## About

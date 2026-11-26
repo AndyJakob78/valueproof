@@ -4,6 +4,39 @@ A way to cut the running cost of an AI feature with evidence instead of intuitio
 
 Roles: a **product owner** who decides, and an **engineer** — a person or an AI coding agent — who changes one thing at a time and runs the tests. The owner never decides from an argument, only from the ledger.
 
+## The flow
+
+Steps 0, 3 and 5 together are the **eval**: built once, reused for every lever.
+
+```mermaid
+flowchart TD
+    subgraph EVAL["The eval: build it once, reuse it for every change"]
+        E0["Define good enough<br/>what users must keep getting"]
+        E1["Fixed test set<br/>20-100 real requests, incl. hard ones"]
+        E2["Checks in code<br/>the mistakes that must never ship"]
+        E3["Blind review<br/>fixed rubric, A/B labels, hard-failure count"]
+    end
+    C["Break today's cost into parts<br/>where does the money go?"]
+    L["List levers, each with a guess<br/>Scout & Rescue, lower effort, shorter prompt, caching"]
+    T["Test ONE lever against today<br/>same requests, same moment: mmco compare"]
+    LG["Write it in the ledger<br/>cost, speed, quality, hard failures"]
+    D{"Cheaper AND<br/>quality holds?"}
+    K["Keep"]
+    X["Drop: anti-levers list"]
+    M{"More levers?"}
+    CT["Combined test of all kept levers<br/>against what is live"]
+    S["Ship behind a switch, keep measuring<br/>cost per request, rescue rate, check failures"]
+    E0 --> C --> L --> T
+    E1 --> T
+    E2 --> T
+    T --> E3 --> LG --> D
+    D -- yes --> K --> M
+    D -- no --> X --> M
+    M -- yes --> T
+    M -- no --> CT --> S
+    S -. "new model, new prices, drift" .-> C
+```
+
 ---
 
 ## Step 0 — Define "good enough" before you start
