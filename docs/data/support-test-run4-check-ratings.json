@@ -1,0 +1,35 @@
+{
+  "code checks (published)": {
+    "replies": 92,
+    "hard_failures": 1,
+    "caught": 0,
+    "missed": 1,
+    "false_alarms": 9,
+    "weaker": 5,
+    "weaker_flagged": 0,
+    "flagged": 9,
+    "cost_usd": 0.0
+  },
+  "code + policy check (Haiku)": {
+    "replies": 92,
+    "hard_failures": 1,
+    "caught": 1,
+    "missed": 0,
+    "false_alarms": 18,
+    "weaker": 5,
+    "weaker_flagged": 1,
+    "flagged": 19,
+    "cost_usd": 0.019468100000000002
+  },
+  "code + policy check (Sonnet)": {
+    "replies": 92,
+    "hard_failures": 1,
+    "caught": 1,
+    "missed": 0,
+    "false_alarms": 19,
+    "weaker": 5,
+    "weaker_flagged": 3,
+    "flagged": 20,
+    "cost_usd": 0.289162
+  }
+}

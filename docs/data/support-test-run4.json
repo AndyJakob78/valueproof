@@ -1,0 +1,3042 @@
+[
+  {
+    "case": 0,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Thank you for letting us know about order #48213, and I'm sorry the item arrived with a cracked screen. Under our damaged item policy (§1), you can choose a free replacement or a full refund, provided you report the damage within 14 days of delivery. Please send us a photo of the cracked screen so we can process your request. Once we have the photo, we'll confirm which option you'd like to go ahead with.",
+      "cost_usd": 0.0001134,
+      "seconds": 2.618546962738037,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate §1; asks photo. Ignores customer's stated replacement choice; cites § internally.",
+      "cost_usd": 0.007804
+    }
+  },
+  {
+    "case": 0,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Hi there, I'm sorry to hear that order #48213 arrived with a cracked screen! Damaged items qualify for a free replacement or a full refund, so a replacement is an option (§1). To get started, please reply with a photo that clearly shows the damage (§1). Please note that damage needs to be reported within 14 days of delivery (§1). Once we have the photo, we'll take care of the next steps for your replacement.",
+      "cost_usd": 0.005736,
+      "seconds": 2.278090000152588,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate §1 handling, clear next step; internal §-references feel bureaucratic to customers.",
+      "cost_usd": 0.008136
+    }
+  },
+  {
+    "case": 0,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Thank you for letting us know about order #48213, and I'm sorry the item arrived with a cracked screen. Under our damaged item policy (§1), you can choose a free replacement or a full refund, provided you report the damage within 14 days of delivery. Please send us a photo of the cracked screen so we can process your request. Once we have the photo, we'll confirm which option you'd like to go ahead with.",
+      "cost_usd": 0.00029340000000000003,
+      "seconds": 4.224601745605469,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate §1; asks photo. Ignores customer's stated replacement choice; cites § internally.",
+      "cost_usd": 0.007804
+    }
+  },
+  {
+    "case": 0,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Thank you for letting us know about order #48213, and I'm sorry the item arrived with a cracked screen. Under our damaged item policy (§1), you can choose a free replacement or a full refund, provided you report the damage within 14 days of delivery. Please send us a photo of the cracked screen so we can process your request. Once we have the photo, we'll confirm which option you'd like to go ahead with.",
+      "cost_usd": 0.0001134,
+      "seconds": 2.618569850921631,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate §1; asks photo. Ignores customer's stated replacement choice; cites § internally.",
+      "cost_usd": 0.007804
+    }
+  },
+  {
+    "case": 1,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Hi there, thanks for getting in touch about order 77120. Standard delivery takes 3-5 working days (§2), so your parcel is still within the usual window, though it's not yet at the point where we open a trace with the carrier. If it hasn't arrived by 7 working days after dispatch, please let us know and we'll open a trace with the carrier (§2). We can't give an exact delivery date, but we'll help you get this sorted as quickly as we can.",
+      "cost_usd": 0.00012230000000000002,
+      "seconds": 1.1479339599609375,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 32,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct overall; 'after dispatch' adds nuance; citing § numbers to customers is awkward.",
+      "cost_usd": 0.009052
+    }
+  },
+  {
+    "case": 1,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Hi there, thanks for getting in touch about order 77120. Standard delivery takes 3-5 working days (§2), so your parcel is still within the usual window, though it's not yet at the point where we open a trace with the carrier. If it hasn't arrived by 7 working days after dispatch, please let us know and we'll open a trace with the carrier (§2). We can't give an exact delivery date, but we'll help you get this sorted as quickly as we can.",
+      "cost_usd": 0.00012230000000000002,
+      "seconds": 1.1479418277740479,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 32,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct overall; 'after dispatch' adds nuance; citing § numbers to customers is awkward.",
+      "cost_usd": 0.009052
+    }
+  },
+  {
+    "case": 1,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Hi, and thanks for reaching out about order 77120! Standard delivery takes 3-5 working days, so at 4 working days your parcel is still within the normal delivery window (§2). If it still hasn't arrived after 7 working days, just let us know and we'll open a trace with the carrier to find out where it is (§2). Thanks for your patience, and we hope your parcel reaches you very soon!",
+      "cost_usd": 0.006632,
+      "seconds": 2.5728492736816406,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 36,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate §2 guidance and clear next step; customer-facing § references are unnecessary.",
+      "cost_usd": 0.007484
+    }
+  },
+  {
+    "case": 1,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Hi there, thanks for getting in touch about order 77120! Our standard delivery time is 3-5 working days, so at 4 working days your parcel is still within the normal window (§2). I'm sorry for the wait, and I know it's frustrating not to have it yet. If it still hasn't arrived after 7 working days, just let us know and we'll open a trace with the carrier to find out what's happening (§2). Thanks for your patience, and we hope your order arrives very soon!",
+      "cost_usd": 0.0072374,
+      "seconds": 8.376726150512695,
+      "path": "rescue",
+      "final_check": "policy check failed",
+      "rejected_because": "policy check failed"
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct and helpful; internal § references shouldn't appear in customer replies.",
+      "cost_usd": 0.00844
+    }
+  },
+  {
+    "case": 2,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Hi there, thanks for getting in touch about returning the jacket from order 30551! We're happy to accept returns within 30 days, as long as the item is unused and in its original packaging (§5). Since the jacket has never been worn and still has its tags, it sounds like a great fit for a return, so please pack it in its original packaging. Please note that return shipping is paid by the customer unless the item is faulty (§5). Let us know if you have any questions, and we'll be glad to help!",
+      "cost_usd": 0.006692,
+      "seconds": 3.0861220359802246,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 29,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Rules correct; no return instructions, 30-day check, or internal §5 citations.",
+      "cost_usd": 0.008256
+    }
+  },
+  {
+    "case": 2,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Hi there, thanks for getting in touch about returning the jacket from order 30551! Since it's never been worn and still has its tags, it should qualify for a return as long as it's within 30 days of delivery and sent back in its original packaging (§5). Please note that return shipping costs are covered by the customer unless the item is faulty (§5). Just reply to confirm you'd like to go ahead, and we'll send you the return instructions.",
+      "cost_usd": 0.0064617,
+      "seconds": 7.0448901653289795,
+      "path": "rescue",
+      "final_check": null,
+      "rejected_because": "policy check failed"
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate return rules; extra confirmation step and internal § references are unnecessary.",
+      "cost_usd": 0.007176
+    }
+  },
+  {
+    "case": 2,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Thank you for getting in touch about order 30551. Returns are accepted within 30 days of delivery, provided the item is unused and in its original packaging (§5). Since the jacket is unworn with tags still attached, it appears to meet these conditions. Please note that return shipping is paid by you unless the item is faulty (§5). Once you have confirmed you would like to proceed, please reply and we will send you the next steps for returning the jacket.",
+      "cost_usd": 0.00011930000000000001,
+      "seconds": 1.16365385055542,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 32,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct rules; needless confirmation step delays return, packaging not checked.",
+      "cost_usd": 0.008868
+    }
+  },
+  {
+    "case": 2,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Thank you for getting in touch about order 30551. Returns are accepted within 30 days of delivery, provided the item is unused and in its original packaging (§5). Since the jacket is unworn with tags still attached, it appears to meet these conditions. Please note that return shipping is paid by you unless the item is faulty (§5). Once you have confirmed you would like to proceed, please reply and we will send you the next steps for returning the jacket.",
+      "cost_usd": 0.00011930000000000001,
+      "seconds": 1.1636271476745605,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 32,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct rules; needless confirmation step delays return, packaging not checked.",
+      "cost_usd": 0.008868
+    }
+  },
+  {
+    "case": 3,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Hello, thank you for contacting us about order 50911. I'm sorry to hear you were charged twice. Under our policy (§3), a duplicate charge is refunded within 5 working days once our billing team confirms it, and we don't offer other compensation for this. I've noted the issue so it can be checked by our billing team. If you have any further details, such as the dates or amounts of the two charges, please share them so we can help the confirmation go smoothly.",
+      "cost_usd": 0.0002898,
+      "seconds": 2.5553221702575684,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 34,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate §3; unprompted no-compensation line and §3 citation feel slightly cold.",
+      "cost_usd": 0.00834
+    }
+  },
+  {
+    "case": 3,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Hello, thank you for contacting us about order 50911. I'm sorry to hear you were charged twice. Under our policy (§3), a duplicate charge is refunded within 5 working days once our billing team confirms it, and we don't offer other compensation for this. I've noted the issue so it can be checked by our billing team. If you have any further details, such as the dates or amounts of the two charges, please share them so we can help the confirmation go smoothly.",
+      "cost_usd": 0.0001199,
+      "seconds": 1.2136509418487549,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 34,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate §3; unprompted no-compensation line and §3 citation feel slightly cold.",
+      "cost_usd": 0.00834
+    }
+  },
+  {
+    "case": 3,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Hi, thank you for reaching out, and I'm sorry about the double charge on order 50911. I've passed this on to our billing team so they can confirm the duplicate charge (§3). Once they confirm it, the extra amount will be refunded within 5 working days (§3). If anything else comes up in the meantime, just reply to this message and we'll be glad to help.",
+      "cost_usd": 0.004276,
+      "seconds": 1.8798768520355225,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 36,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate §3 handling; internal section references shouldn't appear in customer reply.",
+      "cost_usd": 0.005896
+    }
+  },
+  {
+    "case": 3,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Hello, thank you for contacting us about order 50911. I'm sorry to hear you were charged twice. Under our policy (§3), a duplicate charge is refunded within 5 working days once our billing team confirms it, and we don't offer other compensation for this. I've noted the issue so it can be checked by our billing team. If you have any further details, such as the dates or amounts of the two charges, please share them so we can help the confirmation go smoothly.",
+      "cost_usd": 0.0001199,
+      "seconds": 1.2136626243591309,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 34,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate §3; unprompted no-compensation line and §3 citation feel slightly cold.",
+      "cost_usd": 0.00834
+    }
+  },
+  {
+    "case": 4,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Hello, thank you for getting in touch about order 61442. We're happy to help with the address correction. A corrected invoice will be sent within 2 working days (§4). Please note that if the change involves the company name or VAT number, we would also need your written confirmation of the new details (§4). Since this is a street address spelling fix, that step shouldn't be needed. Thank you for your patience.",
+      "cost_usd": 0.0001099,
+      "seconds": 1.5407109260559082,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 32,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Never asks for the correct address spelling; internal § references and VAT aside are unnecessary.",
+      "cost_usd": 0.007656
+    }
+  },
+  {
+    "case": 4,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Hello, thank you for getting in touch about order 61442. We're happy to help with the address correction. A corrected invoice will be sent within 2 working days (§4). Please note that if the change involves the company name or VAT number, we would also need your written confirmation of the new details (§4). Since this is a street address spelling fix, that step shouldn't be needed. Thank you for your patience.",
+      "cost_usd": 0.0002492,
+      "seconds": 2.636575222015381,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 32,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Never asks for the correct address spelling; internal § references and VAT aside are unnecessary.",
+      "cost_usd": 0.007656
+    }
+  },
+  {
+    "case": 4,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Hello, thank you for getting in touch about order 61442. We're happy to help with the address correction. A corrected invoice will be sent within 2 working days (§4). Please note that if the change involves the company name or VAT number, we would also need your written confirmation of the new details (§4). Since this is a street address spelling fix, that step shouldn't be needed. Thank you for your patience.",
+      "cost_usd": 0.0001099,
+      "seconds": 1.5407328605651855,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 32,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Never asks for the correct address spelling; internal § references and VAT aside are unnecessary.",
+      "cost_usd": 0.007656
+    }
+  },
+  {
+    "case": 4,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Hello, and thank you for getting in touch about order 61442! We're happy to correct the misspelled street address on your invoice. Could you please reply with the full, correctly spelled address so we can make sure everything is accurate? Once we have it, we'll send you the corrected invoice within 2 working days (§4). Thank you for your patience, and have a lovely day!",
+      "cost_usd": 0.005656,
+      "seconds": 2.601778984069824,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct 2-day timeline; asks for the address; exposes internal §4 reference.",
+      "cost_usd": 0.008252
+    }
+  },
+  {
+    "case": 5,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Hi there, thank you for letting us know about order 22980, and I'm sorry the mug arrived chipped. Thanks for attaching the photo, which is exactly what we need for a damaged item. Under our damaged-item policy (§1), we can offer you either a free replacement or a full refund, so please let us know which you prefer. Our team will follow up with the next steps once we have your choice.",
+      "cost_usd": 0.00011180000000000001,
+      "seconds": 1.1994013786315918,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 37,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correctly applies §1, offers replacement or refund, asks for the customer's choice.",
+      "cost_usd": 0.005644
+    }
+  },
+  {
+    "case": 5,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Hi there, thank you for letting us know about order 22980, and I'm sorry the mug arrived chipped. Thanks for attaching the photo, which is exactly what we need for a damaged item. Under our damaged-item policy (§1), we can offer you either a free replacement or a full refund, so please let us know which you prefer. Our team will follow up with the next steps once we have your choice.",
+      "cost_usd": 0.00011180000000000001,
+      "seconds": 1.1994171142578125,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 37,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correctly applies §1, offers replacement or refund, asks for the customer's choice.",
+      "cost_usd": 0.005644
+    }
+  },
+  {
+    "case": 5,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Hi there, thank you for letting us know about order 22980, and I'm sorry the mug arrived chipped. Thanks for attaching the photo, which is exactly what we need for a damaged item. Under our damaged-item policy (§1), we can offer you either a free replacement or a full refund, so please let us know which you prefer. Our team will follow up with the next steps once we have your choice.",
+      "cost_usd": 0.0002243,
+      "seconds": 2.094801425933838,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 37,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correctly applies §1, offers replacement or refund, asks for the customer's choice.",
+      "cost_usd": 0.005644
+    }
+  },
+  {
+    "case": 5,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Hi there, thank you for getting in touch, and I'm sorry your mug from order 22980 arrived with a chip in it. Since you've reported the damage within 14 days of delivery and included a photo, you're entitled to either a free replacement or a full refund (§1). Please let us know which option you'd prefer, and we'll get it sorted for you right away.",
+      "cost_usd": 0.005572,
+      "seconds": 2.7893619537353516,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 37,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct §1 application; clear next step. Citing '§1' to customer slightly odd.",
+      "cost_usd": 0.005664
+    }
+  },
+  {
+    "case": 6,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Hi there, I'm sorry order 81007 hasn't arrived yet. Standard delivery takes 3-5 working days, and since it has now been 8 working days, we are opening a trace with the carrier to locate your parcel (§2). I can't give you an exact delivery date. If the parcel is more than 10 working days late, we will refund the shipping cost (§2). Thank you for your patience.",
+      "cost_usd": 0.0003232,
+      "seconds": 3.116913080215454,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 36,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct trace and refund rules; §2 citations feel slightly robotic for customers.",
+      "cost_usd": 0.008576
+    }
+  },
+  {
+    "case": 6,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Hi there, thanks for getting in touch about order 81007, and I'm sorry it hasn't arrived yet. Since it has now been more than 7 working days, we're opening a trace with the carrier to find out where your parcel is (§2). We can't promise an exact delivery date (§7), but we'll update you as soon as we hear back from the carrier. If your parcel ends up more than 10 working days late, we'll refund your shipping cost (§2). Thanks for your patience!",
+      "cost_usd": 0.007388,
+      "seconds": 3.339478015899658,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 36,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct trace and refund rules; internal § references are unnecessary for customers.",
+      "cost_usd": 0.00762
+    }
+  },
+  {
+    "case": 6,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Hi there, I'm sorry order 81007 hasn't arrived yet. Standard delivery takes 3-5 working days, and since it has now been 8 working days, we are opening a trace with the carrier to locate your parcel (§2). I can't give you an exact delivery date. If the parcel is more than 10 working days late, we will refund the shipping cost (§2). Thank you for your patience.",
+      "cost_usd": 0.0003232,
+      "seconds": 3.116892099380493,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 36,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct trace and refund rules; §2 citations feel slightly robotic for customers.",
+      "cost_usd": 0.008576
+    }
+  },
+  {
+    "case": 6,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Hi there, I'm sorry order 81007 hasn't arrived yet. Standard delivery takes 3-5 working days, and since it has now been 8 working days, we are opening a trace with the carrier to locate your parcel (§2). I can't give you an exact delivery date. If the parcel is more than 10 working days late, we will refund the shipping cost (§2). Thank you for your patience.",
+      "cost_usd": 0.0004890000000000001,
+      "seconds": 4.482608318328857,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 36,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct trace and refund rules; §2 citations feel slightly robotic for customers.",
+      "cost_usd": 0.008576
+    }
+  },
+  {
+    "case": 7,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Thank you for contacting us about order 44120. You can return the shoes within 30 days of purchase, as long as they are unused and in their original packaging (§5). Because the shoes are not faulty, return shipping is at your expense (§5). Once you have the shoes ready, please reply to confirm you'd like to proceed, and we will go through the next steps with you. Thanks for your patience, and we hope you find a better fit.",
+      "cost_usd": 0.0003514,
+      "seconds": 3.8998191356658936,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 29,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct rules; return process vague; '30 days of purchase' assumed; §-references customer-facing.",
+      "cost_usd": 0.008316
+    }
+  },
+  {
+    "case": 7,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Thank you for contacting us about order 44120. You can return the shoes within 30 days of purchase, as long as they are unused and in their original packaging (§5). Because the shoes are not faulty, return shipping is at your expense (§5). Once you have the shoes ready, please reply to confirm you'd like to proceed, and we will go through the next steps with you. Thanks for your patience, and we hope you find a better fit.",
+      "cost_usd": 0.00011559999999999999,
+      "seconds": 1.1700689792633057,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 29,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct rules; return process vague; '30 days of purchase' assumed; §-references customer-facing.",
+      "cost_usd": 0.008316
+    }
+  },
+  {
+    "case": 7,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Thank you for contacting us about order 44120. You can return the shoes within 30 days of purchase, as long as they are unused and in their original packaging (§5). Because the shoes are not faulty, return shipping is at your expense (§5). Once you have the shoes ready, please reply to confirm you'd like to proceed, and we will go through the next steps with you. Thanks for your patience, and we hope you find a better fit.",
+      "cost_usd": 0.00011559999999999999,
+      "seconds": 1.170076847076416,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 29,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct rules; return process vague; '30 days of purchase' assumed; §-references customer-facing.",
+      "cost_usd": 0.008316
+    }
+  },
+  {
+    "case": 7,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Thanks for reaching out, and sorry the shoes from order 44120 turned out to be too small! You can return them within 30 days as long as they're unused and in their original packaging (§5). Since the shoes aren't faulty, return shipping is at your own cost (§5). Just reply to this message once you're ready to send them back, and we'll help you with the next steps.",
+      "cost_usd": 0.005544,
+      "seconds": 2.5058090686798096,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate return rules; next step vague; internal § references unnecessary for customer.",
+      "cost_usd": 0.00662
+    }
+  },
+  {
+    "case": 8,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Thank you for getting in touch about order 39004. I'm sorry to hear you were charged twice. A duplicate charge is refunded within 5 working days once our billing team confirms it, and no other compensation applies (§3). I've noted the duplicate charge of 89.90 on order 39004 so the billing team can verify it. If you have a screenshot of both transactions, please send it to help them confirm faster.",
+      "cost_usd": 0.0001137,
+      "seconds": 1.2982523441314697,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 33,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate §3; unprompted 'no other compensation' and §3 citation feel bureaucratic.",
+      "cost_usd": 0.008384
+    }
+  },
+  {
+    "case": 8,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Thank you for getting in touch about order 39004. I'm sorry to hear you were charged twice. A duplicate charge is refunded within 5 working days once our billing team confirms it, and no other compensation applies (§3). I've noted the duplicate charge of 89.90 on order 39004 so the billing team can verify it. If you have a screenshot of both transactions, please send it to help them confirm faster.",
+      "cost_usd": 0.0003252,
+      "seconds": 3.072831153869629,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 33,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate §3; unprompted 'no other compensation' and §3 citation feel bureaucratic.",
+      "cost_usd": 0.008384
+    }
+  },
+  {
+    "case": 8,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Thank you for getting in touch about order 39004. I'm sorry to hear you were charged twice. A duplicate charge is refunded within 5 working days once our billing team confirms it, and no other compensation applies (§3). I've noted the duplicate charge of 89.90 on order 39004 so the billing team can verify it. If you have a screenshot of both transactions, please send it to help them confirm faster.",
+      "cost_usd": 0.0001137,
+      "seconds": 1.2982232570648193,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 33,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate §3; unprompted 'no other compensation' and §3 citation feel bureaucratic.",
+      "cost_usd": 0.008384
+    }
+  },
+  {
+    "case": 8,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Hello, and thank you for letting us know about the double payment of 89.90 for order 39004. I'm sorry for the trouble this has caused. I've passed your case to our billing team. Once they confirm the duplicate charge, it will be refunded to your card within 5 working days (§3). We'll keep you updated, and please don't hesitate to reach out if you have any further questions.",
+      "cost_usd": 0.004348,
+      "seconds": 2.098945140838623,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 36,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct and complete; the internal '(§3)' reference shouldn't be shown to customers.",
+      "cost_usd": 0.006564
+    }
+  },
+  {
+    "case": 9,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Thank you for contacting us about order 70316, and I'm sorry the blender won't turn on. Under our damaged item policy (§1), you are entitled to either a free replacement or a full refund. To proceed, please send us a photo showing the fault, and note that damage must be reported within 14 days of delivery (§1). Once we receive the photo, we'll confirm which option we can process for you. Thank you for your patience.",
+      "cost_usd": 0.0003054,
+      "seconds": 2.8135077953338623,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 31,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct §1 use; should confirm requested refund, not 'which option we can process'.",
+      "cost_usd": 0.009364
+    }
+  },
+  {
+    "case": 9,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Hi there, thank you for contacting us about order 70316, and I'm sorry to hear your blender won't turn on at all. Since the item appears to be faulty, you can return it within 30 days for a refund, and we'll cover the return shipping (§5). If the blender also shows any visible damage, please send us a photo of it within 14 days of delivery, and we can process a full refund that way (§1). Just reply to this message and we'll guide you through the next steps.",
+      "cost_usd": 0.011656,
+      "seconds": 5.390456199645996,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 31,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct faulty-return terms; packaging condition omitted, two routes confuse, vague next step.",
+      "cost_usd": 0.011556
+    }
+  },
+  {
+    "case": 9,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Thank you for contacting us about order 70316, and I'm sorry the blender won't turn on. Under our damaged item policy (§1), you are entitled to either a free replacement or a full refund. To proceed, please send us a photo showing the fault, and note that damage must be reported within 14 days of delivery (§1). Once we receive the photo, we'll confirm which option we can process for you. Thank you for your patience.",
+      "cost_usd": 0.0006778999999999999,
+      "seconds": 6.14873194694519,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 31,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct §1 use; should confirm requested refund, not 'which option we can process'.",
+      "cost_usd": 0.009364
+    }
+  },
+  {
+    "case": 9,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Thank you for contacting us about order 70316, and I'm sorry the blender won't turn on. Under our damaged item policy (§1), you are entitled to either a free replacement or a full refund. To proceed, please send us a photo showing the fault, and note that damage must be reported within 14 days of delivery (§1). Once we receive the photo, we'll confirm which option we can process for you. Thank you for your patience.",
+      "cost_usd": 0.0003054,
+      "seconds": 2.813486099243164,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 31,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct §1 use; should confirm requested refund, not 'which option we can process'.",
+      "cost_usd": 0.009364
+    }
+  },
+  {
+    "case": 10,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Thank you for contacting us about order #50912. For the duplicate charge, we will refund the extra payment within 5 working days once our billing team confirms it (§3). For the invoice, we will send a corrected invoice within 2 working days (§4). To change the company name, we need your written confirmation of the new details (§4). Please send that to us, and we will get started right away. We cannot guarantee the refund or invoice will arrive before your Friday audit, but we will do our best to help.",
+      "cost_usd": 0.0001264,
+      "seconds": 1.5032639503479004,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 34,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate and complete. Remove § citations; clarify invoice timing starts after confirmation.",
+      "cost_usd": 0.008936
+    }
+  },
+  {
+    "case": 10,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Thank you for reaching out, and I'm sorry for the trouble with order #50912. Our billing team will review the duplicate charge, and once they confirm it, the extra amount will be refunded within 5 working days (§3). To correct the company name on your invoice, please reply with written confirmation of the correct company name exactly as it should appear (§4). Once we have that, we'll send you a corrected invoice within 2 working days (§4). We understand your audit is on Friday, and we'll handle both requests as quickly as these timelines allow.",
+      "cost_usd": 0.013156,
+      "seconds": 5.188691854476929,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 36,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate and complete; customer-facing § references are unnecessary clutter.",
+      "cost_usd": 0.008436
+    }
+  },
+  {
+    "case": 10,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Thank you for contacting us about order #50912. For the duplicate charge, we will refund the extra payment within 5 working days once our billing team confirms it (§3). For the invoice, we will send a corrected invoice within 2 working days (§4). To change the company name, we need your written confirmation of the new details (§4). Please send that to us, and we will get started right away. We cannot guarantee the refund or invoice will arrive before your Friday audit, but we will do our best to help.",
+      "cost_usd": 0.0004922,
+      "seconds": 4.612525701522827,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 34,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate and complete. Remove § citations; clarify invoice timing starts after confirmation.",
+      "cost_usd": 0.008936
+    }
+  },
+  {
+    "case": 10,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Thank you for contacting us about order #50912. For the duplicate charge, we will refund the extra payment within 5 working days once our billing team confirms it (§3). For the invoice, we will send a corrected invoice within 2 working days (§4). To change the company name, we need your written confirmation of the new details (§4). Please send that to us, and we will get started right away. We cannot guarantee the refund or invoice will arrive before your Friday audit, but we will do our best to help.",
+      "cost_usd": 0.0001264,
+      "seconds": 1.5032498836517334,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 34,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate and complete. Remove § citations; clarify invoice timing starts after confirmation.",
+      "cost_usd": 0.008936
+    }
+  },
+  {
+    "case": 11,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "I'm really sorry your parcel is so late, and I completely understand your frustration. Since it is more than 10 working days overdue, you're entitled to a refund of your shipping cost (§2). Because it has been over 7 working days, we'll also make sure a trace is opened with the carrier to find out where your parcel is (§2). Could you please send me your order number so I can locate your order and get both of these started? Thank you for your patience, and we'll update you as soon as we hear back from the carrier.",
+      "cost_usd": 0.01152,
+      "seconds": 5.040737867355347,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 36,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct shipping refund and trace; clear next step. Policy citations unnecessary.",
+      "cost_usd": 0.00788
+    }
+  },
+  {
+    "case": 11,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Thank you for getting in touch, and I'm sorry your parcel is so late. Because it is more than 10 working days late, we will refund the shipping cost you paid (§2). We will also open a trace with the carrier (§2). Could you please send me your order number so we can locate your order and process the refund? Once I have it, I'll confirm the details with you.",
+      "cost_usd": 0.00044590000000000005,
+      "seconds": 3.880282402038574,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct shipping refund and trace; clear next step. Section citations slightly odd.",
+      "cost_usd": 0.00766
+    }
+  },
+  {
+    "case": 11,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Thank you for getting in touch, and I'm sorry your parcel is so late. Because it is more than 10 working days late, we will refund the shipping cost you paid (§2). We will also open a trace with the carrier (§2). Could you please send me your order number so we can locate your order and process the refund? Once I have it, I'll confirm the details with you.",
+      "cost_usd": 0.000284,
+      "seconds": 2.5166451930999756,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct shipping refund and trace; clear next step. Section citations slightly odd.",
+      "cost_usd": 0.00766
+    }
+  },
+  {
+    "case": 11,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Thank you for getting in touch, and I'm sorry your parcel is so late. Because it is more than 10 working days late, we will refund the shipping cost you paid (§2). We will also open a trace with the carrier (§2). Could you please send me your order number so we can locate your order and process the refund? Once I have it, I'll confirm the details with you.",
+      "cost_usd": 0.000284,
+      "seconds": 2.516686201095581,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct shipping refund and trace; clear next step. Section citations slightly odd.",
+      "cost_usd": 0.00766
+    }
+  },
+  {
+    "case": 12,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Thank you for your patience, and I'm sorry the broken lamp in order 66301 is still unresolved. Because this is your third contact about the same issue, a colleague will take over your case (§6). Under our damaged-item policy, you can receive a free replacement or a full refund, provided we have a photo of the damage and the report was made within 14 days of delivery (§1). If you haven't already, please reply with a clear photo of the damage so your colleague can review it as soon as possible.",
+      "cost_usd": 0.0005633999999999999,
+      "seconds": 5.134024143218994,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 33,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct escalation and §1; 'your colleague' typo; re-asking photo may frustrate.",
+      "cost_usd": 0.009872
+    }
+  },
+  {
+    "case": 12,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "I'm very sorry that you've had to contact us a third time about the broken lamp from order 66301, and I understand your frustration. Because this is your third message about the same issue, a colleague will take over your case personally (§6). Under our policy, a damaged item qualifies for a free replacement or a full refund, provided we have a photo of the damage and it was reported within 14 days of delivery (§1). If you haven't already sent a photo of the broken lamp, please reply with one so my colleague has everything they need. Thank you for your patience.",
+      "cost_usd": 0.007608,
+      "seconds": 3.232130765914917,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct §6 escalation and §1 rules; doesn't address refund status directly.",
+      "cost_usd": 0.006876
+    }
+  },
+  {
+    "case": 12,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Thank you for your patience, and I'm sorry the broken lamp in order 66301 is still unresolved. Because this is your third contact about the same issue, a colleague will take over your case (§6). Under our damaged-item policy, you can receive a free replacement or a full refund, provided we have a photo of the damage and the report was made within 14 days of delivery (§1). If you haven't already, please reply with a clear photo of the damage so your colleague can review it as soon as possible.",
+      "cost_usd": 0.00032669999999999997,
+      "seconds": 3.0449421405792236,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 33,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct escalation and §1; 'your colleague' typo; re-asking photo may frustrate.",
+      "cost_usd": 0.009872
+    }
+  },
+  {
+    "case": 12,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Thank you for your patience, and I'm sorry the broken lamp in order 66301 is still unresolved. Because this is your third contact about the same issue, a colleague will take over your case (§6). Under our damaged-item policy, you can receive a free replacement or a full refund, provided we have a photo of the damage and the report was made within 14 days of delivery (§1). If you haven't already, please reply with a clear photo of the damage so your colleague can review it as soon as possible.",
+      "cost_usd": 0.00032669999999999997,
+      "seconds": 3.044969081878662,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 33,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct escalation and §1; 'your colleague' typo; re-asking photo may frustrate.",
+      "cost_usd": 0.009872
+    }
+  },
+  {
+    "case": 13,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Hi, thank you for getting in touch, and I'm sorry that order 15873 arrived both damaged and late. For the damage, we can offer you a free replacement or a full refund; please send us a photo of the damage within 14 days of delivery (§1). For the delay, if your parcel arrived more than 10 working days late, we'll refund your shipping cost (§2). Unfortunately, we're not able to offer vouchers or discounts (§7). Just let us know whether you'd prefer a replacement or a refund along with the photo, and we'll take care of it right away.",
+      "cost_usd": 0.012356,
+      "seconds": 4.732454061508179,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate policy, voucher correctly declined; photo deadline slightly reworded, section refs unnecessary.",
+      "cost_usd": 0.0083
+    }
+  },
+  {
+    "case": 13,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Thank you for letting us know about order 15873, and I'm sorry it arrived damaged and late. We're not able to offer vouchers or discounts (§7), but for the damaged item you can choose either a free replacement or a full refund (§1). Please send us a photo of the damage, and make sure it reaches us within 14 days of delivery (§1). If the parcel was more than 10 working days late, we will also refund the shipping cost (§2). Please let us know which option you'd prefer, and we'll take it from there.",
+      "cost_usd": 0.0006255,
+      "seconds": 5.10628604888916,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 36,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate and complete; ties photo to 14-day deadline; § references feel internal.",
+      "cost_usd": 0.009948
+    }
+  },
+  {
+    "case": 13,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Thank you for letting us know about order 15873, and I'm sorry it arrived damaged and late. We're not able to offer vouchers or discounts (§7), but for the damaged item you can choose either a free replacement or a full refund (§1). Please send us a photo of the damage, and make sure it reaches us within 14 days of delivery (§1). If the parcel was more than 10 working days late, we will also refund the shipping cost (§2). Please let us know which option you'd prefer, and we'll take it from there.",
+      "cost_usd": 0.0004214,
+      "seconds": 3.357961893081665,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 36,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate and complete; ties photo to 14-day deadline; § references feel internal.",
+      "cost_usd": 0.009948
+    }
+  },
+  {
+    "case": 13,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Thank you for letting us know about order 15873, and I'm sorry it arrived damaged and late. We're not able to offer vouchers or discounts (§7), but for the damaged item you can choose either a free replacement or a full refund (§1). Please send us a photo of the damage, and make sure it reaches us within 14 days of delivery (§1). If the parcel was more than 10 working days late, we will also refund the shipping cost (§2). Please let us know which option you'd prefer, and we'll take it from there.",
+      "cost_usd": 0.0004214,
+      "seconds": 3.357974052429199,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 36,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate and complete; ties photo to 14-day deadline; § references feel internal.",
+      "cost_usd": 0.009948
+    }
+  },
+  {
+    "case": 14,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Thank you for contacting us about order 92010. I understand your frustration with the double charge. Under §3, a duplicate charge is refunded within 5 working days once our billing team confirms it, and we cannot offer any other compensation. Because you have mentioned a chargeback, your case is being passed to a human colleague (§6), who will take over and follow up with you directly. Please keep your bank statement handy in case the colleague needs the details of the duplicate charge.",
+      "cost_usd": 0.00029120000000000003,
+      "seconds": 2.514388084411621,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct §3 terms and §6 escalation; citing section numbers feels slightly bureaucratic.",
+      "cost_usd": 0.007936
+    }
+  },
+  {
+    "case": 14,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Thank you for contacting us about order 92010. I understand your frustration with the double charge. Under §3, a duplicate charge is refunded within 5 working days once our billing team confirms it, and we cannot offer any other compensation. Because you have mentioned a chargeback, your case is being passed to a human colleague (§6), who will take over and follow up with you directly. Please keep your bank statement handy in case the colleague needs the details of the duplicate charge.",
+      "cost_usd": 0.0001229,
+      "seconds": 1.1813600063323975,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct §3 terms and §6 escalation; citing section numbers feels slightly bureaucratic.",
+      "cost_usd": 0.007936
+    }
+  },
+  {
+    "case": 14,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Thank you for contacting us about order 92010. I understand your frustration with the double charge. Under §3, a duplicate charge is refunded within 5 working days once our billing team confirms it, and we cannot offer any other compensation. Because you have mentioned a chargeback, your case is being passed to a human colleague (§6), who will take over and follow up with you directly. Please keep your bank statement handy in case the colleague needs the details of the duplicate charge.",
+      "cost_usd": 0.0001229,
+      "seconds": 1.1813719272613525,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct §3 terms and §6 escalation; citing section numbers feels slightly bureaucratic.",
+      "cost_usd": 0.007936
+    }
+  },
+  {
+    "case": 14,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Thank you for getting in touch about the double charge on order 92010, and I'm sorry for the trouble this has caused. Once our billing team confirms the duplicate charge, it will be refunded within 5 working days (§3). Because you mentioned a possible chargeback, a colleague will take over your case personally and follow up with you (§6). Thank you for your patience while we sort this out.",
+      "cost_usd": 0.005956,
+      "seconds": 2.402222156524658,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 37,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct §3 refund terms and §6 escalation; section citations slightly unnecessary.",
+      "cost_usd": 0.00674
+    }
+  },
+  {
+    "case": 15,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Hi there, thank you for reaching out, and I'm sorry to hear the kettle from order 58822 isn't working properly. Good news: since the item is faulty, you won't have to pay for the return shipping (§5). Our standard return window is 30 days (§5), so please get in touch within that period to arrange the return. If you could also send us a short description of the fault, that will help us process everything smoothly. Thanks for your patience, and we'll get this sorted for you!",
+      "cost_usd": 0.007912,
+      "seconds": 3.6618099212646484,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 33,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct free-return answer; next step vague, internal § references shown to customer.",
+      "cost_usd": 0.00962
+    }
+  },
+  {
+    "case": 15,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Thank you for getting in touch, and I'm sorry your kettle from order 58822 arrived faulty. You won't need to pay for return shipping, because faulty items are returned at our cost (§5). To take this further, please send us a photo showing the fault (§1). Once we have it, we can arrange either a free replacement or a full refund under §1. Please note that damage claims must be reported within 14 days of delivery (§1).",
+      "cost_usd": 0.0003373,
+      "seconds": 3.107745885848999,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Return shipping answer correct; applying §1 damage rules to a faulty item is debatable.",
+      "cost_usd": 0.010388
+    }
+  },
+  {
+    "case": 15,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Thank you for getting in touch, and I'm sorry your kettle from order 58822 arrived faulty. You won't need to pay for return shipping, because faulty items are returned at our cost (§5). To take this further, please send us a photo showing the fault (§1). Once we have it, we can arrange either a free replacement or a full refund under §1. Please note that damage claims must be reported within 14 days of delivery (§1).",
+      "cost_usd": 0.0006314000000000001,
+      "seconds": 6.050425052642822,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Return shipping answer correct; applying §1 damage rules to a faulty item is debatable.",
+      "cost_usd": 0.010388
+    }
+  },
+  {
+    "case": 15,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Thank you for getting in touch, and I'm sorry your kettle from order 58822 arrived faulty. You won't need to pay for return shipping, because faulty items are returned at our cost (§5). To take this further, please send us a photo showing the fault (§1). Once we have it, we can arrange either a free replacement or a full refund under §1. Please note that damage claims must be reported within 14 days of delivery (§1).",
+      "cost_usd": 0.0003373,
+      "seconds": 3.10776686668396,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Return shipping answer correct; applying §1 damage rules to a faulty item is debatable.",
+      "cost_usd": 0.010388
+    }
+  },
+  {
+    "case": 16,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Hi there, thank you for reaching out, and happy early birthday to the recipient! I'm sorry, but I can't guarantee an exact delivery date. Standard delivery usually takes 3-5 working days (§2), and if your parcel hasn't arrived after 7 working days, we'll open a trace with the carrier (§2). I can't promise Saturday, but I hope it arrives in time. If you have any other questions about order 33715, just let me know.",
+      "cost_usd": 0.0001228,
+      "seconds": 1.315648078918457,
+      "path": "single",
+      "final_check": "does not cite §7",
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correctly declines date guarantee; policy citations clutter; next step slightly vague.",
+      "cost_usd": 0.007972
+    }
+  },
+  {
+    "case": 16,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Thank you for reaching out, and how lovely that order 33715 is a birthday present! I'm sorry, but we can't guarantee that it will arrive by Saturday, as we're unable to promise exact delivery dates (§7). Standard delivery usually takes 3-5 working days, so there's a good chance it will arrive in time (§2). If the parcel hasn't arrived after 7 working days, we'll open a trace with the carrier for you (§2). Please don't hesitate to get in touch if you have any other questions.",
+      "cost_usd": 0.0070148,
+      "seconds": 4.074357986450195,
+      "path": "rescue",
+      "final_check": null,
+      "rejected_because": "does not cite §7"
+    },
+    "score": {
+      "points": 33,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correctly declines guarantee; 'good chance' is unfounded speculation; § citations unnecessary.",
+      "cost_usd": 0.00798
+    }
+  },
+  {
+    "case": 16,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Hi there, and thank you for reaching out about your order 33715. We completely understand how important it is for a birthday present to arrive on time! Unfortunately, we aren't able to guarantee a specific delivery date, so we can't promise it will arrive by Saturday (§7). Our standard delivery usually takes 3-5 working days, and if a parcel hasn't arrived after 7 working days, we open a trace with the carrier to locate it (§2). We truly hope it reaches you in time for the celebration, and please don't hesitate to get in touch if you have any other questions.",
+      "cost_usd": 0.0069903000000000005,
+      "seconds": 5.808267116546631,
+      "path": "rescue",
+      "final_check": null,
+      "rejected_because": "does not cite §7"
+    },
+    "score": {
+      "points": 34,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correctly refuses date guarantee; slightly wordy, section references unnecessary for customer.",
+      "cost_usd": 0.008024
+    }
+  },
+  {
+    "case": 16,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Hi there, thank you for reaching out about your order 33715, and what a lovely birthday present to be sending! Unfortunately, we can't guarantee delivery by a specific date like Saturday, as we're unable to promise exact delivery dates (§7). Standard delivery usually takes 3-5 working days, so depending on when your order shipped, there's a good chance it will arrive in time (§2). If the parcel is ever delayed beyond 7 working days, we'll open a trace with the carrier to find it for you (§2). We hope it arrives in time for the celebration!",
+      "cost_usd": 0.007432,
+      "seconds": 3.1037309169769287,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 33,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correctly refuses guarantee; 'good chance' is speculative, no tracking next step.",
+      "cost_usd": 0.008184
+    }
+  },
+  {
+    "case": 17,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Hello, thank you for contacting us about order 47009. We can issue a corrected invoice within 2 working days (§4). Since this changes the company name, we first need your written confirmation of the new details, so please reply to this message confirming that the invoice should show Nordlicht GmbH (§4). Once we receive that, we will send the corrected invoice. Thank you for your patience.",
+      "cost_usd": 0.0001097,
+      "seconds": 1.283972978591919,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 33,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct §4 handling; confirmation request slightly redundant; internal § citations unnecessary.",
+      "cost_usd": 0.008224
+    }
+  },
+  {
+    "case": 17,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Hello, and thank you for your message about order 47009! We're happy to change the company name on your invoice to Nordlicht GmbH. Before we can make this change, we need your written confirmation of the new details (§4). Please reply to this email confirming the exact company name as it should appear, and let us know if the VAT number should change too. Once we have your confirmation, we'll send you a corrected invoice within 2 working days (§4).",
+      "cost_usd": 0.007648,
+      "seconds": 3.5806620121002197,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct §4 handling; showing policy section numbers to the customer is unnecessary.",
+      "cost_usd": 0.00838
+    }
+  },
+  {
+    "case": 17,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Hello, thank you for contacting us about order 47009. We can issue a corrected invoice within 2 working days (§4). Since this changes the company name, we first need your written confirmation of the new details, so please reply to this message confirming that the invoice should show Nordlicht GmbH (§4). Once we receive that, we will send the corrected invoice. Thank you for your patience.",
+      "cost_usd": 0.0002727,
+      "seconds": 2.6335980892181396,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 33,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct §4 handling; confirmation request slightly redundant; internal § citations unnecessary.",
+      "cost_usd": 0.008224
+    }
+  },
+  {
+    "case": 17,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Hello, thank you for contacting us about order 47009. We can issue a corrected invoice within 2 working days (§4). Since this changes the company name, we first need your written confirmation of the new details, so please reply to this message confirming that the invoice should show Nordlicht GmbH (§4). Once we receive that, we will send the corrected invoice. Thank you for your patience.",
+      "cost_usd": 0.0001097,
+      "seconds": 1.2839500904083252,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 33,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct §4 handling; confirmation request slightly redundant; internal § citations unnecessary.",
+      "cost_usd": 0.008224
+    }
+  },
+  {
+    "case": 18,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Hi there, thank you for reaching out about order 12688. I'm sorry to disappoint you, but our returns policy only covers unused items in their original packaging returned within 30 days (§5). Since your sofa cover was bought 40 days ago, it's outside our return window, so we're unable to accept it for return. If the cover turns out to be faulty, just let us know, as faulty items are handled differently (§5). Thanks for your understanding, and please don't hesitate to get in touch if there's anything else we can help with!",
+      "cost_usd": 0.009952,
+      "seconds": 4.484917163848877,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 32,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct refusal; faulty-item hint vague, §1 window passed; citing § numbers unnecessary.",
+      "cost_usd": 0.011608
+    }
+  },
+  {
+    "case": 18,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Thank you for getting in touch, and I'm sorry to hear the sofa cover isn't working out. Returns are accepted within 30 days of purchase, provided the item is unused and in its original packaging (§5). Unfortunately, your order was placed 40 days ago, which is outside that window, so we are unable to accept this return under our policy. If you believe there are other circumstances we should consider, please reply with the details and we will review them. Thank you for your understanding.",
+      "cost_usd": 0.00012330000000000002,
+      "seconds": 1.1825220584869385,
+      "path": "single",
+      "final_check": "does not mention the order number",
+      "rejected_because": null
+    },
+    "score": {
+      "points": 34,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct refusal; 'of purchase' adds detail the policy doesn't specify.",
+      "cost_usd": 0.009616
+    }
+  },
+  {
+    "case": 18,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Hi, and thank you for getting in touch about order 12688! I'm sorry, but our policy allows returns only within 30 days, for unused items in their original packaging (§5). Since your sofa cover was bought 40 days ago, it falls outside the return window, so unfortunately we can't accept the return. If the parcel was actually delivered within the last 30 days, please reply with the delivery date and we'll gladly take another look. Thanks for your understanding, and let us know if there's anything else we can help with!",
+      "cost_usd": 0.0125753,
+      "seconds": 7.312095880508423,
+      "path": "rescue",
+      "final_check": null,
+      "rejected_because": "does not mention the order number"
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correctly declines per §5; sensible delivery-date check. Citing §5 unnecessary.",
+      "cost_usd": 0.008452
+    }
+  },
+  {
+    "case": 18,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Hello, and thank you for contacting us about order 12688. I'm sorry to disappoint you, but returns are only possible within 30 days, for unused items in their original packaging (§5). Since your purchase was 40 days ago, your sofa cover is outside the return window, so we unfortunately can't accept it as a return. If you have any other questions about your order, we're always happy to help.",
+      "cost_usd": 0.009247499999999999,
+      "seconds": 5.832644939422607,
+      "path": "rescue",
+      "final_check": null,
+      "rejected_because": "does not mention the order number"
+    },
+    "score": {
+      "points": 34,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct refusal; citing internal §5 to the customer is slightly odd.",
+      "cost_usd": 0.009412
+    }
+  },
+  {
+    "case": 19,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Hello, I'm sorry to hear about both issues. To look into your delivery and the duplicate charge, could you please send me your order number? Once I have it, I can check the status of your parcel. If it is more than 7 working days past the usual 3-5 working day delivery window, we will open a trace with the carrier (§2). For the double charge, once our billing team confirms the duplicate, it will be refunded within 5 working days (§3). Thank you for your patience.",
+      "cost_usd": 0.000122,
+      "seconds": 1.1603679656982422,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 26,
+      "max_points": 40,
+      "hard_failure": true,
+      "note": "Trace starts after 7 working days total, not 7 days past window.",
+      "cost_usd": 0.00886
+    }
+  },
+  {
+    "case": 19,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Hello, and thank you for reaching out. I'm sorry to hear about the trouble with your order! Could you please send me your order number so I can look into both issues for you? Standard delivery takes 3-5 working days. If your parcel hasn't arrived after 7 working days, we open a trace with the carrier, and if it ends up more than 10 working days late, we refund the shipping cost (§2). As for the double charge, the duplicate payment will be refunded within 5 working days once our billing team confirms it (§3).",
+      "cost_usd": 0.0113,
+      "seconds": 4.626031160354614,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 34,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate and complete. Internal § references confuse customers. Next step slightly vague.",
+      "cost_usd": 0.008732
+    }
+  },
+  {
+    "case": 19,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Hello, and thank you for reaching out. I'm sorry your package hasn't arrived and that you were charged twice. Could you please send me your order number so I can look into both issues? Standard delivery takes 3-5 working days, and after 7 working days we open a trace with the carrier; if a parcel is more than 10 working days late, we refund the shipping cost (§2). For the double charge, once our billing team confirms the duplicate payment, it will be refunded within 5 working days (§3). As soon as I have your order number, I'll get both of these moving for you.",
+      "cost_usd": 0.0129515,
+      "seconds": 10.044048070907593,
+      "path": "rescue",
+      "final_check": null,
+      "rejected_because": "policy check failed"
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate, covers both issues; policy section citations unnecessary, slightly wordy.",
+      "cost_usd": 0.007908
+    }
+  },
+  {
+    "case": 19,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Hello, I'm sorry to hear about both issues. To look into your delivery and the duplicate charge, could you please send me your order number? Once I have it, I can check the status of your parcel. If it is more than 7 working days past the usual 3-5 working day delivery window, we will open a trace with the carrier (§2). For the double charge, once our billing team confirms the duplicate, it will be refunded within 5 working days (§3). Thank you for your patience.",
+      "cost_usd": 0.000122,
+      "seconds": 1.1603240966796875,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 26,
+      "max_points": 40,
+      "hard_failure": true,
+      "note": "Trace starts after 7 working days total, not 7 days past window.",
+      "cost_usd": 0.00886
+    }
+  },
+  {
+    "case": 20,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Hello, thank you for letting us know about order 55120, and we're sorry it arrived late and with a broken lamp. Because it was more than 10 working days late, we will refund the shipping cost (§2), and we have also opened a trace with the carrier (§2). For the damaged lamp, we can offer either a free replacement or a full refund, but we will need a photo of the damage, and reports must be made within 14 days of delivery (§1). To correct the VAT number on your invoice, please confirm the new number in writing, and we will send a corrected invoice within 2 working days of receiving that confirmation (§4). Thank you for your patience, and please reply with the photo and your written VAT confirmation when you can.",
+      "cost_usd": 0.0007883,
+      "seconds": 6.556439161300659,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 33,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "All issues covered correctly; carrier trace pointless for delivered parcel; § citations unnecessary.",
+      "cost_usd": 0.009036
+    }
+  },
+  {
+    "case": 20,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Hello, thank you for letting us know about order 55120, and we're sorry it arrived late and with a broken lamp. Because it was more than 10 working days late, we will refund the shipping cost (§2), and we have also opened a trace with the carrier (§2). For the damaged lamp, we can offer either a free replacement or a full refund, but we will need a photo of the damage, and reports must be made within 14 days of delivery (§1). To correct the VAT number on your invoice, please confirm the new number in writing, and we will send a corrected invoice within 2 working days of receiving that confirmation (§4). Thank you for your patience, and please reply with the photo and your written VAT confirmation when you can.",
+      "cost_usd": 0.0004765,
+      "seconds": 4.001366138458252,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 33,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "All issues covered correctly; carrier trace pointless for delivered parcel; § citations unnecessary.",
+      "cost_usd": 0.009036
+    }
+  },
+  {
+    "case": 20,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Hi, thank you for contacting us about order 55120, and I'm sorry it arrived late and with a broken lamp. Since your parcel was more than 10 working days late, we will refund your shipping cost (§2). For the lamp, we can offer either a free replacement or a full refund. Please send us a photo of the damage within 14 days of delivery and tell us which option you prefer (§1). To update the VAT number on your invoice, please reply with written confirmation of the new VAT number, and we'll send you a corrected invoice within 2 working days (§4).",
+      "cost_usd": 0.01324,
+      "seconds": 5.242904186248779,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 37,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "All three issues handled correctly; internal § references feel slightly bureaucratic.",
+      "cost_usd": 0.009088
+    }
+  },
+  {
+    "case": 20,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Hello, thank you for letting us know about order 55120, and we're sorry it arrived late and with a broken lamp. Because it was more than 10 working days late, we will refund the shipping cost (§2), and we have also opened a trace with the carrier (§2). For the damaged lamp, we can offer either a free replacement or a full refund, but we will need a photo of the damage, and reports must be made within 14 days of delivery (§1). To correct the VAT number on your invoice, please confirm the new number in writing, and we will send a corrected invoice within 2 working days of receiving that confirmation (§4). Thank you for your patience, and please reply with the photo and your written VAT confirmation when you can.",
+      "cost_usd": 0.0004765,
+      "seconds": 4.001327037811279,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 33,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "All issues covered correctly; carrier trace pointless for delivered parcel; § citations unnecessary.",
+      "cost_usd": 0.009036
+    }
+  },
+  {
+    "case": 21,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Thank you for getting in touch again about the return for order 73001, and I'm sorry you've had to follow up several times. Since this is your third contact about the same issue and you've mentioned legal action, I'm passing your case to a human colleague (§6). A colleague will take over from here and get back to you about your return refund. We appreciate your patience while they look into it.",
+      "cost_usd": 0.0058185,
+      "seconds": 4.055216073989868,
+      "path": "rescue",
+      "final_check": "does not cite §5",
+      "rejected_because": "does not cite §5"
+    },
+    "score": {
+      "points": 36,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct §6 escalation. Citing '§6' to the customer is unnecessary internal jargon.",
+      "cost_usd": 0.007984
+    }
+  },
+  {
+    "case": 21,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Thank you for getting in touch again, and I'm sorry you've had to write a third time about the refund for your return on order 73001. Because this is your third contact about the same issue and you've mentioned legal action, a colleague will now take over your case personally (§6). They will review the status of your return and the refund and get back to you directly. We appreciate your patience while they look into it.",
+      "cost_usd": 0.00624,
+      "seconds": 2.82611083984375,
+      "path": "single",
+      "final_check": "does not cite §5",
+      "rejected_because": null
+    },
+    "score": {
+      "points": 37,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct §6 escalation. Citing '§6' to the customer is unnecessary internal jargon.",
+      "cost_usd": 0.008392
+    }
+  },
+  {
+    "case": 21,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Thank you for getting in touch again about the return for order 73001, and I'm sorry this still isn't resolved and that you've had to write three times. Because this is your third contact about the same issue and you've mentioned legal action, I'm passing your case to a human colleague who will take over from here (§6). They will review your return and the status of your refund. I appreciate your patience while my colleague looks into this for you.",
+      "cost_usd": 0.0061785,
+      "seconds": 4.317878723144531,
+      "path": "rescue",
+      "final_check": "does not cite §5",
+      "rejected_because": "does not cite §5"
+    },
+    "score": {
+      "points": 37,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct §6 escalation, empathetic. Internal '§6' reference is unnecessary. No contact timeframe given.",
+      "cost_usd": 0.008456
+    }
+  },
+  {
+    "case": 21,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Dear customer,\n\nThank you for your patience, and I'm sorry the return for order 73001 has not been refunded yet. Because this is your third contact about the same issue and you have mentioned legal action, I am passing your case to a human colleague, who will take over and contact you directly (§6). Please keep your earlier emails and any return tracking details handy so they can review everything without asking you to repeat it.\n\nKind regards,\nCustomer Support",
+      "cost_usd": 0.0001785,
+      "seconds": 1.7597699165344238,
+      "path": "single",
+      "final_check": "does not cite §5",
+      "rejected_because": null
+    },
+    "score": {
+      "points": 36,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct §6 escalation; 'thanks for patience' and §6 citation slightly off.",
+      "cost_usd": 0.008452
+    }
+  },
+  {
+    "case": 22,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Hi, thank you for reaching out, and I'm sorry that one of your items arrived broken! Could you please send us your order number so we can look into this for you? For the damaged item, we can offer a free replacement or a full refund. Just send us a photo of the damage and let us know which you'd prefer, as long as you report it within 14 days of delivery (§1). The other item can be returned within 30 days if it's unused and in its original packaging, and return shipping for it is at your cost, while you won't pay return shipping for the faulty item (§5). Once we have your order number and the photo, we'll get everything moving for you.",
+      "cost_usd": 0.015472,
+      "seconds": 6.917808771133423,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 36,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate §1/§5; clear next steps; internal section references slightly awkward for customers.",
+      "cost_usd": 0.008224
+    }
+  },
+  {
+    "case": 22,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Thank you for getting in touch, and I'm sorry one of your items arrived damaged. Could you please send us your order number so we can locate your order? For the damaged item, we can offer a free replacement or a full refund (§1). We'll just need a photo of the damage, reported within 14 days of delivery. Because it's faulty, you won't have to pay return shipping on it (§5). For the second item, returns are accepted within 30 days if it's unused and in its original packaging, but return shipping would be at your cost (§5). Once we have your order number, we'll confirm the next steps.",
+      "cost_usd": 0.0004223,
+      "seconds": 4.356892824172974,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 36,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate on both items; § citations are unnecessary; photo request could be clearer.",
+      "cost_usd": 0.008724
+    }
+  },
+  {
+    "case": 22,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Thank you for getting in touch, and I'm sorry one of your items arrived damaged. Could you please send us your order number so we can locate your order? For the damaged item, we can offer a free replacement or a full refund (§1). We'll just need a photo of the damage, reported within 14 days of delivery. Because it's faulty, you won't have to pay return shipping on it (§5). For the second item, returns are accepted within 30 days if it's unused and in its original packaging, but return shipping would be at your cost (§5). Once we have your order number, we'll confirm the next steps.",
+      "cost_usd": 0.0004223,
+      "seconds": 4.356842041015625,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 36,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate on both items; § citations are unnecessary; photo request could be clearer.",
+      "cost_usd": 0.008724
+    }
+  },
+  {
+    "case": 22,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Thank you for getting in touch, and I'm sorry one of your items arrived damaged. Could you please send us your order number so we can locate your order? For the damaged item, we can offer a free replacement or a full refund (§1). We'll just need a photo of the damage, reported within 14 days of delivery. Because it's faulty, you won't have to pay return shipping on it (§5). For the second item, returns are accepted within 30 days if it's unused and in its original packaging, but return shipping would be at your cost (§5). Once we have your order number, we'll confirm the next steps.",
+      "cost_usd": 0.0006613000000000001,
+      "seconds": 6.317716121673584,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 36,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate on both items; § citations are unnecessary; photo request could be clearer.",
+      "cost_usd": 0.008724
+    }
+  },
+  {
+    "case": 23,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Thank you for letting us know about the duplicate charge on order 40987, and I'm sorry for the trouble, especially since it has happened before. Under §3, a duplicate charge is refunded within 5 working days once our billing team confirms it. I'm not able to offer a discount or voucher (§7), and §3 doesn't provide other compensation for duplicate charges. If you can send a screenshot or bank statement showing both charges, that will help our billing team confirm it. Thank you for your patience.",
+      "cost_usd": 0.0006118,
+      "seconds": 5.712830066680908,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct refund timeline and discount refusal; citing § numbers feels bureaucratic.",
+      "cost_usd": 0.009064
+    }
+  },
+  {
+    "case": 23,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Thank you for letting us know about the duplicate charge on order 40987, and I'm sorry for the trouble, especially since it has happened before. Under §3, a duplicate charge is refunded within 5 working days once our billing team confirms it. I'm not able to offer a discount or voucher (§7), and §3 doesn't provide other compensation for duplicate charges. If you can send a screenshot or bank statement showing both charges, that will help our billing team confirm it. Thank you for your patience.",
+      "cost_usd": 0.0003443,
+      "seconds": 3.38281512260437,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct refund timeline and discount refusal; citing § numbers feels bureaucratic.",
+      "cost_usd": 0.009064
+    }
+  },
+  {
+    "case": 23,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Thank you for letting us know about the duplicate charge on order 40987, and I'm sorry for the trouble, especially since it has happened before. Under §3, a duplicate charge is refunded within 5 working days once our billing team confirms it. I'm not able to offer a discount or voucher (§7), and §3 doesn't provide other compensation for duplicate charges. If you can send a screenshot or bank statement showing both charges, that will help our billing team confirm it. Thank you for your patience.",
+      "cost_usd": 0.0003443,
+      "seconds": 3.382829189300537,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct refund timeline and discount refusal; citing § numbers feels bureaucratic.",
+      "cost_usd": 0.009064
+    }
+  },
+  {
+    "case": 23,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Hello, and thank you for getting in touch about order 40987. I'm sorry you were charged twice, especially since this has happened to you before. Once our billing team confirms the duplicate charge, it will be refunded to you within 5 working days (§3). I understand your request for a discount, but we're unable to offer discounts, vouchers, or other compensation for a double charge (§3, §7). We'll keep you updated as soon as the refund has been processed.",
+      "cost_usd": 0.006532,
+      "seconds": 2.8269870281219482,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 37,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct refund timeline, discount properly declined; citing § numbers to customer is unnecessary.",
+      "cost_usd": 0.00952
+    }
+  },
+  {
+    "case": 24,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Hi, thanks for reaching out about order 18830, and I'm sorry to hear your speaker isn't working properly. Our returns policy allows returns within 30 days, so at 35 days since purchase your order may fall outside the standard return window (§5). When an item is faulty, though, you would not pay the return shipping (§5). Could you send us the delivery date and a short description of the fault, ideally with a photo or video, so we can review your case and let you know your options?",
+      "cost_usd": 0.011748,
+      "seconds": 5.668797969818115,
+      "path": "single",
+      "final_check": "does not cite §1",
+      "rejected_because": null
+    },
+    "score": {
+      "points": 34,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct §5 rules; sensibly asks delivery date; return eligibility left open.",
+      "cost_usd": 0.010312
+    }
+  },
+  {
+    "case": 24,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Thank you for getting in touch about order 18830, and I'm sorry the speaker is faulty. Our standard 30-day return window (§5) has passed, since your order is 35 days old. Faulty items can instead be handled under our damaged-item policy, which offers a free replacement or full refund if the fault is reported within 14 days of delivery with a photo (§1). Could you send us your delivery date and a photo of the fault so we can check whether this applies? If it does, return shipping would not be your cost, because faulty items are exempt from the customer-pays rule (§5).",
+      "cost_usd": 0.0004367,
+      "seconds": 4.019495964050293,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 30,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Return window counted from order date; 14-day damage window likely expired too.",
+      "cost_usd": 0.012152
+    }
+  },
+  {
+    "case": 24,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Thank you for getting in touch about order 18830, and I'm sorry the speaker is faulty. Our standard 30-day return window (§5) has passed, since your order is 35 days old. Faulty items can instead be handled under our damaged-item policy, which offers a free replacement or full refund if the fault is reported within 14 days of delivery with a photo (§1). Could you send us your delivery date and a photo of the fault so we can check whether this applies? If it does, return shipping would not be your cost, because faulty items are exempt from the customer-pays rule (§5).",
+      "cost_usd": 0.0007649,
+      "seconds": 6.690636157989502,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 30,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Return window counted from order date; 14-day damage window likely expired too.",
+      "cost_usd": 0.012152
+    }
+  },
+  {
+    "case": 24,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Thank you for getting in touch about order 18830, and I'm sorry the speaker is faulty. Our standard 30-day return window (§5) has passed, since your order is 35 days old. Faulty items can instead be handled under our damaged-item policy, which offers a free replacement or full refund if the fault is reported within 14 days of delivery with a photo (§1). Could you send us your delivery date and a photo of the fault so we can check whether this applies? If it does, return shipping would not be your cost, because faulty items are exempt from the customer-pays rule (§5).",
+      "cost_usd": 0.0004367,
+      "seconds": 4.019522190093994,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 30,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Return window counted from order date; 14-day damage window likely expired too.",
+      "cost_usd": 0.012152
+    }
+  },
+  {
+    "case": 25,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Thank you for contacting us about order 90215, and I'm sorry for the double charge and the delay. Under §3, a duplicate charge is refunded within 5 working days once our billing team confirms it. Because your parcel is 9 working days late, we are opening a trace with the carrier under §2. A shipping refund applies only when a parcel is more than 10 working days late (§2), so it does not yet apply to this order. As you've mentioned a chargeback, a colleague will take over your case from here.",
+      "cost_usd": 0.00039180000000000004,
+      "seconds": 3.285126209259033,
+      "path": "single",
+      "final_check": "does not cite §6",
+      "rejected_because": null
+    },
+    "score": {
+      "points": 36,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate and escalated correctly; citing section numbers feels bureaucratic.",
+      "cost_usd": 0.00876
+    }
+  },
+  {
+    "case": 25,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Thank you for contacting us about order 90215, and I'm sorry for the trouble with both the charge and the delivery. Once our billing team confirms the duplicate charge, it will be refunded within 5 working days (§3). Because your parcel is now more than 7 working days in transit, we will open a trace with the carrier, and if it ends up more than 10 working days late, we will refund your shipping cost (§2). Since you mentioned disputing the charge with your bank, a colleague will take over your case from here (§6).",
+      "cost_usd": 0.007972,
+      "seconds": 3.7286720275878906,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 36,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate rules and escalation; section references slightly clutter the customer reply.",
+      "cost_usd": 0.008804
+    }
+  },
+  {
+    "case": 25,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Hi, thank you for contacting us about order 90215, and I'm sorry for the trouble with both the payment and the delivery. Since you mentioned disputing the charge with your bank, a colleague will take over your case (§6). Once our billing team confirms the duplicate charge, it will be refunded within 5 working days (§3). Your parcel is now past 7 working days, so we'll open a trace with the carrier, and if it ends up more than 10 working days late, we'll refund the shipping cost (§2). Thank you for your patience while we sort this out.",
+      "cost_usd": 0.013183799999999999,
+      "seconds": 8.668604135513306,
+      "path": "rescue",
+      "final_check": null,
+      "rejected_because": "does not cite §6"
+    },
+    "score": {
+      "points": 36,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate escalation, refund, and trace; § citations are unnecessary for customers.",
+      "cost_usd": 0.00938
+    }
+  },
+  {
+    "case": 25,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Thank you for getting in touch about order 90215, and I'm sorry for the trouble with both the payment and the delivery. Once our billing team confirms the duplicate charge, it will be refunded within 5 working days (§3). Since your parcel is now more than 7 working days in transit, we are opening a trace with the carrier, and if it ends up more than 10 working days late, we will refund the shipping cost (§2). Because you mentioned a dispute with your bank, a colleague will take over your case from here (§6). Thank you for your patience while we sort this out.",
+      "cost_usd": 0.0128353,
+      "seconds": 13.002059936523438,
+      "path": "rescue",
+      "final_check": null,
+      "rejected_because": "does not cite §6"
+    },
+    "score": {
+      "points": 37,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate on all three issues; section references slightly clutter the customer reply.",
+      "cost_usd": 0.008764
+    }
+  },
+  {
+    "case": 26,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Thank you for getting in touch about order 64410. We have received your written request to add VAT number DE123456789 and company name Bergwerk AG to the invoice. Under §4, we will send you a corrected invoice within 2 working days. If anything in these details is incorrect, please let us know before then so we can get it right.",
+      "cost_usd": 0.0005883,
+      "seconds": 5.713845252990723,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct §4 handling; written request counts; citing §4 to customer is odd.",
+      "cost_usd": 0.008644
+    }
+  },
+  {
+    "case": 26,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Thank you for getting in touch about order 64410. We have received your written request to add VAT number DE123456789 and company name Bergwerk AG to the invoice. Under §4, we will send you a corrected invoice within 2 working days. If anything in these details is incorrect, please let us know before then so we can get it right.",
+      "cost_usd": 0.00026430000000000003,
+      "seconds": 2.5306148529052734,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct §4 handling; written request counts; citing §4 to customer is odd.",
+      "cost_usd": 0.008644
+    }
+  },
+  {
+    "case": 26,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Hello, and thank you for your message about order 64410! We're happy to add the company name \"Bergwerk AG\" and the VAT number DE123456789 to your invoice. Before we can change these details, we need your written confirmation that they are correct (§4). Please reply to this message to confirm both the company name and the VAT number exactly as they should appear. Once we have your confirmation, we'll send the corrected invoice within 2 working days (§4).",
+      "cost_usd": 0.007052,
+      "seconds": 3.0714499950408936,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 33,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct §4 handling; the written ticket may already count as confirmation.",
+      "cost_usd": 0.008548
+    }
+  },
+  {
+    "case": 26,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Thank you for getting in touch about order 64410. We have received your written request to add VAT number DE123456789 and company name Bergwerk AG to the invoice. Under §4, we will send you a corrected invoice within 2 working days. If anything in these details is incorrect, please let us know before then so we can get it right.",
+      "cost_usd": 0.00026430000000000003,
+      "seconds": 2.530593156814575,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct §4 handling; written request counts; citing §4 to customer is odd.",
+      "cost_usd": 0.008644
+    }
+  },
+  {
+    "case": 27,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Thanks for getting in touch, and I'm sorry your order hasn't arrived yet. Standard delivery usually takes 3-5 working days, and we open a trace with the carrier once an order is 7 working days late (§2), so it isn't quite time for a trace yet. Could you please send me your order number so I can check the status for you? If the parcel still hasn't arrived once it passes 7 working days, just let me know and I'll open the trace then (§2).",
+      "cost_usd": 0.00012220000000000002,
+      "seconds": 1.0922133922576904,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 29,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Says '7 working days late' once; policy is after 7 working days.",
+      "cost_usd": 0.011328
+    }
+  },
+  {
+    "case": 27,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Thank you for reaching out, and I'm sorry your parcel hasn't arrived yet. Could you please send us your order number so we can look into it? Standard delivery takes 3-5 working days, and we open a trace with the carrier once a parcel is more than 7 working days on its way (§2). Since your order is at 6 working days, we can't open a trace just yet, but we'll gladly start one if it still hasn't arrived after 7 working days. If the parcel ends up more than 10 working days late, we'll also refund your shipping cost (§2).",
+      "cost_usd": 0.006668,
+      "seconds": 2.8228919506073,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 34,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct trace rule; unclear who starts the trace; §-references feel internal.",
+      "cost_usd": 0.010428
+    }
+  },
+  {
+    "case": 27,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Thanks for getting in touch, and I'm sorry your order hasn't arrived yet. Standard delivery usually takes 3-5 working days, and we open a trace with the carrier once an order is 7 working days late (§2), so it isn't quite time for a trace yet. Could you please send me your order number so I can check the status for you? If the parcel still hasn't arrived once it passes 7 working days, just let me know and I'll open the trace then (§2).",
+      "cost_usd": 0.0003103,
+      "seconds": 2.528200149536133,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 29,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Says '7 working days late' once; policy is after 7 working days.",
+      "cost_usd": 0.011328
+    }
+  },
+  {
+    "case": 27,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Thanks for getting in touch, and I'm sorry your order hasn't arrived yet. Standard delivery usually takes 3-5 working days, and we open a trace with the carrier once an order is 7 working days late (§2), so it isn't quite time for a trace yet. Could you please send me your order number so I can check the status for you? If the parcel still hasn't arrived once it passes 7 working days, just let me know and I'll open the trace then (§2).",
+      "cost_usd": 0.00012220000000000002,
+      "seconds": 1.0921471118927002,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 29,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Says '7 working days late' once; policy is after 7 working days.",
+      "cost_usd": 0.011328
+    }
+  },
+  {
+    "case": 28,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Hello, thank you for contacting us about order 37702, and I'm sorry it arrived damaged and in the wrong colour. For damaged items we offer a free replacement or a full refund (§1). Please send us a photo of the damage, and let us know the delivery date, since reports must be made within 14 days of delivery (§1). We're not able to offer vouchers or discounts (§7). If you'd prefer to return the item, returns are accepted within 30 days if it's unused and in its original packaging. Return shipping is paid by the customer unless the item is faulty (§5). Once we have your photos, we'll confirm the next steps. Thank you for your patience.",
+      "cost_usd": 0.0004493,
+      "seconds": 3.6977767944335938,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 32,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate policy; wrong colour unaddressed; return shipping for faulty item ambiguous.",
+      "cost_usd": 0.009252
+    }
+  },
+  {
+    "case": 28,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Hi, I'm sorry that order 37702 arrived in the wrong color and with a dent. For the dented item, we can offer a free replacement or a full refund. Please send us a photo of the damage, as damage needs to be reported within 14 days of delivery (§1). Unfortunately, we can't offer discounts or vouchers, so a 10% voucher isn't possible (§7). If you'd prefer to return items, you can do so within 30 days if they're unused and in their original packaging; return shipping is free for faulty items and otherwise paid by the customer (§5). Let us know how you'd like to proceed, and feel free to include a photo showing the color you received too.",
+      "cost_usd": 0.015012,
+      "seconds": 6.499878883361816,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 32,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Policy followed; wrong-color issue lacks a clear resolution; § citations unnecessary.",
+      "cost_usd": 0.011164
+    }
+  },
+  {
+    "case": 28,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Hi, I'm sorry that order 37702 arrived in the wrong color and with a dent. We aren't able to offer discounts or vouchers (§7), but for the damaged item we can offer a free replacement or a full refund (§1). To arrange this, please send us a photo of the dent; we can help as long as it's reported within 14 days of delivery (§1). If you'd rather return the order, you can do so within 30 days if the items are unused and in their original packaging. Return shipping is free for faulty items but otherwise paid by the customer (§5). Please let us know which option you prefer and which color you originally ordered so we can look into the mix-up.",
+      "cost_usd": 0.0181665,
+      "seconds": 14.337094783782959,
+      "path": "rescue",
+      "final_check": "contains 'voucher'",
+      "rejected_because": "policy check failed"
+    },
+    "score": {
+      "points": 32,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate policy; wrong-color remedy left open; § citations unnecessary for customers.",
+      "cost_usd": 0.010056
+    }
+  },
+  {
+    "case": 28,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Hello, thank you for contacting us about order 37702, and I'm sorry it arrived damaged and in the wrong colour. For damaged items we offer a free replacement or a full refund (§1). Please send us a photo of the damage, and let us know the delivery date, since reports must be made within 14 days of delivery (§1). We're not able to offer vouchers or discounts (§7). If you'd prefer to return the item, returns are accepted within 30 days if it's unused and in its original packaging. Return shipping is paid by the customer unless the item is faulty (§5). Once we have your photos, we'll confirm the next steps. Thank you for your patience.",
+      "cost_usd": 0.0004493,
+      "seconds": 3.697795867919922,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 32,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate policy; wrong colour unaddressed; return shipping for faulty item ambiguous.",
+      "cost_usd": 0.009252
+    }
+  },
+  {
+    "case": 29,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Thank you for your patience, and I'm sorry for the trouble with the double charge on order 81235. Because this is your third message about the same issue, I'm passing your case to a human colleague, who will take over and follow up with you directly. Under our policy, a duplicate charge is refunded within 5 working days once our billing team confirms it (§3), and §6 requires that repeat contacts about the same issue be handled by a colleague. Thank you for your understanding while we get this resolved.",
+      "cost_usd": 0.00012440000000000002,
+      "seconds": 1.18589186668396,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 34,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct escalation and refund rule; citing policy section numbers is internal and redundant.",
+      "cost_usd": 0.00832
+    }
+  },
+  {
+    "case": 29,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Thank you for your patience, and I'm sorry for the trouble with the double charge on order 81235. Because this is your third message about the same issue, I'm passing your case to a human colleague, who will take over and follow up with you directly. Under our policy, a duplicate charge is refunded within 5 working days once our billing team confirms it (§3), and §6 requires that repeat contacts about the same issue be handled by a colleague. Thank you for your understanding while we get this resolved.",
+      "cost_usd": 0.00028230000000000003,
+      "seconds": 2.508762836456299,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 34,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct escalation and refund rule; citing policy section numbers is internal and redundant.",
+      "cost_usd": 0.00832
+    }
+  },
+  {
+    "case": 29,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Thank you for your patience, and I'm sorry for the trouble with the double charge on order 81235. Because this is your third message about the same issue, I'm passing your case to a human colleague, who will take over and follow up with you directly. Under our policy, a duplicate charge is refunded within 5 working days once our billing team confirms it (§3), and §6 requires that repeat contacts about the same issue be handled by a colleague. Thank you for your understanding while we get this resolved.",
+      "cost_usd": 0.00012440000000000002,
+      "seconds": 1.1858649253845215,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 34,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct escalation and refund rule; citing policy section numbers is internal and redundant.",
+      "cost_usd": 0.00832
+    }
+  },
+  {
+    "case": 29,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Thank you for getting in touch again about the double charge on order 81235, and I'm sorry you've had to write to us three times about this. Because this is your third message about the same issue, a colleague will take over your case personally (§6). Once our billing team confirms the duplicate charge, it will be refunded within 5 working days (§3). Your colleague will be in touch with you soon, and we appreciate your patience.",
+      "cost_usd": 0.006196,
+      "seconds": 2.5244810581207275,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 36,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct escalation and refund rule; drop internal § references, fix 'your colleague'.",
+      "cost_usd": 0.00848
+    }
+  },
+  {
+    "case": 30,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Thank you for getting in touch about order 52267, and I'm so sorry your glass table arrived shattered. Unfortunately, damage needs to be reported within 14 days of delivery for a replacement or refund under our damaged-item policy, so I can't offer that option here at 20 days (§1). However, since you're still within 30 days of delivery, you may be able to return the table if it's unused and in its original packaging, and because the item is faulty you wouldn't pay the return shipping (§5). If you'd like to go ahead, please reply with a photo of the damage and confirm that you still have the original packaging, and I'll help you with the next steps.",
+      "cost_usd": 0.013604,
+      "seconds": 6.187098979949951,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 32,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct 14-day rule; §5 return workaround is plausible but arguably sidesteps §1.",
+      "cost_usd": 0.01156
+    }
+  },
+  {
+    "case": 30,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Dear customer, I'm sorry to hear that the glass table from order 52267 arrived shattered, and I understand that being abroad delayed your report. Under our damaged-item policy (§1), damage must be reported within 14 days of delivery, with a photo of the damage. Because this report came 20 days after delivery, we are unable to offer a replacement or refund under that policy. If you have any other questions about order 52267, please reply and we will be glad to help.",
+      "cost_usd": 0.0003571,
+      "seconds": 3.4632840156555176,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 31,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correctly applies 14-day limit; no alternative or real next step offered.",
+      "cost_usd": 0.00892
+    }
+  },
+  {
+    "case": 30,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Dear customer, I'm sorry to hear that the glass table from order 52267 arrived shattered, and I understand that being abroad delayed your report. Under our damaged-item policy (§1), damage must be reported within 14 days of delivery, with a photo of the damage. Because this report came 20 days after delivery, we are unable to offer a replacement or refund under that policy. If you have any other questions about order 52267, please reply and we will be glad to help.",
+      "cost_usd": 0.0005495000000000001,
+      "seconds": 5.087465763092041,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 31,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correctly applies 14-day limit; no alternative or real next step offered.",
+      "cost_usd": 0.00892
+    }
+  },
+  {
+    "case": 30,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Dear customer, I'm sorry to hear that the glass table from order 52267 arrived shattered, and I understand that being abroad delayed your report. Under our damaged-item policy (§1), damage must be reported within 14 days of delivery, with a photo of the damage. Because this report came 20 days after delivery, we are unable to offer a replacement or refund under that policy. If you have any other questions about order 52267, please reply and we will be glad to help.",
+      "cost_usd": 0.0003571,
+      "seconds": 3.4632568359375,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 31,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correctly applies 14-day limit; no alternative or real next step offered.",
+      "cost_usd": 0.00892
+    }
+  },
+  {
+    "case": 31,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Thank you for getting in touch, and I'm sorry for the trouble with order 29081. I've passed the duplicate charge to our billing team. Once they confirm it, the extra charge will be refunded within 5 working days (§3). We'll also send you a corrected invoice with the right amount within 2 working days (§4). If anything else looks off in the meantime, just reply to this message and we'll be happy to help.",
+      "cost_usd": 0.00686,
+      "seconds": 2.589632034301758,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 37,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Both issues handled per §3/§4; citing section numbers to customer unnecessary.",
+      "cost_usd": 0.00804
+    }
+  },
+  {
+    "case": 31,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Thank you for contacting us about order 29081, and we're sorry for the trouble with your invoice. Our billing team will confirm the duplicate charge, and once confirmed, the extra amount will be refunded within 5 working days (§3). We will also send you a corrected invoice within 2 working days (§4). If you can reply with the amount you expected to see, that will help us check the invoice. Thank you for your patience while we look into this.",
+      "cost_usd": 0.0003445,
+      "seconds": 3.1206178665161133,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Covers both issues correctly; internal § citations needlessly clutter the customer-facing reply.",
+      "cost_usd": 0.009504
+    }
+  },
+  {
+    "case": 31,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Thank you for contacting us about order 29081, and we're sorry for the trouble with your invoice. Our billing team will confirm the duplicate charge, and once confirmed, the extra amount will be refunded within 5 working days (§3). We will also send you a corrected invoice within 2 working days (§4). If you can reply with the amount you expected to see, that will help us check the invoice. Thank you for your patience while we look into this.",
+      "cost_usd": 0.0003445,
+      "seconds": 3.120645761489868,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Covers both issues correctly; internal § citations needlessly clutter the customer-facing reply.",
+      "cost_usd": 0.009504
+    }
+  },
+  {
+    "case": 31,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Thank you for contacting us about order 29081, and we're sorry for the trouble with your invoice. Our billing team will confirm the duplicate charge, and once confirmed, the extra amount will be refunded within 5 working days (§3). We will also send you a corrected invoice within 2 working days (§4). If you can reply with the amount you expected to see, that will help us check the invoice. Thank you for your patience while we look into this.",
+      "cost_usd": 0.000573,
+      "seconds": 5.088213920593262,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Covers both issues correctly; internal § citations needlessly clutter the customer-facing reply.",
+      "cost_usd": 0.009504
+    }
+  },
+  {
+    "case": 32,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Hello, thank you for contacting us about order 61102. I'm sorry your delivery is running so late. Under our late delivery policy (§2), a parcel more than 10 working days late qualifies for a refund of the shipping cost, and since your order is now 12 working days late, you are eligible for that refund. We will also open a trace with the carrier if we have not already done so (§2). I will pass your request for the shipping refund on to our team so it can be processed. Thank you for your patience.",
+      "cost_usd": 0.00028720000000000004,
+      "seconds": 3.0185229778289795,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct §2 refund; next step vague, no timeline. Slightly wordy.",
+      "cost_usd": 0.00834
+    }
+  },
+  {
+    "case": 32,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Hello, thank you for contacting us about order 61102. I'm sorry your delivery is running so late. Under our late delivery policy (§2), a parcel more than 10 working days late qualifies for a refund of the shipping cost, and since your order is now 12 working days late, you are eligible for that refund. We will also open a trace with the carrier if we have not already done so (§2). I will pass your request for the shipping refund on to our team so it can be processed. Thank you for your patience.",
+      "cost_usd": 0.00012580000000000002,
+      "seconds": 1.6325609683990479,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct §2 refund; next step vague, no timeline. Slightly wordy.",
+      "cost_usd": 0.00834
+    }
+  },
+  {
+    "case": 32,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Hello, thank you for contacting us about order 61102. I'm sorry your delivery is running so late. Under our late delivery policy (§2), a parcel more than 10 working days late qualifies for a refund of the shipping cost, and since your order is now 12 working days late, you are eligible for that refund. We will also open a trace with the carrier if we have not already done so (§2). I will pass your request for the shipping refund on to our team so it can be processed. Thank you for your patience.",
+      "cost_usd": 0.00012580000000000002,
+      "seconds": 1.6325759887695312,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct §2 refund; next step vague, no timeline. Slightly wordy.",
+      "cost_usd": 0.00834
+    }
+  },
+  {
+    "case": 32,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Hi, and I'm sorry that order 61102 still hasn't arrived after 12 working days. Since your parcel is more than 10 working days late, you're entitled to a refund of the shipping cost, and we'll process that for you (§2). For any parcel more than 7 working days late, we also open a trace with the carrier to find out where it is (§2). I can't give you an exact delivery date (§7), but we'll be in touch as soon as we hear back from the carrier.",
+      "cost_usd": 0.008732,
+      "seconds": 3.656765937805176,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct refund and trace; policy section citations to customer feel robotic.",
+      "cost_usd": 0.008588
+    }
+  },
+  {
+    "case": 33,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Thank you for getting in touch about order 47755. Our returns policy accepts unused items only in their original packaging, so without the box we can't accept this return under the standard policy (§5). If you'd like to discuss your options, please reply and let us know, and we'll review what we can do. If you return an item under the standard policy, the return shipping cost would be yours to pay (§5).",
+      "cost_usd": 0.0004885,
+      "seconds": 4.5731542110443115,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 26,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct refusal; vague 'review options' hints at exceptions; shipping line confuses.",
+      "cost_usd": 0.008764
+    }
+  },
+  {
+    "case": 33,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Thank you for getting in touch about order 47755, and I'm sorry to disappoint you. Under our returns policy, items can be returned within 30 days if they are unused and in their original packaging (§5). Since the original box is no longer available, we're unfortunately unable to accept this return. If the item arrived damaged, please report it within 14 days of delivery and send us a photo of the damage, and we'll gladly help (§1).",
+      "cost_usd": 0.00912,
+      "seconds": 3.939751148223877,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 33,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correctly declines under §5; damage mention is slightly off-topic; § citations clutter.",
+      "cost_usd": 0.009736
+    }
+  },
+  {
+    "case": 33,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Thank you for getting in touch about order 47755. Our returns policy accepts unused items only in their original packaging, so without the box we can't accept this return under the standard policy (§5). If you'd like to discuss your options, please reply and let us know, and we'll review what we can do. If you return an item under the standard policy, the return shipping cost would be yours to pay (§5).",
+      "cost_usd": 0.0002375,
+      "seconds": 2.3948471546173096,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 26,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct refusal; vague 'review options' hints at exceptions; shipping line confuses.",
+      "cost_usd": 0.008764
+    }
+  },
+  {
+    "case": 33,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Thank you for getting in touch about order 47755. Our returns policy accepts unused items only in their original packaging, so without the box we can't accept this return under the standard policy (§5). If you'd like to discuss your options, please reply and let us know, and we'll review what we can do. If you return an item under the standard policy, the return shipping cost would be yours to pay (§5).",
+      "cost_usd": 0.0002375,
+      "seconds": 2.394857168197632,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 26,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct refusal; vague 'review options' hints at exceptions; shipping line confuses.",
+      "cost_usd": 0.008764
+    }
+  },
+  {
+    "case": 34,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Hi there, thanks for contacting us about order 30418, and I'm sorry the drill arrived faulty. Under §1, a damaged item can be replaced free of charge or refunded in full, and we'll need a photo of the damage, reported within 14 days of delivery. Under §5, return shipping isn't charged to you when the item is faulty. Because your message mentions legal action, a colleague will take over your case from here (§6). Thank you for your patience.",
+      "cost_usd": 0.0005645,
+      "seconds": 4.865090847015381,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 33,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct rules and escalation; photo-versus-colleague next step slightly unclear.",
+      "cost_usd": 0.008372
+    }
+  },
+  {
+    "case": 34,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Thank you for getting in touch about order 30418, and I'm sorry to hear your drill isn't working properly. Under our returns policy, you don't pay return shipping when an item is faulty (§5). Because your message mentions legal action, a colleague will take over your case and contact you about the next steps (§6). In the meantime, it would help if you could reply with a short description of the fault and, if possible, a photo, so your case can be handled quickly.",
+      "cost_usd": 0.009272,
+      "seconds": 4.067761182785034,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 37,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct free faulty return, proper escalation for legal threat, clear next step.",
+      "cost_usd": 0.008088
+    }
+  },
+  {
+    "case": 34,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Hi there, thanks for contacting us about order 30418, and I'm sorry the drill arrived faulty. Under §1, a damaged item can be replaced free of charge or refunded in full, and we'll need a photo of the damage, reported within 14 days of delivery. Under §5, return shipping isn't charged to you when the item is faulty. Because your message mentions legal action, a colleague will take over your case from here (§6). Thank you for your patience.",
+      "cost_usd": 0.0003488,
+      "seconds": 3.0256519317626953,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 33,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct rules and escalation; photo-versus-colleague next step slightly unclear.",
+      "cost_usd": 0.008372
+    }
+  },
+  {
+    "case": 34,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Hi there, thanks for contacting us about order 30418, and I'm sorry the drill arrived faulty. Under §1, a damaged item can be replaced free of charge or refunded in full, and we'll need a photo of the damage, reported within 14 days of delivery. Under §5, return shipping isn't charged to you when the item is faulty. Because your message mentions legal action, a colleague will take over your case from here (§6). Thank you for your patience.",
+      "cost_usd": 0.0003488,
+      "seconds": 3.0256340503692627,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 33,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct rules and escalation; photo-versus-colleague next step slightly unclear.",
+      "cost_usd": 0.008372
+    }
+  },
+  {
+    "case": 35,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Thank you for getting in touch, and I'm sorry that order 85090 shows as delivered even though nothing has reached you. Since it has now been more than 7 working days, we will open a trace with the carrier to find out where the parcel actually ended up (§2). In the meantime, it may be worth checking with neighbours, your building's reception, or any safe place where a parcel might have been left. We'll update you as soon as we hear back from the carrier.",
+      "cost_usd": 0.007856,
+      "seconds": 3.3746140003204346,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correctly opens trace per §2; citing '§2' to customer is unnecessary.",
+      "cost_usd": 0.008816
+    }
+  },
+  {
+    "case": 35,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Hi, thank you for getting in touch, and I'm sorry order 85090 still hasn't reached you. As it has now been more than 7 working days, we're opening a trace with the carrier (§2). I can't give an exact delivery date, but we'll update you as soon as we hear back. If the parcel is more than 10 working days late, you'd also be eligible for a refund of the shipping cost (§2). In the meantime, could you check with neighbours or your building's reception in case it was left somewhere? Thank you for your patience.",
+      "cost_usd": 0.0006829,
+      "seconds": 6.329517126083374,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 34,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct trace and refund rule; §-citations odd for customers; delivered-status underexplained.",
+      "cost_usd": 0.010424
+    }
+  },
+  {
+    "case": 35,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Hi, thank you for getting in touch, and I'm sorry order 85090 still hasn't reached you. As it has now been more than 7 working days, we're opening a trace with the carrier (§2). I can't give an exact delivery date, but we'll update you as soon as we hear back. If the parcel is more than 10 working days late, you'd also be eligible for a refund of the shipping cost (§2). In the meantime, could you check with neighbours or your building's reception in case it was left somewhere? Thank you for your patience.",
+      "cost_usd": 0.0003879,
+      "seconds": 3.7302513122558594,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 34,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct trace and refund rule; §-citations odd for customers; delivered-status underexplained.",
+      "cost_usd": 0.010424
+    }
+  },
+  {
+    "case": 35,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Hi, thank you for getting in touch, and I'm sorry order 85090 still hasn't reached you. As it has now been more than 7 working days, we're opening a trace with the carrier (§2). I can't give an exact delivery date, but we'll update you as soon as we hear back. If the parcel is more than 10 working days late, you'd also be eligible for a refund of the shipping cost (§2). In the meantime, could you check with neighbours or your building's reception in case it was left somewhere? Thank you for your patience.",
+      "cost_usd": 0.0003879,
+      "seconds": 3.7302310466766357,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 34,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct trace and refund rule; §-citations odd for customers; delivered-status underexplained.",
+      "cost_usd": 0.010424
+    }
+  },
+  {
+    "case": 36,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Thank you for getting in touch about order 11946, and I'm sorry for the trouble. To correct the company name on your invoice, please reply with your written confirmation of the new details, and we'll send a corrected invoice within 2 working days (§4). A duplicate charge is refunded within 5 working days once our billing team confirms it (§3). Standard delivery takes 3-5 working days, and if your parcel is still outstanding after 7 working days, we'll open a trace with the carrier (§2). If it is more than 10 working days late, we will also refund the shipping cost (§2). Could you tell us when you placed the order so we can check where it stands?",
+      "cost_usd": 0.0007507,
+      "seconds": 6.152987957000732,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 34,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate on all three issues; double-charge next step vague; customer-facing § citations odd.",
+      "cost_usd": 0.008508
+    }
+  },
+  {
+    "case": 36,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Thank you for contacting us about order 11946, and sorry for the trouble. To correct the company name on your invoice, please send us written confirmation of the correct name, and we'll send a corrected invoice within 2 working days of receiving it (§4). We'll pass the double charge to our billing team, and once they confirm it, the duplicate amount will be refunded within 5 working days (§3). For the late parcel, standard delivery takes 3-5 working days, so if it has been more than 7 working days, we'll open a trace with the carrier, and if it ends up more than 10 working days late, we'll refund your shipping cost (§2). We'll keep you updated on all three points.",
+      "cost_usd": 0.014524,
+      "seconds": 6.676289796829224,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 34,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate on all three; trace step conditional, not concrete; § references unnecessary.",
+      "cost_usd": 0.008596
+    }
+  },
+  {
+    "case": 36,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Thank you for getting in touch about order 11946, and I'm sorry for the trouble. To correct the company name on your invoice, please reply with your written confirmation of the new details, and we'll send a corrected invoice within 2 working days (§4). A duplicate charge is refunded within 5 working days once our billing team confirms it (§3). Standard delivery takes 3-5 working days, and if your parcel is still outstanding after 7 working days, we'll open a trace with the carrier (§2). If it is more than 10 working days late, we will also refund the shipping cost (§2). Could you tell us when you placed the order so we can check where it stands?",
+      "cost_usd": 0.0004551,
+      "seconds": 3.758085012435913,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 34,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate on all three issues; double-charge next step vague; customer-facing § citations odd.",
+      "cost_usd": 0.008508
+    }
+  },
+  {
+    "case": 36,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Thank you for getting in touch about order 11946, and I'm sorry for the trouble. To correct the company name on your invoice, please reply with your written confirmation of the new details, and we'll send a corrected invoice within 2 working days (§4). A duplicate charge is refunded within 5 working days once our billing team confirms it (§3). Standard delivery takes 3-5 working days, and if your parcel is still outstanding after 7 working days, we'll open a trace with the carrier (§2). If it is more than 10 working days late, we will also refund the shipping cost (§2). Could you tell us when you placed the order so we can check where it stands?",
+      "cost_usd": 0.0004551,
+      "seconds": 3.758064031600952,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 34,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Accurate on all three issues; double-charge next step vague; customer-facing § citations odd.",
+      "cost_usd": 0.008508
+    }
+  },
+  {
+    "case": 37,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Thank you for getting in touch about order 70721. We're sorry it arrived late, but we're unable to offer discounts or vouchers on future orders (§7). Standard delivery takes 3-5 working days, and if a parcel is still missing after 7 working days, we open a trace with the carrier (§2). If the parcel is more than 10 working days late, we refund the shipping cost (§2), so please reply to confirm whether it has arrived and we'll check which of these applies.",
+      "cost_usd": 0.0003053,
+      "seconds": 2.7611637115478516,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 31,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correctly declines discount; asks if arrived despite saying it arrived late.",
+      "cost_usd": 0.009076
+    }
+  },
+  {
+    "case": 37,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Hi, thank you for getting in touch, and I'm sorry that order 70721 was late. Unfortunately, we're not able to offer discounts or vouchers on future orders (§7). However, if your parcel arrived more than 10 working days late, we'll refund the shipping cost for that order (§2). If you can let me know the date it was delivered, I'll gladly check whether it qualifies. Thanks for your patience, and we appreciate you shopping with us!",
+      "cost_usd": 0.013032,
+      "seconds": 5.651051998138428,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 36,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correctly declines discount, offers §2 shipping refund; policy citations unnecessary for customer.",
+      "cost_usd": 0.00738
+    }
+  },
+  {
+    "case": 37,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Thank you for getting in touch about order 70721. We're sorry it arrived late, but we're unable to offer discounts or vouchers on future orders (§7). Standard delivery takes 3-5 working days, and if a parcel is still missing after 7 working days, we open a trace with the carrier (§2). If the parcel is more than 10 working days late, we refund the shipping cost (§2), so please reply to confirm whether it has arrived and we'll check which of these applies.",
+      "cost_usd": 0.0003053,
+      "seconds": 2.7611777782440186,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 31,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correctly declines discount; asks if arrived despite saying it arrived late.",
+      "cost_usd": 0.009076
+    }
+  },
+  {
+    "case": 37,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Thank you for getting in touch about order 70721. We're sorry it arrived late, but we're unable to offer discounts or vouchers on future orders (§7). Standard delivery takes 3-5 working days, and if a parcel is still missing after 7 working days, we open a trace with the carrier (§2). If the parcel is more than 10 working days late, we refund the shipping cost (§2), so please reply to confirm whether it has arrived and we'll check which of these applies.",
+      "cost_usd": 0.0004986,
+      "seconds": 4.509764671325684,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 31,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correctly declines discount; asks if arrived despite saying it arrived late.",
+      "cost_usd": 0.009076
+    }
+  },
+  {
+    "case": 38,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Hi there, I'm sorry to hear your coffee machine is leaking. Could you send us your order number? You can usually find it in your order confirmation email. We'll also need a photo of the leak or damage so we can assess the problem (§1). If the machine is damaged, you're entitled to a free replacement or a full refund (§1), provided the problem is reported within 14 days of delivery, so please let us know when it arrived. Once we have these details, we'll get back to you with next steps.",
+      "cost_usd": 0.00035989999999999997,
+      "seconds": 3.151585102081299,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 34,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct §1 handling; asks needed details. Customer-facing §-citations feel slightly robotic.",
+      "cost_usd": 0.008304
+    }
+  },
+  {
+    "case": 38,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Hi there, I'm sorry to hear that your new coffee machine is leaking! Since you received it last week, you're within the 14-day reporting window, and we can offer you either a free replacement or a full refund (§1). To get this started, could you please send us a photo showing the leak or damage (§1)? Please also send your order number so we can locate your purchase. Just let us know whether you'd prefer a replacement or a refund, and we'll take care of the rest.",
+      "cost_usd": 0.007296,
+      "seconds": 3.080613851547241,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 35,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct §1 handling; asks for unavailable order number without alternative; cites internal sections.",
+      "cost_usd": 0.008052
+    }
+  },
+  {
+    "case": 38,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Hi there, I'm sorry to hear your coffee machine is leaking. Could you send us your order number? You can usually find it in your order confirmation email. We'll also need a photo of the leak or damage so we can assess the problem (§1). If the machine is damaged, you're entitled to a free replacement or a full refund (§1), provided the problem is reported within 14 days of delivery, so please let us know when it arrived. Once we have these details, we'll get back to you with next steps.",
+      "cost_usd": 0.0005878999999999999,
+      "seconds": 4.918116092681885,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 34,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct §1 handling; asks needed details. Customer-facing §-citations feel slightly robotic.",
+      "cost_usd": 0.008304
+    }
+  },
+  {
+    "case": 38,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Hi there, I'm sorry to hear your coffee machine is leaking. Could you send us your order number? You can usually find it in your order confirmation email. We'll also need a photo of the leak or damage so we can assess the problem (§1). If the machine is damaged, you're entitled to a free replacement or a full refund (§1), provided the problem is reported within 14 days of delivery, so please let us know when it arrived. Once we have these details, we'll get back to you with next steps.",
+      "cost_usd": 0.00035989999999999997,
+      "seconds": 3.1516239643096924,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 34,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correct §1 handling; asks needed details. Customer-facing §-citations feel slightly robotic.",
+      "cost_usd": 0.008304
+    }
+  },
+  {
+    "case": 39,
+    "setup": "S&R + policy check (Haiku)",
+    "run": {
+      "text": "Thank you for getting in touch about order 26114. I understand how important the timing is to you. Unfortunately, we are not able to promise an exact delivery date (§7). Standard delivery takes 3-5 working days, and if the parcel has not arrived after 7 working days, we will open a trace with the carrier (§2). If you decide to cancel, please let us know and we will look into the options available to you. We are happy to help with any other questions you have about your order.",
+      "cost_usd": 0.00032879999999999997,
+      "seconds": 2.7989718914031982,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 31,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correctly refuses date promise; cancellation next step vague; internal § references unnecessary.",
+      "cost_usd": 0.008752
+    }
+  },
+  {
+    "case": 39,
+    "setup": "Haiku alone, no rescuer",
+    "run": {
+      "text": "Thank you for getting in touch about order 26114. I understand how important the timing is to you. Unfortunately, we are not able to promise an exact delivery date (§7). Standard delivery takes 3-5 working days, and if the parcel has not arrived after 7 working days, we will open a trace with the carrier (§2). If you decide to cancel, please let us know and we will look into the options available to you. We are happy to help with any other questions you have about your order.",
+      "cost_usd": 0.00012109999999999999,
+      "seconds": 1.163567066192627,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 31,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correctly refuses date promise; cancellation next step vague; internal § references unnecessary.",
+      "cost_usd": 0.008752
+    }
+  },
+  {
+    "case": 39,
+    "setup": "Opus medium, no scout",
+    "run": {
+      "text": "Thank you for getting in touch about order 26114. I understand you'd like it to arrive by Saturday, but unfortunately we can't promise an exact delivery date (§7). Our standard delivery time is 3-5 working days, and if your parcel hasn't arrived after 7 working days, we'll open a trace with the carrier for you (§2). If the order arrives and you no longer want it, you can return it within 30 days, unused and in its original packaging, though return shipping is at your cost unless the item is faulty (§5). I'm sorry I can't give you a firmer guarantee, and please let us know if there's anything else we can help with.",
+      "cost_usd": 0.014304,
+      "seconds": 6.444311857223511,
+      "path": "single",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 33,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correctly declines date promise; cancellation request only indirectly addressed via returns.",
+      "cost_usd": 0.009492
+    }
+  },
+  {
+    "case": 39,
+    "setup": "baseline (published)",
+    "run": {
+      "text": "Thank you for getting in touch about order 26114. I understand how important the timing is to you. Unfortunately, we are not able to promise an exact delivery date (§7). Standard delivery takes 3-5 working days, and if the parcel has not arrived after 7 working days, we will open a trace with the carrier (§2). If you decide to cancel, please let us know and we will look into the options available to you. We are happy to help with any other questions you have about your order.",
+      "cost_usd": 0.00012109999999999999,
+      "seconds": 1.1635830402374268,
+      "path": "scout",
+      "final_check": null,
+      "rejected_because": null
+    },
+    "score": {
+      "points": 31,
+      "max_points": 40,
+      "hard_failure": false,
+      "note": "Correctly refuses date promise; cancellation next step vague; internal § references unnecessary.",
+      "cost_usd": 0.008752
+    }
+  }
+]

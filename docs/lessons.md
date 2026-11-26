@@ -51,6 +51,9 @@ We first compared Scout & Rescue only with the strong model alone, and credited 
 ### 13c. Measure the checks themselves
 A check is an alarm: count what it catches, what it misses, and how often it rings for nothing, against the blind review. Ours caught 0 of 7 hard failures and flagged none of the 17 clearly weaker replies across two runs, while raising 16 false alarms. We had been tuning the cascade around checks nobody had measured.
 
+### 13d. Code checks for form, a model check for substance
+Rules in code are free and catch form: empty, missing field, wrong id. They cannot tell that a rule was applied wrongly. A cheap model asked "is this safe to send?", with the policy as its reference, caught the hard failure our code checks missed — and raised twice the false alarms. Rate a check against the blind review before you build on it, and give it the reference that defines right.
+
 ### 14. Try lower effort before a smaller model
 Running the strong model at effort low instead of medium cost 24–40% less with no measurable quality loss on short support replies. It is the cheapest lever to test, because nothing else in the setup changes.
 

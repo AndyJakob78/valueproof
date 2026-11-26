@@ -1,6 +1,6 @@
 # Measured: Scout & Rescue on support replies
 
-A live test of the Scout & Rescue code in [examples/](../examples/), against the strong model alone, on made-up support tickets. Three runs, November 2026.
+A live test of the Scout & Rescue code in [examples/](../examples/), against the strong model alone, on made-up support tickets. Four runs, November 2026.
 
 **In one sentence:** Scout & Rescue cost **81–92% less** than Claude Opus 5.5 alone and scored **2–6% lower** in a blind review — but on this task **almost all of the saving comes from the cheap model itself**: with no rescuer at all, it was nearly as good. The rescuer ran on 2 of 40 tickets. Expect some loss of quality either way: the cheap model's replies are good, but not always as good as the strong model's, and a few wrong policy statements got through.
 
@@ -50,7 +50,7 @@ A live test of the Scout & Rescue code in [examples/](../examples/), against the
 | **Haiku alone, no rescuer** | **0.025 ¢** | 37 of 40 | 0.023 ¢ | — | 2.2 s | 1,301 | 1 |
 | Opus medium alone | 0.920 ¢ | 37 of 40 | 0.851 ¢ | — | 3.7 s | 1,393 | 0 |
 
-An outcome is a reply that passes the checks and has no hard failure. Costs are the reply step only, at the API prices in [claude.py](../src/valueproof/claude.py); the reviewer's own cost is not included ($0.72 in run 3). Raw results: [run 1](data/support-test-run1.json) · [run 2](data/support-test-run2.json) · [run 3](data/support-test-run3.json).
+An outcome is a reply that passes the checks and has no hard failure. Costs are the reply step only, at the API prices in [claude.py](../src/valueproof/claude.py); the reviewer's own cost is not included ($0.72 in run 3). Raw results: [run 1](data/support-test-run1.json) · [run 2](data/support-test-run2.json) · [run 3](data/support-test-run3.json) · [run 4](data/support-test-run4.json) and its [check ratings](data/support-test-run4-check-ratings.json).
 
 ## What it means
 
@@ -79,9 +79,39 @@ The checks decide which replies go to the rescuer, so we measured the checks the
 
 **Our checks test form, and the cheap model gets form right.** Length, order number, cited policy section: Haiku passes them. Its weaknesses are in substance — a misread rule, an ignored request — and no check looked there. The false alarms came mostly from one over-strict rule ("must cite §5"), which even Opus failed.
 
-This is why the rescuer added so little: it was never sent the right tickets. The next step is not a better rescuer but better checks, for example a cheap model asked "does this reply apply the policy correctly?", measured the same way.
+This is why the rescuer added so little: it was never sent the right tickets. The next step is not a better rescuer but better checks — which the next section tests.
 
-### 3. Scout & Rescue vs. the strong model alone: much cheaper, a little lower quality
+### 3. A check by a model catches what code can't — at a price
+
+Run 4 tested the obvious fix for the gap above: before a reply is sent, a cheap model is asked whether it is safe to send — does it apply a policy rule wrongly, promise something the policy doesn't allow, assume facts the ticket doesn't give, or ignore a request? The check gets the full policy as its reference.
+
+**As a setup** (40 tickets; the policy check's own cost is included):
+
+| Setup | Cost per outcome | Avg cost per reply | Rescued | Avg time | Quality | Hard failures |
+|---|---|---|---|---|---|---|
+| Opus medium alone | 0.945 ¢ | 0.898 ¢ | — | 3.9 s | 1,391 | 0 |
+| Scout & Rescue, code checks | 0.125 ¢ | 0.119 ¢ | 4 of 40 | 2.8 s | 1,326 | 1 |
+| **Scout & Rescue + policy check (Haiku)** | 0.258 ¢ | 0.239 ¢ | 8 of 40 | 5.3 s | **1,343** | **0** |
+| Haiku alone | 0.028 ¢ | 0.025 ¢ | — | 2.4 s | 1,327 | 1 |
+
+**As candidate checks**, each tried on all 92 distinct replies of the run and rated against the judge (`--rate-checks`):
+
+| Eval check | Hard failures caught (of 1) | False alarms | Weaker replies flagged (of 5) | Cost per check |
+|---|---|---|---|---|
+| Code checks | 0 | 9 | 0 | free |
+| Code + policy check by Haiku 5.5 | **1** | 18 | 1 | 0.02 ¢ |
+| Code + policy check by Sonnet 5.5 | **1** | 19 | 3 | 0.31 ¢ |
+
+What it shows:
+
+- **The policy check caught the one hard failure** — the misread trace rule that the code checks missed in every run — and the rescuer fixed it (26 → 35 points). With it, Scout & Rescue had no hard failure and scored 17 points higher; the gap to Opus alone shrank from 4.7% to 3.5%.
+- **It has a price.** Twice the false alarms, so twice the rescues; about twice the cost per reply and nearly twice the time (the check is an extra call). It is still 73% cheaper per outcome than Opus alone.
+- **A cheap checker was enough for the hard failure.** Sonnet caught the same one, flagged more of the merely weaker replies (3 of 5 against 1), and cost 15 times as much per check — more than the cheap model's whole reply.
+- **Now the rescuer has a job.** The four drafts the policy check sent to it gained 15 points in total.
+
+**Read with care:** this rests on **one** hard failure in 92 replies. It shows the direction, not a rate. Whether twice the cost is worth it depends on what a wrong statement costs you: for a refund or legal answer, likely yes; for a routine reply, likely not.
+
+### 4. Scout & Rescue vs. the strong model alone: much cheaper, a little lower quality
 
 | | Scout & Rescue | Opus medium alone |
 |---|---|---|
@@ -100,7 +130,7 @@ This is why the rescuer added so little: it was never sent the right tickets. Th
 
 **Read with care:** the reviewer is Opus 5.5, the same model as the "alone" setups, and may favour its own style — the real gap may be smaller. Results vary between runs: the rescuer ran on 4 of the 40 tickets in run 2 and on 2 in run 3, and the cost saving ranged from 81% to 92%.
 
-### 4. Rescuer at low effort: keep it (for tasks like this)
+### 5. Rescuer at low effort: keep it (for tasks like this)
 
 - **24–25% cheaper in both runs**, with the same number of rescues.
 - Quality on the 7 rescued tickets across both runs: 247 vs. 245 for medium effort.
@@ -108,7 +138,7 @@ This is why the rescuer added so little: it was never sent the right tickets. Th
 
 **Limits:** only 7 rescued tickets, and these are short replies. Effort may matter more for long reasoning — test it on your task.
 
-### 5. Handoff: rejected
+### 6. Handoff: rejected
 
 Giving the rescuer the scout's rejected draft and the reason **cost 12% more** (it reads more text) and scored the same or 1 point lower on the 3 rescued tickets. It stays in the code as an option, off by default.
 

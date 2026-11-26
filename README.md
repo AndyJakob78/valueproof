@@ -150,6 +150,8 @@ We then ran the support-reply step of this idea for real: 40 made-up tickets (20
 
 **Is the rescuer worth it? Here, barely.** In a third run we added the cheap model alone: it cost 0.025 ¢ per outcome against 0.069 ¢ for Scout & Rescue and 0.92 ¢ for Opus, with nearly the same quality as Scout & Rescue. The rescuer ran on 2 of 40 tickets. On this task the saving comes from the cheap model; the rescuer is cheap insurance.
 
+**Code checks catch form; a check by a model catches substance.** Our code checks missed every hard failure. A fourth run added a policy check by the cheap model: it caught the one hard failure, and the gap to Opus shrank from 4.7% to 3.5% — for twice the cost per reply and twice the false alarms, still 73% cheaper per outcome than Opus alone. One case is thin evidence; it shows the direction.
+
 **Good for cost, with a quality trade-off.** Most cheap replies were good, but some were weaker in ways no check saw, and one stated a wrong refund rule. Use it where a few percent of quality is acceptable, or where your checks catch the mistakes that matter; keep refund, money and legal answers on the strong model until they do. → [Full results, caveats and how to rerun it](https://github.com/AndyJakob78/valueproof/blob/main/docs/support-test.md)
 
 **And where a cheap model is already in use:** in a game that writes an AI newspaper article per match day, the cheap model passed every check, so the rescuer never ran. The strong model alone cost 18× more for 13% better text, and the blind review found fact errors in both that no check caught. The better lever there is a better check, not a bigger model. → [Game article test](https://github.com/AndyJakob78/valueproof/blob/main/docs/game-article-test.md)
@@ -200,7 +202,7 @@ valueproof compare my_test.py --live --estimate     # runs 2 requests for real, 
 valueproof compare my_test.py --live --max-spend 5  # the full test, stops starting new requests at $5
 ```
 
-After the table it lists **which check rule fired most often**, and **how good your eval checks are**: how many of the judge's hard failures they caught, how many they missed, and how many false alarms they raised. In our own support test the answer was sobering: the checks caught 0 of 7 hard failures. → [Support test](https://github.com/AndyJakob78/valueproof/blob/main/docs/support-test.md)
+After the table it lists **which check rule fired most often**, and **how good your eval checks are**: how many of the judge's hard failures they caught, how many they missed, and how many false alarms they raised. In our own support test the answer was sobering: the code checks caught 0 of 7 hard failures. You can also **rate candidate eval checks** before you build on one: with a policy check done by a cheap model, the one hard failure in that run was caught and fixed, for about twice the cost per reply. → [Support test](https://github.com/AndyJakob78/valueproof/blob/main/docs/support-test.md)
 
 → How to write `my_test.py`, plus a support-ticket demo that works without an API key: [examples/](https://github.com/AndyJakob78/valueproof/blob/main/examples/). The live Claude mode was run in the [support test](https://github.com/AndyJakob78/valueproof/blob/main/docs/support-test.md).
 
