@@ -148,10 +148,19 @@ outcome = scout_and_rescue(
 print(outcome.path, outcome.cost_usd)  # "scout" or "rescue" - how often each runs depends on your checks
 ```
 
-**Install** (early version 0.1, Python 3.10+):
+**Install** (version 0.2, early: the API may still change; Python 3.10+, Gemini adapter 3.11+):
 
 ```bash
 pip install "ai-mixed-model-cost-optimization[claude]"
+```
+
+| You install | You import | You run |
+|---|---|---|
+| `ai-mixed-model-cost-optimization` | `mixed_model_cost` | `mmco` |
+
+```python
+from mixed_model_cost import scout_and_rescue
+from mixed_model_cost.claude import claude   # or .openai / .gemini
 ```
 
 The core has no dependencies and works with any provider: a model is just a function `prompt -> ModelResult`. Adapters come as extras: `[claude]`, `[openai]`, `[gemini]` or `[all]`. For a local model, write a function with the same shape.
@@ -172,33 +181,16 @@ mmco compare my_test.py --live
 The test setup is an **eval**: a fixed set of real requests, checks in code and a blind review, built once and reused for every change. Without it you can't tell a saving from a quality loss.
 
 ```mermaid
-flowchart TD
-    subgraph EVAL["The eval: build it once, reuse it for every change"]
-        E0["Define good enough<br/>what users must keep getting"]
-        E1["Fixed test set<br/>20-100 real requests, incl. hard ones"]
-        E2["Checks in code<br/>the mistakes that must never ship"]
-        E3["Blind review<br/>fixed rubric, A/B labels, hard-failure count"]
-    end
-    C["Break today's cost into parts<br/>where does the money go?"]
-    L["List levers, each with a guess<br/>Scout & Rescue, lower effort, shorter prompt, caching"]
-    T["Test ONE lever against today<br/>same requests, same moment: mmco compare"]
-    LG["Write it in the ledger<br/>cost, speed, quality, hard failures"]
-    D{"Cheaper AND<br/>quality holds?"}
-    K["Keep"]
-    X["Drop: anti-levers list"]
-    M{"More levers?"}
-    CT["Combined test of all kept levers<br/>against what is live"]
-    S["Ship behind a switch, keep measuring<br/>cost per request, rescue rate, check failures"]
-    E0 --> C --> L --> T
-    E1 --> T
-    E2 --> T
-    T --> E3 --> LG --> D
-    D -- yes --> K --> M
-    D -- no --> X --> M
-    M -- yes --> T
-    M -- no --> CT --> S
-    S -. "new model, new prices, drift" .-> C
+flowchart LR
+    E["1. Build the eval<br/>real requests, checks in code,<br/>blind review"] --> L["2. Pick the next lever<br/>e.g. Scout & Rescue, lower effort"]
+    L --> T["3. Test it against today<br/>same requests, same moment<br/>mmco compare"]
+    T --> D{"Cheaper AND<br/>quality holds?"}
+    D -- "yes: keep" --> L
+    D -- "no: drop" --> L
+    L -- "no levers left" --> S["4. Test all kept levers together,<br/>ship, keep measuring"]
 ```
+
+The full flow, with the cost breakdown and the ledger: [method.md](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/docs/method.md#the-flow)
 
 → The step-by-step method: [docs/method.md](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/docs/method.md) · Templates: [templates/](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/templates/)
 

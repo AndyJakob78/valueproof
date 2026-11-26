@@ -1,6 +1,10 @@
 # Package and examples
 
-Python 3.10+. Early version (0.1): the API may still change.
+Python 3.10+ (Gemini adapter: 3.11+). Version 0.2, early: the API may still change.
+
+| You install | You import | You run |
+|---|---|---|
+| `ai-mixed-model-cost-optimization` | `mixed_model_cost` | `mmco` |
 
 ```bash
 pip install "ai-mixed-model-cost-optimization[claude]"
