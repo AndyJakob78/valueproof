@@ -93,7 +93,7 @@ An online shop's chatbot sends every turn to Claude Opus 5.5: **2.6 cents per tu
 | 1 in 5 turns | $36,200 | **$119,800 (−77%)** |
 | 2 in 5 turns | $67,400 | **$88,600 (−57%)** |
 
-These numbers come from assumptions, not a measurement, and are an upper estimate: they leave out prompt caching, which would make the "before" setup cheaper and the saving smaller. → [Full chatbot example, with the checks and how to prove it](docs/example-service-chatbot.md)
+These numbers come from assumptions, not a measurement, and are an upper estimate: they leave out prompt caching, which would make the "before" setup cheaper and the saving smaller. → [Full chatbot example, with the checks and how to prove it](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/docs/example-service-chatbot.md)
 
 ### Measured: support replies
 
@@ -105,7 +105,7 @@ We then ran the support-reply step of this idea for real: 40 made-up tickets (20
 | Quality (blind review, two runs) | **2–6% lower** | — |
 | Hard failures (run 2, 40 tickets) | 3 | 2 |
 
-**Good for cost, with a quality trade-off.** Most cheap replies were good, but some were weaker in ways no check saw, and one stated a wrong refund rule. Use it where a few percent of quality is acceptable, or where your checks catch the mistakes that matter; keep refund, money and legal answers on the strong model until they do. → [Full results, caveats and how to rerun it](docs/support-test.md)
+**Good for cost, with a quality trade-off.** Most cheap replies were good, but some were weaker in ways no check saw, and one stated a wrong refund rule. Use it where a few percent of quality is acceptable, or where your checks catch the mistakes that matter; keep refund, money and legal answers on the strong model until they do. → [Full results, caveats and how to rerun it](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/docs/support-test.md)
 
 ## The solution
 
@@ -149,19 +149,19 @@ The core has no dependencies and works with any provider: a model is just a func
 mmco compare my_test.py --live
 ```
 
-→ How to write `my_test.py`, plus a support-ticket demo that works without an API key: [examples/](examples/). The live Claude mode was run in the [support test](docs/support-test.md).
+→ How to write `my_test.py`, plus a support-ticket demo that works without an API key: [examples/](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/examples/). The live Claude mode was run in the [support test](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/docs/support-test.md).
 
 **A second, smaller lever: lower effort on the strong model.** In the same test, running the rescuer at effort low instead of medium cost 24–25% less in two runs, with no measurable quality loss on the rescued tickets. Measured on short support replies only.
 
 **3. Prove every change before you ship it.** Change one thing at a time. Run the old and new versions side by side on the same requests. Review quality blind, as A vs. B. Keep only what saves money *and* holds quality.
 
-→ The step-by-step method: [docs/method.md](docs/method.md) · Templates: [templates/](templates/)
+→ The step-by-step method: [docs/method.md](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/docs/method.md) · Templates: [templates/](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/templates/)
 
 ## The full story
 
 We tested 12 cost-saving ideas one at a time, and **7 raised cost or lowered quality**. For example, a shorter prompt made the model search *more*.
 
-→ [Case study](docs/case-study.md) · [Support test](docs/support-test.md) · [Scout & Rescue in detail](docs/scout-and-rescue.md) · [Lessons](docs/lessons.md)
+→ [Case study](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/docs/case-study.md) · [Support test](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/docs/support-test.md) · [Scout & Rescue in detail](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/docs/scout-and-rescue.md) · [Lessons](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/docs/lessons.md)
 
 ## Terms used on this page
 
@@ -178,4 +178,4 @@ We tested 12 cost-saving ideas one at a time, and **7 raised cost or lowered qua
 
 Built from a real cost-reduction project on a live language-learning app. Engineering, testing and blind reviews were done with an AI coding assistant (Claude); a product owner made every keep-or-drop decision from the results.
 
-Text: [CC BY 4.0](LICENSE). Code in [src/](src/) and [examples/](examples/): [MIT](LICENSE-CODE). Use it, adapt it, credit it.
+Text: [CC BY 4.0](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/LICENSE). Code in [src/](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/src/) and [examples/](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/examples/): [MIT](https://github.com/AndyJakob78/ai-mixed-model-cost-optimization/blob/main/LICENSE-CODE). Use it, adapt it, credit it.
