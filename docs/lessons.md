@@ -54,6 +54,9 @@ A check is an alarm: count what it catches, what it misses, and how often it rin
 ### 13d. Code checks for form, a model check for substance
 Rules in code are free and catch form: empty, missing field, wrong id. They cannot tell that a rule was applied wrongly. A cheap model asked "is this safe to send?", with the policy as its reference, caught the hard failure our code checks missed — and raised twice the false alarms. Rate a check against the blind review before you build on it, and give it the reference that defines right.
 
+### 13e. Levers that each hold quality can lose it together
+Five levers each made the policy-check setup 29–58% cheaper with no measurable quality loss. Three of them stacked made it 75% cheaper and gave back the quality the policy check had bought: every lever removed some rescues, and together they removed the useful ones. (The case study's lesson 10 again.) And the rescuer does not need the strongest model: a mid-size model did the rescues at half the price with the same quality.
+
 ### 14. Try lower effort before a smaller model
 Running the strong model at effort low instead of medium cost 24–40% less with no measurable quality loss on short support replies. It is the cheapest lever to test, because nothing else in the setup changes.
 

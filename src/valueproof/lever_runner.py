@@ -264,6 +264,63 @@ def print_check_ratings(ratings: dict[str, dict]) -> None:
               f"{str(q['weaker_flagged']) + '/' + str(q['weaker']):>16}{per:>14.3f}c")
 
 
+def lever_ledger(report: Report, levers: dict[str, dict], tolerance: float = 0.01) -> list[dict]:
+    """The keep-or-drop ledger: each lever against the setup it changes.
+
+    levers: {setup_name: {"baseline": other_setup_name, "estimate": "what you expected, written before the test"}}
+    A lever is kept when it costs less per request, quality did not fall by more than `tolerance` of the
+    maximum score (default 1%, about the noise between runs), and it has no more hard failures.
+    A lever that costs more but improves quality or removes hard failures is flagged as the owner's call.
+    Without a judge the verdict rests on cost alone and says so.
+    """
+    names = {r.setup for r in report.rows}
+    rows = []
+    for name, info in levers.items():
+        base = info.get("baseline")
+        if name not in names or base not in names:
+            continue
+        s = {x["setup"]: x for x in summarize(report, [base, name])}
+        b, l = s[base], s[name]
+        cost = l["avg_cost"] / b["avg_cost"] - 1 if b["avg_cost"] else 0.0
+        row = {"lever": name, "baseline": base, "estimate": info.get("estimate", ""),
+               "cost_change": cost, "seconds_change": l["avg_seconds"] - b["avg_seconds"],
+               "rescued": f"{b['rescued']} -> {l['rescued']}", "quality_change": None, "hard_fail_change": None}
+        if l["quality"] is not None and b["quality"] is not None:
+            row["quality_change"] = l["quality"] - b["quality"]
+            row["hard_fail_change"] = l["hard_fail"] - b["hard_fail"]
+            held = row["quality_change"] >= -tolerance * l["quality_max"] and row["hard_fail_change"] <= 0
+            better = row["quality_change"] > tolerance * l["quality_max"] or row["hard_fail_change"] < 0
+            row["verdict"] = ("keep" if cost < 0 and held else "drop: quality fell" if cost < 0
+                              else "costs more, buys quality: your call" if better else "drop: not cheaper")
+        else:
+            row["verdict"] = "cheaper (quality not reviewed)" if cost < 0 else "drop: not cheaper"
+        rows.append(row)
+    return rows
+
+
+def ledger_markdown(rows: list[dict]) -> str:
+    out = ["| Lever | Against | Estimate before the test | Cost | Time | Rescues | Quality | Hard failures | Verdict |",
+           "|---|---|---|---|---|---|---|---|---|"]
+    for r in rows:
+        q = "not reviewed" if r["quality_change"] is None else f"{r['quality_change']:+d} points"
+        h = "" if r["hard_fail_change"] is None else f"{r['hard_fail_change']:+d}"
+        out.append(f"| {r['lever']} | {r['baseline']} | {r['estimate']} | {r['cost_change'] * 100:+.0f}% | "
+                   f"{r['seconds_change']:+.1f} s | {r['rescued']} | {q} | {h} | **{r['verdict']}** |")
+    return "\n".join(out)
+
+
+def print_ledger(rows: list[dict]) -> None:
+    if not rows:
+        return
+    print("\nLever ledger (each lever against the setup it changes):")
+    print(f"{'lever':<28}{'cost':>7}{'time':>8}{'rescues':>10}{'quality':>9}{'hard':>6}  verdict   | estimate before the test")
+    for r in rows:
+        q = "n/a" if r["quality_change"] is None else f"{r['quality_change']:+d}"
+        h = "" if r["hard_fail_change"] is None else f"{r['hard_fail_change']:+d}"
+        print(f"{r['lever']:<28}{r['cost_change'] * 100:>+6.0f}%{r['seconds_change']:>+7.1f}s{r['rescued']:>10}{q:>9}{h:>6}"
+              f"  {r['verdict']} | {r['estimate']}")
+
+
 def print_table(report: Report, setups: list[str]) -> None:
     rows = summarize(report, setups)
     base = rows[0]["cost_per_outcome"]

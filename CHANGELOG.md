@@ -2,6 +2,8 @@
 
 ## 0.6.0
 - **Check quality** in `valueproof compare`: when a judge ran, the output shows how the eval checks did against it, over every distinct reply: hard failures caught and missed, false alarms, and how many clearly weaker replies a check flagged. Also as `check_quality(report, setups)`.
+- **Lever ledger**: add `"levers": {setup: {"baseline": other_setup, "estimate": "..."}}` to your test file and `valueproof compare` prints each lever against the setup it changes, with your estimate and a keep-or-drop verdict, and writes `ledger.md`. Also as `lever_ledger(...)`.
+- **`--from-results FILE`**: show a saved run again (table, ledger) and rate new checks on its replies without running the models.
 - **Rate candidate eval checks**: add `"checks": {name: fn(case, text)}` to your test file and `valueproof compare` tries each on every distinct reply and rates it against the judge (caught, missed, false alarms, cost per check). A check that calls a model returns `(reason, cost_usd)`. Also as `rate_checks(...)`.
 - The bundled support test has a "Haiku alone, no rescuer" setup, to show what the rescuer adds.
 - The support test also has a policy check done by a model ("S&R + policy check (Haiku)") and `--rate-checks`.

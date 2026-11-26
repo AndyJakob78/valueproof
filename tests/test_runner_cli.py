@@ -4,7 +4,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from valueproof import Run, Score, check_quality, estimate, load_report, rate_checks, print_table, run_levers, save, summarize
+from valueproof import Run, Score, check_quality, estimate, ledger_markdown, lever_ledger, load_report, rate_checks, print_table, run_levers, save, summarize
 from valueproof.cli import main
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -135,3 +135,24 @@ def test_saved_results_can_be_rated_again(tmp_path):
     assert len(again.rows) == 2 and again.rows[0].score.max_points == 40
     r = rate_checks(again, [0], ["base", "cheap"], {"sharp": lambda case, text: "bad" if text == "bad" else None})
     assert (r["sharp"]["caught"], r["sharp"]["missed"]) == (1, 0)
+
+
+def test_lever_ledger_keeps_cheaper_levers_that_hold_quality():
+    setups = {"today": lambda c: Run("t", 0.010, 2.0),
+              "cheap ok": lambda c: Run("a", 0.004, 1.5),
+              "cheap worse": lambda c: Run("b", 0.003, 1.5),
+              "dearer": lambda c: Run("d", 0.020, 2.5),
+              "dearer but better": lambda c: Run("e", 0.020, 2.5)}
+    points = {"t": 36, "a": 36, "b": 30, "d": 36, "e": 40}
+    report = run_levers([0, 1], setups, judge=lambda c, text: Score(points[text], 40))
+    levers = {n: {"baseline": "today", "estimate": "guess"}
+              for n in ("cheap ok", "cheap worse", "dearer", "dearer but better", "not run")}
+    rows = {r["lever"]: r for r in lever_ledger(report, levers)}
+    assert set(rows) == {"cheap ok", "cheap worse", "dearer", "dearer but better"}  # one that did not run is left out
+    assert rows["dearer but better"]["verdict"] == "costs more, buys quality: your call"
+    assert rows["cheap ok"]["verdict"] == "keep" and round(rows["cheap ok"]["cost_change"], 2) == -0.6
+    assert rows["cheap worse"]["verdict"] == "drop: quality fell" and rows["cheap worse"]["quality_change"] == -12
+    assert rows["dearer"]["verdict"] == "drop: not cheaper"
+    assert "**keep**" in ledger_markdown(list(rows.values()))
+    no_judge = lever_ledger(run_levers([0], setups), levers)
+    assert no_judge[0]["verdict"] == "cheaper (quality not reviewed)"

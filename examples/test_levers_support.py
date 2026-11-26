@@ -243,6 +243,23 @@ def make_policy_check(model, prompt=None):
     return policy_check
 
 
+# The levers under test, each against the setup it changes, with the estimate written down BEFORE the run.
+_POLICY = "S&R + policy check (Haiku)"
+LEVERS = {
+    _POLICY: {"baseline": "baseline (published)", "estimate": "catches substance errors; about 2x cost"},
+    "L1 no cite rule": {"baseline": _POLICY, "estimate": "about -35% cost"},
+    "L2 rescuer effort low": {"baseline": _POLICY, "estimate": "about -25% of rescue cost"},
+    "L3 sharper check prompt": {"baseline": _POLICY, "estimate": "about -20% cost (fewer false alarms)"},
+    "L4 check high-risk only": {"baseline": _POLICY, "estimate": "about -1 s on average"},
+    "L5 Sonnet as rescuer": {"baseline": _POLICY, "estimate": "about -50% of rescue cost"},
+    "combined L1+L2+L4": {"baseline": _POLICY, "estimate": "0.11-0.13 cents per reply"},
+    "combined L1+L2+L3+L4": {"baseline": _POLICY, "estimate": "0.10-0.12 cents per reply"},
+    "rescuer effort low": {"baseline": "baseline (published)", "estimate": "about -25% cost"},
+    "handoff": {"baseline": "baseline (published)", "estimate": "better rescues"},
+    "Haiku alone, no rescuer": {"baseline": "baseline (published)", "estimate": "cheaper, clearly lower quality"},
+}
+
+
 def timed(model):
     def call(prompt):
         t0 = time.time()
@@ -391,6 +408,7 @@ def build(live: bool, args: list[str]) -> dict:
         "setups": setups,
         "judge": make_judge(judge_model),
         "checks": candidates,
+        "levers": LEVERS,
         "describe": lambda t: t.text,
     }
 

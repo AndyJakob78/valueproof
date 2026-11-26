@@ -15,6 +15,7 @@ Your test file is plain Python and defines one function:
             "setups":   {"baseline": run, ...},     # name -> run(case) -> Run; first is the baseline
             "judge":    judge,                       # optional: judge(case, text) -> Score
             "checks":   {"my new check": fn},        # optional: candidate eval checks to rate, fn(case, text)
+            "levers":   {"new": {"baseline": "baseline", "estimate": "-30% cost"}},  # optional: keep-or-drop ledger
             "describe": lambda case: str(case),      # optional: how a case shows on the review sheet
         }
 
@@ -32,7 +33,7 @@ from datetime import datetime
 from pathlib import Path
 
 from . import __version__
-from .lever_runner import estimate, load_report, print_check_ratings, print_table, rate_checks, run_levers, save
+from .lever_runner import estimate, ledger_markdown, lever_ledger, load_report, print_check_ratings, print_ledger, print_table, rate_checks, run_levers, save
 from .starter import STARTER
 
 
@@ -67,10 +68,16 @@ def compare(file: str, live: bool = False, out: str | None = None, extra: list[s
         report = load_report(Path(from_results))
         present = list(dict.fromkeys(r.setup for r in report.rows))
         names = [n for n in setups if n in present] + [n for n in present if n not in setups]  # first = baseline
-        print(f"{mode}: rating checks on {len(report.rows)} saved results from {from_results}")
-        ratings = rate_checks(report, cases, names, spec.get("checks") or {})
-        print_check_ratings(ratings)
-        print(f"Spent on the checks: ${report.spent_usd:.4f}")
+        print(f"{mode}: {len(report.rows)} saved results from {from_results} (no model runs)\n")
+        print_table(report, names)
+        ledger = lever_ledger(report, spec.get("levers") or {})
+        print_ledger(ledger)
+        if spec.get("checks"):
+            print_check_ratings(rate_checks(report, cases, names, spec["checks"]))
+            print(f"Spent on the checks: ${report.spent_usd:.4f}")
+        if out and ledger:
+            Path(out).mkdir(parents=True, exist_ok=True)
+            (Path(out) / "ledger.md").write_text(ledger_markdown(ledger) + "\n")
         return
     limit = f", stops at ${max_spend:.2f}" if max_spend is not None else ""
     print(f"{mode}: {len(cases)} cases x {len(setups)} setups{limit}")
@@ -80,10 +87,14 @@ def compare(file: str, live: bool = False, out: str | None = None, extra: list[s
         return
     print()
     print_table(report, list(setups))
+    ledger = lever_ledger(report, spec.get("levers") or {})
+    print_ledger(ledger)
     ratings = rate_checks(report, cases, list(setups), spec["checks"]) if spec.get("checks") and judge else {}
     print_check_ratings(ratings)
     out_dir = Path(out) if out else path.parent / "results" / datetime.now().strftime("%Y%m%d-%H%M%S")
     save(report, cases, out_dir, describe=spec.get("describe", str))
+    if ledger:
+        (out_dir / "ledger.md").write_text(ledger_markdown(ledger) + "\n")
     if ratings:
         (out_dir / "check_ratings.json").write_text(json.dumps(ratings, indent=2))
         print(f"Spent including the check ratings: ${report.spent_usd:.4f}")

@@ -1,6 +1,6 @@
 # Measured: Scout & Rescue on support replies
 
-A live test of the Scout & Rescue code in [examples/](../examples/), against the strong model alone, on made-up support tickets. Four runs, November 2026.
+A live test of the Scout & Rescue code in [examples/](../examples/), against the strong model alone, on made-up support tickets. Five runs, November 2026.
 
 **In one sentence:** Scout & Rescue cost **81–92% less** than Claude Opus 5.5 alone and scored **2–6% lower** in a blind review — but on this task **almost all of the saving comes from the cheap model itself**: with no rescuer at all, it was nearly as good. The rescuer ran on 2 of 40 tickets. Expect some loss of quality either way: the cheap model's replies are good, but not always as good as the strong model's, and a few wrong policy statements got through.
 
@@ -111,7 +111,32 @@ What it shows:
 
 **Read with care:** this rests on **one** hard failure in 92 replies. It shows the direction, not a rate. Whether twice the cost is worth it depends on what a wrong statement costs you: for a refund or legal answer, likely yes; for a routine reply, likely not.
 
-### 4. Scout & Rescue vs. the strong model alone: much cheaper, a little lower quality
+### 4. Making it cheaper and faster: the lever ledger
+
+The policy check doubled the cost and the time. Run 5 tested five ways to get that back, one lever at a time against "Scout & Rescue + policy check", each with an estimate written down before the run. `valueproof compare` prints this ledger itself (since 0.6):
+
+| Lever | The one change | Estimate before the test | Cost | Time | Rescues | Quality | Verdict |
+|---|---|---|---|---|---|---|---|
+| L1 No cite rule | The over-strict "must cite §" code rule is off | about −35% cost | **−29%** | −0.5 s | 9 → 6 | −4 points | **keep** |
+| L2 Rescuer effort low | Opus rescues at effort low | about −25% of rescue cost | **−34%** | −0.6 s | 9 → 9 | +2 points | **keep** |
+| L4 Check high-risk only | The policy check runs only on tickets the product owner marked high-risk (18 of 40) | about −1 s on average | **−45%** | −0.9 s | 9 → 5 | −14 points | **keep** |
+| L5 Sonnet as rescuer | Sonnet 5.5 rescues instead of Opus 5.5 | about −50% of rescue cost | **−58%** | −0.6 s | 9 → 9 | −3 points | **keep** |
+| Combined L1+L2+L4 | All three together | 0.11–0.13 ¢ per reply | **−75%** (0.064 ¢) | −1.4 s | 9 → 2 | **−25 points** | **drop: quality fell** |
+
+Quality is out of 1,600; the ledger keeps a lever when quality falls by no more than 1% of the scale (16 points, about the noise between runs) and hard failures do not rise. No setup had a hard failure in this run. Raw results: [run 5](data/support-test-run5.json).
+
+What it shows:
+
+- **The rescuer does not need the strongest model.** Sonnet as rescuer cut the cost by more than half with the same quality. It is the best single lever.
+- **Each lever works alone.** Lower effort, dropping the over-strict rule and risk levels all saved 29–45% with no quality loss beyond noise.
+- **Stacked, they give the gain back.** The combined setup is the cheapest and as fast as plain Scout & Rescue, but the rescuer ran only twice, and quality fell to about where the cheap model alone lands. The points were lost on seven tickets the full setup rescued and the combined one let through. Each lever removes some rescues; together they remove the useful ones too. Test the combination you intend to ship.
+- **Risk levels are a product decision.** Which topics always get the policy check is one line the product owner sets (`HIGH_RISK_SECTIONS`). It trades about a second and 45% of the cost against a check on every reply.
+
+**A sharper check prompt** (lever 3) was rated on the saved replies of run 4 instead of being run as a setup: it caught the same hard failure with 15 false alarms instead of 24. The same rating also showed how noisy a check by a model is: the unchanged prompt on the identical replies gave 18 false alarms one day and 24 the next.
+
+**Not tested:** prompt caching (the test policy is too short for it to take effect) and the combination we would ship next — Sonnet as rescuer, no cite rule, the sharper prompt, policy check on every ticket.
+
+### 5. Scout & Rescue vs. the strong model alone: much cheaper, a little lower quality
 
 | | Scout & Rescue | Opus medium alone |
 |---|---|---|
@@ -130,7 +155,7 @@ What it shows:
 
 **Read with care:** the reviewer is Opus 5.5, the same model as the "alone" setups, and may favour its own style — the real gap may be smaller. Results vary between runs: the rescuer ran on 4 of the 40 tickets in run 2 and on 2 in run 3, and the cost saving ranged from 81% to 92%.
 
-### 5. Rescuer at low effort: keep it (for tasks like this)
+### 6. Rescuer at low effort: keep it (for tasks like this)
 
 - **24–25% cheaper in both runs**, with the same number of rescues.
 - Quality on the 7 rescued tickets across both runs: 247 vs. 245 for medium effort.
@@ -138,7 +163,7 @@ What it shows:
 
 **Limits:** only 7 rescued tickets, and these are short replies. Effort may matter more for long reasoning — test it on your task.
 
-### 6. Handoff: rejected
+### 7. Handoff: rejected
 
 Giving the rescuer the scout's rejected draft and the reason **cost 12% more** (it reads more text) and scored the same or 1 point lower on the 3 rescued tickets. It stays in the code as an option, off by default.
 

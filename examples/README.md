@@ -64,10 +64,14 @@ def build(live: bool, args: list[str]) -> dict:
         "cases":  my_requests,                           # 20-100 real requests, including hard ones
         "setups": {"today": run_today, "new": run_new},  # name -> run(case) -> Run; first is the baseline
         "judge":  my_judge,                              # optional: judge(case, text) -> Score, blind
+        "levers": {"new": {"baseline": "today", "estimate": "-30% cost"}},  # optional: the keep-or-drop ledger
+        "checks": {"my new check": my_check},            # optional: candidate eval checks to rate
     }
 ```
 
-Results go to `results/<time>/` next to your file: `results.json`, plus `blind_review.csv` and `blind_key.csv` to score replies yourself. Copy [test_levers_support.py](test_levers_support.py) and replace the policy, tickets, checks and setups.
+Write your estimate down before the run: the ledger shows it next to the result, with a verdict (keep, drop, or "costs more, buys quality: your call"). To look at a saved run again, or rate new checks on its replies without paying for the models twice, use `--from-results results.json`.
+
+Results go to `results/<time>/` next to your file: `results.json`, `ledger.md`, plus `blind_review.csv` and `blind_key.csv` to score replies yourself. Copy [test_levers_support.py](test_levers_support.py) and replace the policy, tickets, checks and setups.
 
 Expect Scout & Rescue to cost much less and lose a little quality — measure how much on your own requests. [Our results](../docs/support-test.md).
 
