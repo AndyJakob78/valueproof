@@ -1,5 +1,6 @@
 """The `mmco` command.
 
+    mmco init my_test.py               # write a starter test that runs offline straight away
     mmco compare my_test.py            # run every setup on every case, print the table
     mmco compare my_test.py --live     # your file decides what "live" means (real API calls)
     mmco compare my_test.py --out dir  # where results and the blind review sheet go
@@ -28,6 +29,7 @@ from pathlib import Path
 
 from . import __version__
 from .lever_runner import print_table, run_levers, save
+from .starter import STARTER
 
 
 def _load(path: Path):
@@ -56,6 +58,14 @@ def compare(file: str, live: bool = False, out: str | None = None, extra: list[s
     print(f"\nSaved to {out_dir}")
 
 
+def init(file: str) -> None:
+    path = Path(file)
+    if path.exists():
+        raise SystemExit(f"{path} already exists - pick another name: mmco init my_test.py")
+    path.write_text(STARTER.format(name=path.name))
+    print(f"Wrote {path}. Try it: mmco compare {path}\nThen edit the four parts marked EDIT.")
+
+
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(prog="mmco", description="Test cheaper AI setups against your current one.")
     parser.add_argument("--version", action="version", version=f"mmco {__version__}")
@@ -65,9 +75,13 @@ def main(argv: list[str] | None = None) -> None:
     cmp_.add_argument("file", help="your test file, defining build(live, args)")
     cmp_.add_argument("--live", action="store_true", help="tell build() to use real models")
     cmp_.add_argument("--out", help="folder for results (default: results/<time> next to the file)")
+    ini = sub.add_parser("init", help="write a starter test file that runs offline straight away")
+    ini.add_argument("file", nargs="?", default="mmco_test.py", help="file to create (default: mmco_test.py)")
     args, extra = parser.parse_known_args(argv)
     if args.command == "compare":
         compare(args.file, args.live, args.out, extra)
+    elif args.command == "init":
+        init(args.file)
 
 
 if __name__ == "__main__":

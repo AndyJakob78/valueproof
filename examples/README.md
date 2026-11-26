@@ -16,9 +16,11 @@ Leave out `[claude]` if you use another provider — the core has no dependencie
 | [pipeline.py](../src/mixed_model_cost/pipeline.py) | Split a job into steps and give each step its own model, or Scout & Rescue. Logs path and cost per step. |
 | [lever_runner.py](../src/mixed_model_cost/lever_runner.py) | Run every setup on every request, side by side, in a shuffled order. Prints cost (average and median), rescue rate, time, check failures and blind-review quality, and writes a blind review sheet you can score by hand. |
 | [cli.py](../src/mixed_model_cost/cli.py) | The `mmco compare` command. |
-| [claude.py](../src/mixed_model_cost/claude.py) | Adapter for Claude models (Haiku, Sonnet, Opus) with a simple cost estimate. |
+| [claude.py](../src/mixed_model_cost/claude.py) | Adapter for Claude models (Haiku, Sonnet, Opus) with a simple cost estimate. Run live in the [support test](../docs/support-test.md). |
+| [openai.py](../src/mixed_model_cost/openai.py) | Adapter for OpenAI models (Responses API). You pass the prices. Tested against fake clients; not yet run live. |
+| [gemini.py](../src/mixed_model_cost/gemini.py) | Adapter for Google Gemini models; counts thinking tokens as output. You pass the prices. Tested against fake clients; not yet run live. |
 
-**Other providers:** write a function with the same shape — prompt in, `ModelResult(text, cost_usd, model)` out — for OpenAI, Gemini or a local model. Everything else works unchanged.
+Install the adapter you need: `[claude]`, `[openai]`, `[gemini]` or `[all]`. **Any other provider or a local model:** write a function with the same shape — prompt in, `ModelResult(text, cost_usd, model)` out. Everything else works unchanged.
 
 ## Examples (this folder)
 
@@ -35,6 +37,16 @@ python examples/demo_support.py --live     # real Claude calls, a few cents
 Expected output (stub mode): two tickets finish on the cheap model; the hard billing ticket fails the reply check ("too short") and is rescued by the strong model.
 
 ## Test a change on your own requests
+
+The quickest start: `mmco init` writes a starter test that runs straight away with fake models, then you edit four marked parts — your requests, your checks, your models, your setups.
+
+```bash
+mmco init my_test.py
+mmco compare my_test.py          # fake models, no cost
+mmco compare my_test.py --live   # your real models
+```
+
+Or start from the bundled support test:
 
 ```bash
 mmco compare examples/test_levers_support.py               # stub models, checks the wiring, no cost

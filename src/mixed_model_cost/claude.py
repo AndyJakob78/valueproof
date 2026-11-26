@@ -34,9 +34,21 @@ def _get_client():
     return _client
 
 
-def claude(model: str, effort: str = "low", system: str | None = None, max_tokens: int = 16000) -> Model:
-    """Return a Model function for one Claude model at one effort level."""
-    price_in, price_out = PRICES[model]
+def claude(
+    model: str,
+    effort: str = "low",
+    system: str | None = None,
+    max_tokens: int = 16000,
+    prices: tuple[float, float] | None = None,
+    client=None,
+) -> Model:
+    """Return a Model function for one Claude model at one effort level.
+
+    `prices` = (input, output) in USD per million tokens; needed for models not in PRICES.
+    """
+    if prices is None and model not in PRICES:
+        raise ValueError(f"No price for {model!r}: pass prices=(input, output) in USD per million tokens.")
+    price_in, price_out = prices or PRICES[model]
 
     def call(prompt: str) -> ModelResult:
         kwargs = dict(
@@ -48,13 +60,13 @@ def claude(model: str, effort: str = "low", system: str | None = None, max_token
         if system:
             kwargs["system"] = system
 
-        client = _get_client()
+        api = client or _get_client()
         if model in _FALLBACK_MODELS:
-            response = client.beta.messages.create(
+            response = api.beta.messages.create(
                 betas=["server-side-fallback-2026-07-01"], fallbacks="default", **kwargs
             )
         else:
-            response = client.messages.create(**kwargs)
+            response = api.messages.create(**kwargs)
 
         # A refusal returns no usable text; the check will treat "" as a failure.
         if response.stop_reason == "refusal":

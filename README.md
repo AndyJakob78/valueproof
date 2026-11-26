@@ -154,11 +154,12 @@ print(outcome.path, outcome.cost_usd)  # "scout" or "rescue" - how often each ru
 pip install "ai-mixed-model-cost-optimization[claude]"
 ```
 
-The core has no dependencies and works with any provider: a model is just a function `prompt -> ModelResult`. The `[claude]` extra adds the Claude adapter; for OpenAI, Gemini or a local model, write a function with the same shape.
+The core has no dependencies and works with any provider: a model is just a function `prompt -> ModelResult`. Adapters come as extras: `[claude]`, `[openai]`, `[gemini]` or `[all]`. For a local model, write a function with the same shape.
 
 **Test a change on your own requests** with one command — it runs every setup on every request, side by side, and prints cost (average and median), rescue rate, time, check failures and blind-review quality:
 
 ```bash
+mmco init my_test.py            # a starter test that runs straight away, with fake models
 mmco compare my_test.py --live
 ```
 
