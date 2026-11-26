@@ -1,4 +1,4 @@
-# The Token Lever Optimizer method
+# The AI Mixed Model Cost Optimization method
 
 A way to cut the running cost of an AI feature with evidence instead of intuition. It assumes nothing about the model vendor, the language or the framework. You need: the feature, a fixed set of test requests, a way to log tokens per call, and a reviewer for blind judging.
 

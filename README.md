@@ -1,4 +1,4 @@
-# Token Lever Optimizer
+# AI Mixed Model Cost Optimization
 
 **Cut the running cost of AI features while keeping output quality — by letting cheap and strong models work together, and proving each change before it ships.**
 
