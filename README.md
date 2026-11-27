@@ -4,6 +4,8 @@
 
 ## Cheapest isn't the win
 
+**Same cheap model, different check: 4 of 20 good replies with code rules, 13 of 20 with the PM's acceptance criteria, still about 70% cheaper.**
+
 The same cheap model answered 40 support tickets twice, with two different eval checks. A frontier model stepped in whenever the check failed. Then a person compared 20 of the replies blind with the frontier model's own replies.
 
 | | Eval check: rules in code only | Eval check: the PM's acceptance criteria, in plain language |
