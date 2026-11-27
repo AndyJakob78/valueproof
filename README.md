@@ -12,12 +12,15 @@ The two sides often work apart. Engineering and FinOps bring token cost down; pr
 Valueproof is a playbook and a small open-source Python package that connects both ends:
 
 - **An LLM cascade.** A cheap model answers first. A frontier model steps in only when the answer fails an eval check at runtime. The technique is not new ([FrugalGPT](https://github.com/stanford-futuredata/FrugalGPT)); this repo calls it *Scout & Rescue*.
+- **Choose the eval check first, then the model.** In our test, the check decided the quality more than the choice of model did.
 - **The eval check is owned by product.** Rules in code catch form (empty, missing order number). An eval check in plain language catches substance: a cheap model reads the answer against the source that defines "right", such as the refund policy, the price list or the tone-of-voice guide.
 - **Every change is tested before it ships,** on a fixed set of your own real requests (taken from your logs), against what you run today, with a blind review by an LLM judge or a person.
 - **The eval check itself is measured:** what it caught, what it missed, how many false alarms, what it cost.
 - **The metric is cost per usable outcome,** with failed and rescued attempts counted.
 
 ## What we measured
+
+**In short: same cheap model, different eval check, different result.** With rules in code as the check, a person reading blind preferred the frontier model's reply on 16 of 20 tickets. With an eval check in plain language that product owns, the same cheap model was as good or better on 13 of 20, and still about 70% cheaper. One task and one reviewer, so read it as a direction, not a rule.
 
 **Support replies:** 40 made-up support tickets, five runs, against Claude Opus 5.5 alone. Claude Haiku 5.5 answers first, Opus rescues.
 
@@ -30,7 +33,8 @@ Valueproof is a playbook and a small open-source Python package that connects bo
 What it shows:
 
 - **Code rules alone are not enough.** They are free, but they can't see a wrong policy statement. A person reading blind preferred the frontier model almost every time.
-- **The eval check in plain language closes most of the gap,** for about twice the cost and time of code rules, and still about 70% cheaper than Opus alone.
+- **The eval check in plain language closes most of the gap.** It is one more call on every reply: about twice the cost of code rules, still about 70% cheaper than Opus alone, but 10–35% slower than Opus alone.
+- **Levers win the speed back.** A mid-size model as the rescuer was as fast as Opus alone and 87% cheaper; checking only the topics product marks as high-risk was faster still. One run each, not yet checked by a person.
 - **It still missed one kind of mistake twice:** offering a carrier trace for a parcel that had already arrived. That is the next line for whoever owns the check to add.
 - **Check the judge too.** The LLM judge and the person agreed on only one of the three real mistakes the person found with code rules alone.
 
