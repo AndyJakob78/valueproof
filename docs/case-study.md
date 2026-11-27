@@ -54,6 +54,8 @@ All accepted levers switched on together, against **the code running in producti
 
 A second side-by-side compared the new setup with lever 4b alone, which had looked fastest in its first test. Typical search: the new setup was faster and cheaper (13.8 s · $0.026 vs 16.3 s · $0.038); on average 4b alone was cheaper because the rescuer sometimes runs — but 4b alone left one learner without a lesson. Quality was level (437 vs 429).
 
+**A human blind check (November 2026):** the product owner compared 14 pairs of German articles blind, the cheaper search against the previous one, each followed by the same writing steps. They preferred the cheaper search's article 6 times and the previous one's 7 times; 1 was equal. That is a tie, and it supports the AI review's finding that quality held. One reviewer and 14 pairs: a direction, not a rate.
+
 ## What shipped
 
 - **Scout & Rescue**: the small model with the simpler search tool tries first; the big model with the full tool runs only if the scout returns nothing usable or only an old story.

@@ -1,15 +1,44 @@
 # Valueproof
 
-*AI mixed-model cost optimization, proven per outcome.*
+**Prove an AI cost cut before you ship it. Measure cost per usable outcome, not cost per token.**
 
-**Prove an AI cost cut on your own traffic before you ship it. Let cheap and strong models work together, and measure cost per outcome — not cost per token.**
+If you work on an AI product, you probably get two questions:
 
-A lightweight, opinionated FinOps playbook and proof tool for teams that still default to frontier models and need hard evidence to justify a cheaper setup. It also tells you whether your eval checks catch the serious mistakes.
+- "What is the value of it, and how do you prove it?"
+- "Our token cost needs to go down, but we can't sacrifice the quality of outcomes."
 
-**In 30 seconds:**
-- **What it is:** a method and a small Python tool that cuts what AI features cost on live user traffic, and proves output quality before you ship the change. A cheap model does the work first; a strong model steps in only when a check in code rejects the result (*Scout & Rescue*). Every change is tested side by side against your current setup on your own requests, with a blind quality review.
-- **What we measured:** on a live app's web-search step, cost per article fell from 9.7 ¢ to 4.6–7.7 ¢, and quality held in a blind review. On 40 support tickets, a usable reply cost 82–92% less than with Claude Opus 5.5 alone, over three runs.
-- **The trade-off:** on the support tickets, quality was 2–6% lower in an LLM review, and one wrong refund rule slipped past the checks. A person checking blind was stricter: with code checks alone they preferred Opus's reply on 16 of 20 tickets; with a policy check added, the cheap setup was as good or better on 13 of 20. The test also showed that the cheap model alone was nearly as good there: the rescuer pays off only where failures are common and a check can catch them.
+The two sides often work apart. Engineering and FinOps bring token cost down; product managers worry that quality gets sacrificed. When an eval fails, it goes back to engineering, who often don't know what outcome is expected.
+
+Valueproof is a playbook and a small open-source Python package that connects both ends:
+
+- **An LLM cascade.** A cheap model answers first. A frontier model steps in only when the answer fails an eval check at runtime. The technique is not new ([FrugalGPT](https://github.com/stanford-futuredata/FrugalGPT)); this repo calls it *Scout & Rescue*.
+- **The eval check is owned by product.** Rules in code catch form (empty, missing order number). An eval check in plain language catches substance: a cheap model reads the answer against the source that defines "right", such as the refund policy, the price list or the tone-of-voice guide.
+- **Every change is tested before it ships,** on a fixed set of your own real requests (taken from your logs), against what you run today, with a blind review by an LLM judge or a person.
+- **The eval check itself is measured:** what it caught, what it missed, how many false alarms, what it cost.
+- **The metric is cost per usable outcome,** with failed and rescued attempts counted.
+
+## What we measured
+
+**Support replies:** 40 made-up support tickets, five runs, against Claude Opus 5.5 alone. Claude Haiku 5.5 answers first, Opus rescues.
+
+| Setup | Cost per usable reply | Quality, LLM judge | Quality, blind human check (20 tickets) | Serious mistakes |
+|---|---|---|---|---|
+| Code rules as the eval check | **82–92% cheaper** | 2–6% lower | Opus preferred on **16 of 20** | the code rules caught **0 of 10** (four runs) |
+| + an eval check in plain language | **69–73% cheaper** | 3.5–4.9% lower | **as good or better on 13 of 20** | caught the one in its run; 2 of 20 still slipped through |
+| + a mid-size model as the rescuer (one run) | 87% cheaper | 5% lower | not checked | none occurred in that run |
+
+What it shows:
+
+- **Code rules alone are not enough.** They are free, but they can't see a wrong policy statement. A person reading blind preferred the frontier model almost every time.
+- **The eval check in plain language closes most of the gap,** for about twice the cost and time of code rules, and still about 70% cheaper than Opus alone.
+- **It still missed one kind of mistake twice:** offering a carrier trace for a parcel that had already arrived. That is the next line for whoever owns the check to add.
+- **Check the judge too.** The LLM judge and the person agreed on only one of the three real mistakes the person found with code rules alone.
+
+→ [Full support test](https://github.com/AndyJakob78/valueproof/blob/main/docs/support-test.md), with the lever ledger, check ratings and raw data.
+
+**A live language-learning app:** the step that searches the web for a news story ran on Claude Sonnet 5.5 for every lesson, at 9.7 ¢ per article. With Haiku first and Sonnet only when a code check finds no usable or only an old story, it cost **4.6–7.7 ¢** across runs. An LLM judge scored 18 articles 472 vs 434 for the cheaper setup. A person compared 14 German article pairs blind: 6 for the cheaper search, 7 for the old one, 1 equal, which is a tie. Here the cheap model only finds the story; a strong model still writes the lesson. → [Case study](https://github.com/AndyJakob78/valueproof/blob/main/docs/case-study.md)
+
+**Twelve cost ideas, tested one at a time:** 7 made things worse or saved nothing. A shorter prompt made the model search *more*. → [Lessons](https://github.com/AndyJakob78/valueproof/blob/main/docs/lessons.md)
 
 ## Quick start
 
@@ -24,270 +53,79 @@ from valueproof.claude import claude
 ticket = "Where is my order 48213?"
 out = scout_and_rescue(
     "Reply to this support ticket: " + ticket,
-    scout=claude("claude-haiku-5-5"),      # the cheap model tries first
+    scout=claude("claude-haiku-5-5"),      # the cheap model answers first
     rescue=claude("claude-opus-5-5"),      # the frontier model runs only if the check fails
     check=lambda text: None if "48213" in text else "order number missing",
 )
 print(out.path, out.cost_usd)              # "scout" or "rescue", and what it cost
 ```
 
-Then compare setups on your own requests — offline first, with fake models:
+A check returns `None` when the answer is fine, or a reason when it is not. It can be a rule in code, as here, or a call to a cheap model with your policy; see the [support test example](https://github.com/AndyJakob78/valueproof/blob/main/examples/test_levers_support.py).
 
-```bash
-valueproof init my_test.py
-valueproof compare my_test.py
-```
-
-## When it fits
-
-It fits when your product sends a lot of requests to a frontier model — such as Claude Opus 5.5 or Fable 5.2, GPT-6.2 Astra, or Gemini 4 Carbon — to read, analyze, review or summarize data. For example:
-- support chatbots
-- code-review bots
-- data extraction
-- search and research assistants
-- document summarizers
-- code translation and migration (e.g. Java to Kotlin) — the checks are exact: does it compile, do the tests pass
-
-And most of those requests are routine, and a bad result can be detected in code: an empty result, a missing field, an outdated date, or an invalid format.
-
-## What this measures
-
-Most cost tools stop at the first row. This method measures the second before you ship, and tells you how to track the third after.
-
-| Layer | The question | Who asks it | Where it is measured |
-|---|---|---|---|
-| Model output | What does a token cost? How fast is the model? | Engineers | Price lists, benchmarks |
-| **Outcome** (before shipping) | Did the user get a usable, correct result — and what did that result cost, including failed attempts? | Product, engineering | **The eval: `valueproof compare` on your own requests** |
-| **Value shipped** (after shipping) | How much margin did we bank per user, without more complaints, escalations or refunds? | CFO, VP Product | Ship behind a switch, keep measuring — [method, step 9](https://github.com/AndyJakob78/valueproof/blob/main/docs/method.md#step-9--ship-behind-a-switch-keep-measuring) |
-
-**The eval proves you won't break the product. The switch and the ledger prove the margin you banked.**
-
-## Target audience
-
-| Role | What you get |
-|---|---|
-| **Product Manager** | A way to cut AI cost per user with evidence, and to defend every keep-or-drop decision |
-| **System Designer** | A pattern for splitting one AI job into steps, each with the right model |
-| **AI Engineer** | A small Python package: Scout & Rescue, multi-model pipelines, and a test runner (`valueproof compare`) |
-| **Prompt & Context Engineer** | A test routine that shows whether a prompt change really saves tokens — or quietly costs more |
-| **AI Builder** | A way to test cheaper setups for an AI app on a small budget, and keep only those that hold quality |
-| **AI Evaluation** | A blind review (LLM-as-judge or a person) on a fixed rubric, plus a measure of how good your eval checks are |
-| **LLMOps** | Code checks and logging that track how often the expensive model runs |
-| **FinOps** | A clear before-and-after cost per request, and the yearly saving at your scale |
-
-## The problem
-
-Some AI features cannot afford a weak answer. **Compliance, regulation or safety** may demand it — a wrong fact in a financial, medical or legal answer is a real risk. Or the **user experience** depends on it — one confidently wrong answer and users stop trusting the product.
-
-So teams do the safe thing: **one strong model does the whole job, end to end, for every request.** Quality is high. But:
-- **You pay top price for easy work.** Most requests are routine and don't need the strongest model. They are still billed at its rate.
-- **The cost grows with every user.** At scale, a request can cost more than it earns.
-- **The usual fixes put quality at risk.** "Switch to a smaller model" or "shorten the prompt" may save money, or may quietly lower quality, or may even raise cost. Without a test, you can't tell.
-
-**What this method can and cannot do:** it saves money on the requests where a cheap model's mistakes can be caught by a check in code — an empty result, a missing field, an old date, an invalid format. It does **not** catch an answer that looks right but is wrong, such as a plausible but false refund rule. Where such errors carry legal or safety risk, either build a check that really catches them, or keep that step on the strong model.
-
-### Real-world signals (2026)
-
-**AI cost is squeezing companies:**
-- **Harvey** (legal AI): in March it updated its AI agents, and customers began using them far more — token use grew about 20× during the year. Harvey mostly charges customers a fixed price per seat but pays the model providers per token, so its gross margin reportedly fell from about **+50% to −50%** by June: serving customers cost about $1.50 for every $1 of revenue. In August it moved its flagship to its own model built on an open-weight model, and margins reportedly turned positive again. [Bloomberg](https://www.bloomberg.com/news/articles/2026-09-21/startups-like-harvey-embrace-open-models-to-cut-reliance-on-anthropic-openai) · [Artificial Lawyer](https://artificiallawyer.com/2026/07/08/harvey-increases-token-use-14x-in-just-6-months)
-- **Industry survey** (Mavvrik, a cost-management vendor, with Benchmarkit; 396 companies, April–May 2026):
-  - **62%** say an unexpected AI cost changed a business decision in the past year. Of those, 40% had to escalate it to the board, 33% froze spending, and 25% delayed or cancelled an AI project.
-  - **49%** had to raise prices of their AI products because costs rose more than expected.
-  - Only **11%** can forecast their AI spend within ±10% (down from 15% in 2025).
-  - **43%** name token costs as a top source of surprise spend. Agents are a growing blind spot: almost all companies run them, but only about a third include them in cost reports.
-  - [Channel Insider](https://www.channelinsider.com/ai/mavvrik-state-of-ai-cost-governance/) · [CFO Dive](https://cfodive.com/news/1-in-4-companies-delay-cancel-ai-projects-over-cost/827524) · [Diginomica](https://diginomica.com/tokenomics-ai-bill-shock-goes-mainstream-key-cost-driver-becomes-task-complexity)
-
-**And when an AI answer is wrong, courts hold the company liable:**
-- **Hamm, Germany (May 2026):** a clinic's website chatbot invented specialist titles for its doctors. The Higher Regional Court held the clinic responsible — even though the bot had been trained on correct data and was run by an IT provider. Switching the bot off was not enough; the clinic also had to sign a cease-and-desist declaration. Not yet final: an appeal to the Federal Court of Justice is allowed. [Court press release (German)](https://www.justiz.nrw/presse/2026-05-12) · [DLA Piper](https://www.dlapiper.com/en/insights/publications/2026/06/german-court-addresses-liability)
-- **Munich, Germany (May 2026):** Google's AI Overviews made false claims about two publishers that did not appear in the linked sources. The Regional Court of Munich treated the AI summary as Google's own statement and barred Google from repeating it, with fines of up to €250,000 per violation. Not yet final. [Court press release (German)](https://www.justiz.bayern.de/gerichte-und-behoerden/landgericht/muenchen-1/presse/2026/13.php) · [The Decoder](https://the-decoder.com/landmark-german-ruling-declares-googles-ai-overviews-are-googles-own-words-and-makes-it-liable-for-false-answers/)
-
-The lesson: cut cost **and** prove quality, one change at a time — with tests on real requests, not just offline benchmarks.
-
-### What this looked like for us
-
-**The project:** a live language-learning app that turns current local news into reading lessons. Every lesson starts with an AI step that searches the web for one fresh, **true** story. A wrong or outdated fact would be taught to the learner as true, so we ran this step on a strong model for every lesson: **Claude Sonnet 5.5 with full web search**. It cost **9.7 cents per article**. A lesson uses AI twice: once to find the story and once to write the lesson. Finding the story was about half of the lesson's total AI cost, and every lesson a free user read was paid for out of pocket.
-
-**Before and after, per article:**
-
-| | Before | After | What it means |
-|---|---|---|---|
-| Setup | Claude Sonnet 5.5 + full web search, for every article | **Scout:** Claude Haiku 5.5 + simple web search. **Rescue:** Sonnet 5.5 + full web search | The rescuer runs only when a code check finds no usable story or only an old one — 2 to 5 of every 18 articles. |
-| Cost per article (average) | 9.7 ¢ | **4.6 – 7.7 ¢ (−53% to −21%)** | Depends on how often the rescuer runs (2 to 5 of every 18 articles across our runs); rescued articles pay for both attempts. The final combined test against production gave 4.6 ¢. |
-| Cost per article (typical) | 9.2 ¢ | **2.6 ¢ (−71%)** | Median from the final combined test: most articles finish on the scout. |
-| Quality, blind review (18 articles, max 540) | 434 | **472** | Quality held or improved. This is one blind review of 18 articles, scored by an AI model on a fixed rubric; we did not measure how much this score varies between runs, and in another paired run Scout & Rescue scored level with its competitor (437 vs 429). Likely reasons for the gain: the freshness check sends old stories to the rescuer, and new fact rules keep contact details, guessed descriptions and facts that sources disagree on out of the lesson. We did not measure each reason separately. |
-| Time per search (average) | 34 s | 34 s | Same average, wide spread: in a second comparison run, a typical article took about 14 s on the scout; a rescued article takes the scout's time plus the rescuer's, which pulls the average up. The same setup run twice varies by about ±10%. |
-| Lessons without an article | 0 | 0 | Every one of the 18 test requests ended with a usable story — a test result, not a guarantee. Two cheaper ideas failed here: the scout alone left 1 of 18 learners without a story, and a "lazier" rescuer was 22% cheaper but let old stories through (quality 440 vs 470). |
-
-**Over a year:** 1,000 users reading one article a day is 365,000 articles.
-
-| | Best run (4.6 ¢) | Most rescues (7.7 ¢) |
-|---|---|---|
-| Before (9.7 ¢ per article) | $35,405 | $35,405 |
-| After | $16,790 | $28,105 |
-| **Saved** | **$18,615** | **$7,300** |
-
-Costs cover the search step only, at the API prices of our test, extrapolated from 18 test requests. Your own rescue rate decides where you land.
-
-### A second example: a service chatbot (estimate)
-
-An online shop's chatbot sends every turn to Claude Opus 5.5: **2.6 cents per turn, about $156,000 a year** at 500,000 turns a month. Split into steps — Haiku 5.5 to understand the message, Scout & Rescue (Haiku first, Opus only when a check rejects the draft) to answer, and Sonnet 5.5 for one daily summary:
-
-| How often Opus is still needed | Cost per year | Saved |
-|---|---|---|
-| 1 in 5 turns | $36,200 | **$119,800 (−77%)** |
-| 2 in 5 turns | $67,400 | **$88,600 (−57%)** |
-
-These numbers come from assumptions, not a measurement, and are an upper estimate: they leave out prompt caching, which would make the "before" setup cheaper and the saving smaller. → [Full chatbot example, with the checks and how to prove it](https://github.com/AndyJakob78/valueproof/blob/main/docs/example-service-chatbot.md)
-
-### Measured: support replies
-
-We then ran the support-reply step of this idea for real: 40 made-up tickets (20 of them hard), Claude Haiku 5.5 as the scout, Opus 5.5 as the rescuer, against Opus 5.5 alone, with a blind review.
-
-| | Scout & Rescue | Opus 5.5 alone |
-|---|---|---|
-| Cost per reply (three runs) | **81–92% less** | — |
-| Quality (blind review, three runs) | **2–6% lower** | — |
-| Hard failures (run 2, 40 tickets) | 3 | 2 |
-| **Cost per outcome** (three runs) | **82–92% less** | — |
-
-**Is the rescuer worth it? Here, barely.** In a third run we added the cheap model alone: it cost 0.025 ¢ per outcome against 0.069 ¢ for Scout & Rescue and 0.92 ¢ for Opus, with nearly the same quality as Scout & Rescue. The rescuer ran on 2 of 40 tickets. On this task the saving comes from the cheap model; the rescuer is cheap insurance.
-
-**Code checks catch form; a check by a model catches substance.** Our code checks missed every hard failure. A fourth run added a policy check by the cheap model: it caught the one hard failure, and the gap to Opus shrank from 4.7% to 3.5% — for twice the cost per reply and twice the false alarms, still 73% cheaper per outcome than Opus alone. One case is thin evidence; it shows the direction. A fifth run repeated the setup: 0.282 ¢ per outcome against 0.921 ¢ for Opus alone (69% cheaper), quality 4.9% lower, again no hard failure. No setup had a hard failure in that run, so it confirms the cost, not the catch.
-
-**Then a person checked it blind.** The product owner compared 20 replies with Opus's, setups hidden. With code checks only, they preferred Opus on 16 of 20 tickets and found 3 real mistakes in the cheap replies, two of which the LLM judge had not flagged. With the policy check added, the cheap setup was as good or better on 13 of 20; two replies still offered a carrier trace for a parcel that had already arrived. One reviewer and 20 tickets: a direction, not a rate. [Details](https://github.com/AndyJakob78/valueproof/blob/main/docs/support-test.md#5-a-person-reviewed-it-blind-code-checks-alone-are-not-enough-with-the-policy-check-it-holds)
-
-**Then make it cheaper again, one lever at a time.** A fifth run tested five levers on that setup, each with an estimate written down first. Sonnet as the rescuer instead of Opus: −58% cost, same quality. Lower effort, dropping an over-strict rule, and checking only the topics the product owner marks high-risk: −29% to −45% each. All three stacked: −75%, but the quality gain was gone. `valueproof compare` prints this keep-or-drop ledger itself.
-
-**Good for cost, with a quality trade-off.** Most cheap replies were good, but some were weaker in ways no check saw, and one stated a wrong refund rule. Use it where a few percent of quality is acceptable, or where your checks catch the mistakes that matter; keep refund, money and legal answers on the strong model until they do. → [Full results, caveats and how to rerun it](https://github.com/AndyJakob78/valueproof/blob/main/docs/support-test.md)
-
-**And where a cheap model is already in use:** in a game that writes an AI newspaper article per match day, the cheap model passed every check, so the rescuer never ran. The strong model alone cost 18× more for 13% better text, and the blind review found fact errors in both that no check caught. The better lever there is a better check, not a bigger model. → [Game article test](https://github.com/AndyJakob78/valueproof/blob/main/docs/game-article-test.md)
-
-## The solution
-
-**1. Break the job into steps, and give each step the right model.** A recommended starting point — our case study tested this on one step (the search), not a full pipeline.
-
-| Step | Recommended starting point |
-|---|---|
-| Read / extract | small, cheap model |
-| Analyze / draft | **Scout & Rescue** (see below) |
-| Review | a check in code where possible |
-| Aggregate | mid-size model, once per batch |
-
-**2. Scout & Rescue for the steps that are usually easy but sometimes hard.** A cheap model (the scout) tries first. A strong model (the rescuer) runs only when a check in code says the scout's result is unusable. When most requests pass the check, most finish at the cheap price; the rest get the same strong model you use today.
-
-```mermaid
-flowchart LR
-    R["Request"] --> SC["Scout<br/>cheap model"] --> C1{"Check in code:<br/>usable?"}
-    C1 -- yes --> A["Answer<br/>at the cheap price"]
-    C1 -- no --> RS["Rescuer<br/>strong model"] --> C2{"Check:<br/>usable?"}
-    C2 -- yes --> A2["Answer<br/>pays for both calls"]
-    C2 -- no --> F["Fallback<br/>template, human, or error"]
-```
-
-The checks decide the quality: a mistake no check catches goes straight to the user at the cheap price.
-
-**Expect a small quality cost.** Requests that pass the check are only as good as the cheap model's answer. In our support test, Scout & Rescue cost 81–92% less than the strong model alone and scored 2–6% lower in a blind review — a much stronger cost lever than tuning the strong model, with a quality trade-off you should measure for your own task. How much quality you keep depends mostly on your checks.
-
-The code for this is in the [quick start](#quick-start) at the top.
-
-**Install** (version 0.6, early: the API may still change; Python 3.10+, Gemini adapter 3.11+):
-
-```bash
-pip install "valueproof[claude]"
-```
-
-One name for everything: `pip install valueproof`, `import valueproof`, `valueproof compare`. (Until version 0.3 the package was called `ai-mixed-model-cost-optimization`; the old name still installs and pulls in `valueproof`.)
-
-The core has no dependencies and works with any provider: a model is just a function `prompt -> ModelResult`. Adapters come as extras: `[claude]`, `[openai]`, `[gemini]` or `[all]`. For a local model, write a function with the same shape.
-
-**Test a change on your own requests** with one command — it runs every setup on every request, side by side, and prints cost (average and median), rescue rate, time, check failures and blind-review quality:
+## Test a change before you ship it
 
 ```bash
 valueproof init my_test.py                          # a starter test that runs straight away, with fake models
-valueproof compare my_test.py --live --estimate     # runs 2 requests for real, prints the projected bill
-valueproof compare my_test.py --live --max-spend 5  # the full test, stops starting new requests at $5
+valueproof compare my_test.py                       # offline, free
+valueproof compare my_test.py --live --estimate     # runs 2 requests for real and prints the projected bill
+valueproof compare my_test.py --live --max-spend 5  # the full test; stops starting new requests at $5
 ```
 
-If your test file names its levers, it prints the **lever ledger**: each lever against the setup it changes, your estimate from before the test, and a keep-or-drop verdict. After the table it lists **which check rule fired most often**, and **how good your eval checks are**: how many of the judge's hard failures they caught, how many they missed, and how many false alarms they raised. In our own support test the answer was sobering: the code checks caught 0 of 10 hard failures across four runs. You can also **rate candidate eval checks** before you build on one: with a policy check done by a cheap model, the one hard failure in that run was caught and fixed, for about twice the cost per reply. → [Support test](https://github.com/AndyJakob78/valueproof/blob/main/docs/support-test.md)
+`compare` runs every setup on every request in the same moment and prints:
 
-→ How to write `my_test.py`, plus a support-ticket demo that works without an API key: [examples/](https://github.com/AndyJakob78/valueproof/blob/main/examples/). The live Claude mode was run in the [support test](https://github.com/AndyJakob78/valueproof/blob/main/docs/support-test.md).
+- **cost per usable outcome**, average and median cost, time, and how often the frontier model ran
+- **blind-review quality**, with hard failures counted separately so no average can hide them
+- **check quality:** how many of the judge's hard failures each eval check caught, missed, and how many false alarms it raised
+- **the lever ledger:** each change against the setup it changes, your estimate written down before the test, and a keep-or-drop verdict
 
-**A second, smaller lever: lower effort on the strong model.** In the same test, running the rescuer at effort low instead of medium cost 24–25% less in two runs, with no measurable quality loss on the rescued tickets. Measured on short support replies only.
+To rate a new eval check on replies you already paid for, without running the models again: `--from-results results.json`.
 
-**3. Prove every change before you ship it.** Change one thing at a time. Run the old and new versions side by side on the same requests. Review quality blind: the reviewer never knows which setup wrote a result. Keep only what saves money *and* holds quality.
+**Blind review, two ways.** An LLM judge gets one answer at a time, in random order, never the setup's name. Give it the reference that defines "right"; without it, a judge can only tell whether an answer looks usable. Or review it yourself: every run writes `blind_review.csv` and a separate `blind_key.csv`.
 
-The test setup is an **eval**: a fixed set of real requests, checks in code and a blind review, built once and reused for every change. Without it you can't tell a saving from a quality loss.
+→ How to write `my_test.py`, and a demo that runs without an API key: [examples/](https://github.com/AndyJakob78/valueproof/tree/main/examples/) · The step-by-step method: [docs/method.md](https://github.com/AndyJakob78/valueproof/blob/main/docs/method.md)
 
-```mermaid
-flowchart LR
-    E["1. Build the eval<br/>real requests, checks in code,<br/>blind review"] --> L["2. Pick the next lever<br/>e.g. Scout & Rescue, lower effort"]
-    L --> T["3. Test it against today<br/>same requests, same moment<br/>valueproof compare"]
-    T --> D{"Cheaper AND<br/>quality holds?"}
-    D -- "yes: keep" --> L
-    D -- "no: drop" --> L
-    L -- "no levers left" --> S["4. Test all kept levers together,<br/>ship, keep measuring"]
-```
+## When it fits
 
-**How the blind review works.** `valueproof compare` supports two reviewers, and you can use both:
+It fits when your product sends many requests to a frontier model, most of them routine, and you can say what a usable answer is: support replies, data extraction, document summaries, search and research assistants, code review, code migration (does it compile, do the tests pass).
 
-- **LLM-as-judge:** you pass a `judge(case, text) -> Score` function. It gets one result at a time, in random order, and never the setup's name. Give it the reference that defines "right" (the policy, the fact sheet, the help article); without it a judge can only tell whether an answer looks usable, not whether it is correct.
-- **A person:** every run also writes `blind_review.csv` (the results, shuffled, no setup names) and `blind_key.csv` (which setup wrote which). Score the sheet, then map it back with the key.
-
-The rubric from our support test, as an example — four criteria, 0–10 each, plus one flag:
-
-| Criterion | The question |
-|---|---|
-| Policy correct | Does the reply follow the policy exactly, with no wrong rule? |
-| Solves | Does it answer every issue in the ticket and name the next step? |
-| Tone | Friendly, calm, fitting the customer's mood? |
-| Clarity | Short and clear? |
-| **Hard failure** (yes/no) | A wrong policy rule, a promise the policy doesn't allow, an invented order number, or no answer |
-
-Hard failures are counted separately, so no average can hide them. For scoring two results side by side as A and B by hand, see the [rubric template](https://github.com/AndyJakob78/valueproof/blob/main/templates/blind-review-rubric.md).
-
-The full flow, with the cost breakdown and the ledger: [method.md](https://github.com/AndyJakob78/valueproof/blob/main/docs/method.md#the-flow)
-
-→ The step-by-step method: [docs/method.md](https://github.com/AndyJakob78/valueproof/blob/main/docs/method.md) · Templates: [templates/](https://github.com/AndyJakob78/valueproof/blob/main/templates/)
+Be careful where a wrong answer carries legal, money or safety risk. Measure your eval check against a blind review first, or keep that step on the frontier model until the check catches the mistakes that matter.
 
 ## How this differs from other tools
 
-The technique is not new: a cheap model first and a strong one on failure is a well-known *LLM cascade* (see [FrugalGPT](https://github.com/stanford-futuredata/FrugalGPT)). What is less common is the workflow around it: prove the cut on your own traffic, one change at a time, and publish what failed.
-
 | Tool | What it does | How it relates |
 |---|---|---|
-| [RouteLLM](https://github.com/lm-sys/RouteLLM) | Trained routers that pick a model per request | A routing technique. You can test it against your setup with `valueproof compare`. |
-| [cascadeflow](https://github.com/lemony-ai/cascadeflow) | A cascading runtime for agents, with streaming and tool-call routing | A runtime for production. Test it here first. |
+| [RouteLLM](https://github.com/lm-sys/RouteLLM) | Trained routers that pick a model per request | A routing technique. Test it against your setup with `valueproof compare`. |
+| [cascadeflow](https://github.com/lemony-ai/cascadeflow) | A cascading runtime for agents | A runtime for production. Test it here first. |
 | [LiteLLM](https://github.com/BerriAI/litellm) | A gateway to 100+ model APIs | Infrastructure to call models. Works as the model behind a setup here. |
-| [promptfoo](https://github.com/promptfoo/promptfoo) | Broad testing of prompts, agents and RAG, plus red teaming | A general eval suite. This repo is narrower: one cost change at a time, judged by cost per outcome. |
+| [promptfoo](https://github.com/promptfoo/promptfoo) | Broad testing of prompts, agents and RAG | A general eval suite. This repo is narrower. |
 
-**Cost-first, not QA-first.** Eval suites such as promptfoo and Braintrust are built around quality regression and observability, and show cost alongside. Valueproof starts from the decision a product manager or CFO has to make: cost per usable outcome, with failed and rescued attempts counted, an estimate written down before the test, and a keep-or-drop lever ledger after it.
+**Cost-first, not QA-first.** Eval suites such as promptfoo and Braintrust are built around quality regression and observability, and show cost alongside. Valueproof starts from the decision a product manager or CFO has to make: cost per usable outcome, an estimate before the test, and a keep-or-drop verdict after it. Use it to get evidence on your own requests before you commit to a router or gateway.
 
-**Use this when** you want evidence on your own requests before you commit to a router or gateway — or to show that a cheaper setup really holds quality. **Use the others when** you need production routing at scale.
+## More
 
-## The full story
+- [Why this exists](https://github.com/AndyJakob78/valueproof/blob/main/docs/why.md): who it is for, cost per outcome vs value shipped, and real-world signals from 2026
+- [Support test](https://github.com/AndyJakob78/valueproof/blob/main/docs/support-test.md) · [Case study](https://github.com/AndyJakob78/valueproof/blob/main/docs/case-study.md) · [Game article test](https://github.com/AndyJakob78/valueproof/blob/main/docs/game-article-test.md) · [A chatbot estimate](https://github.com/AndyJakob78/valueproof/blob/main/docs/example-service-chatbot.md)
+- [Scout & Rescue in detail](https://github.com/AndyJakob78/valueproof/blob/main/docs/scout-and-rescue.md) · [Method](https://github.com/AndyJakob78/valueproof/blob/main/docs/method.md) · [Lessons](https://github.com/AndyJakob78/valueproof/blob/main/docs/lessons.md) · [Templates](https://github.com/AndyJakob78/valueproof/tree/main/templates/)
 
-We tested 12 cost-saving ideas one at a time, and **7 raised cost or lowered quality**. For example, a shorter prompt made the model search *more*.
+## Install
 
-→ [Case study](https://github.com/AndyJakob78/valueproof/blob/main/docs/case-study.md) · [Support test](https://github.com/AndyJakob78/valueproof/blob/main/docs/support-test.md) · [Game article test](https://github.com/AndyJakob78/valueproof/blob/main/docs/game-article-test.md) · [Scout & Rescue in detail](https://github.com/AndyJakob78/valueproof/blob/main/docs/scout-and-rescue.md) · [Lessons](https://github.com/AndyJakob78/valueproof/blob/main/docs/lessons.md)
+Version 0.6, early: the API may still change. Python 3.10+ (the Gemini adapter needs 3.11+). The core has no dependencies; a model is any function `prompt -> ModelResult`, so a local model works too. Adapters come as extras: `[claude]`, `[openai]`, `[gemini]`, `[all]`.
 
-## Terms used on this page
+The old package name `ai-mixed-model-cost-optimization` still installs and pulls in `valueproof`.
 
-- **Token:** the unit AI providers bill by — roughly a short word of text the model reads or writes.
-- **Lever:** one change that should lower cost, such as a smaller model or a shorter prompt. Each lever is tested on its own.
-- **Scout:** the cheap, fast model that tries first.
-- **Rescuer:** the strong model that runs only when an eval check rejects the scout's result.
-- **Eval check:** a rule in code that judges one answer at runtime (a code-based eval): is it empty, is a field missing, is the date too old? It decides whether the cheap answer is used or the rescuer runs. The pages here also call it a "check in code" or just "check".
-- **Check quality:** how well the eval checks agree with the blind review: caught, missed, false alarms.
-- **Full web search:** a search tool that filters the results with code before the model reads them. Fewer pages to read, but more steps.
-- **Simple web search:** a search tool that hands the raw results straight to the model. Fewer steps; the model reads everything it gets, which is cheap on a small model but expensive on a large one.
-- **Blind review:** a reviewer scores results on a fixed rubric without knowing which setup wrote them. The reviewer can be a model (LLM-as-judge) or a person.
-- **Eval:** the fixed test that decides whether a change is kept — real requests, checks in code and a blind review, run the same way every time.
-- **Outcome:** a request whose final result passed your checks and, if reviewed, had no hard failure — a result a user could rely on.
-- **Cost per outcome:** everything a setup spent, including failed and rescued attempts, divided by its outcomes. The number to compare.
-- **Typical (median):** the middle value — half the requests cost less, half more. Unlike the average, a few expensive outliers don't move it.
+## Terms
+
+- **LLM cascade / Scout & Rescue:** a cheap model (the scout) answers first; a frontier model (the rescuer) runs only when the answer fails an eval check.
+- **Eval check:** judges one answer at runtime and decides whether the rescuer runs. A rule in code, or a cheap model asked in plain language with a reference.
+- **Eval:** the fixed test before shipping: real requests, the eval checks, and a blind review, run the same way for every change.
+- **Blind review:** answers scored on a fixed rubric without knowing which setup wrote them, by an LLM judge or a person.
+- **Hard failure / serious mistake:** a wrong policy rule, a promise the policy doesn't allow, an invented fact, or no answer.
+- **Usable outcome:** a final answer that passed the checks and had no hard failure.
+- **Cost per usable outcome:** everything a setup spent, failed and rescued attempts included, divided by its usable outcomes.
+- **Lever:** one change meant to lower cost, tested on its own.
 
 ## About
 
-Built from a real cost-reduction project on a live language-learning app. Engineering, testing and blind reviews were done with an AI coding assistant (Claude); a product owner made every keep-or-drop decision from the results.
+Built from a real cost-reduction project on a live language-learning app. Engineering, testing and blind reviews were done with an AI coding assistant (Claude); a product owner made every keep-or-drop decision and did the human blind checks.
 
-Text: [CC BY 4.0](https://github.com/AndyJakob78/valueproof/blob/main/LICENSE). Code in [src/](https://github.com/AndyJakob78/valueproof/blob/main/src/) and [examples/](https://github.com/AndyJakob78/valueproof/blob/main/examples/): [MIT](https://github.com/AndyJakob78/valueproof/blob/main/LICENSE-CODE). Use it, adapt it, credit it.
+Text: [CC BY 4.0](https://github.com/AndyJakob78/valueproof/blob/main/LICENSE). Code in [src/](https://github.com/AndyJakob78/valueproof/tree/main/src/) and [examples/](https://github.com/AndyJakob78/valueproof/tree/main/examples/): [MIT](https://github.com/AndyJakob78/valueproof/blob/main/LICENSE-CODE).
