@@ -2,7 +2,7 @@
 
 A live test of the Scout & Rescue code in [examples/](../examples/), against the strong model alone, on made-up support tickets. Five runs, November 2026.
 
-**In one sentence:** Scout & Rescue cost **81–92% less** than Claude Opus 5.5 alone and scored **2–6% lower** in a blind review — but on this task **almost all of the saving comes from the cheap model itself**: with no rescuer at all, it was nearly as good. The rescuer ran on 2 of 40 tickets. Expect some loss of quality either way: the cheap model's replies are good, but not always as good as the strong model's, and a few wrong policy statements got through.
+**In one sentence:** Scout & Rescue cost **81–92% less** than Claude Opus 5.5 alone and scored **2–6% lower** in a blind review — but on this task **almost all of the saving comes from the cheap model itself**: with no rescuer at all, it was nearly as good. The rescuer ran on 2 of 40 tickets. Expect some loss of quality either way: the cheap model's replies are good, but not always as good as the strong model's, and a few wrong policy statements got through. **A person checking blind was stricter than the LLM judge:** with code checks only, they preferred Opus's reply on 16 of 20 tickets; with the added policy check, the cheap setup was as good or better on 13 of 20 (section 5).
 
 ## The setup
 
@@ -138,7 +138,28 @@ What it shows:
 
 **Not tested:** prompt caching (the test policy is too short for it to take effect) and the combination we would ship next — Sonnet as rescuer, no cite rule, the sharper prompt, policy check on every ticket.
 
-### 5. Scout & Rescue vs. the strong model alone: much cheaper, a little lower quality
+### 5. A person reviewed it blind: code checks alone are not enough; with the policy check, it holds
+
+All quality numbers above come from an LLM judge. To check the judge, the product owner reviewed 20 of the tickets blind, twice: each page showed the cheap setup's reply and Opus medium alone's reply to the same ticket, A and B shuffled, setups hidden. The task: pick the reply you would rather send, and mark real mistakes.
+
+| | Check 1: code checks only (run 2) | Check 2: code checks + policy check (run 4) |
+|---|---|---|
+| Cheap setup preferred | 3 | **6** |
+| Equal | 1 | **7** |
+| Opus alone preferred | **16** | 7 |
+| Real mistakes in the cheap setup's replies | 3 | 2 |
+| Real mistakes in Opus's replies | 0 | 0 |
+
+What it shows:
+
+- **With code checks only, the judge's "2–6% lower" understated the gap.** A person preferred the strong model's reply on 16 of 20 tickets. A small gap that shows on almost every ticket loses almost every pair.
+- **The judge and the person disagreed on which replies had real mistakes.** In check 1 the person marked 3, the judge 2; only one was marked by both. Two of the person's three (assumed facts, a carrier trace for a parcel that had already arrived) got lower scores from the judge but no hard-failure flag.
+- **The policy check closes most of the gap.** With it, the cheap setup was as good or better on 13 of 20 tickets. The reply that assumed facts was sent to the rescuer this time.
+- **It missed one kind of mistake twice:** offering a carrier trace for a parcel that has already arrived. Neither the policy check nor the judge caught it. That is the next line for whoever owns the check to add.
+
+**Read with care:** one reviewer, 20 tickets, and the two checks used replies from different runs (the tickets are the same, the texts are not). It shows the direction, not exact rates. Per-pair verdicts: [human check](data/support-test-human-check.json).
+
+### 6. Scout & Rescue vs. the strong model alone: much cheaper, a little lower quality
 
 | | Scout & Rescue | Opus medium alone |
 |---|---|---|
@@ -155,9 +176,9 @@ What it shows:
 
 **Even the harder tickets rarely triggered the rescuer** (2 of 20). The cheap model passes the checks on tricky cases too. So the lever for quality is **the checks**, not the rescuer: a reply is only rescued if a check catches its mistake.
 
-**Read with care:** the reviewer is Opus 5.5, the same model as the "alone" setups, and may favour its own style — the real gap may be smaller. Results vary between runs: the rescuer ran on 4 of the 40 tickets in run 2 and on 2 in run 3, and the cost saving ranged from 81% to 92%.
+**Read with care:** the reviewer is Opus 5.5, the same model as the "alone" setups, and may favour its own style. The human check in section 5 found the gap larger, not smaller, for code checks alone. Results vary between runs: the rescuer ran on 4 of the 40 tickets in run 2 and on 2 in run 3, and the cost saving ranged from 81% to 92%.
 
-### 6. Rescuer at low effort: keep it (for tasks like this)
+### 7. Rescuer at low effort: keep it (for tasks like this)
 
 - **24–25% cheaper in both runs**, with the same number of rescues.
 - Quality on the 7 rescued tickets across both runs: 247 vs. 245 for medium effort.
@@ -165,7 +186,7 @@ What it shows:
 
 **Limits:** only 7 rescued tickets, and these are short replies. Effort may matter more for long reasoning — test it on your task.
 
-### 7. Handoff: rejected
+### 8. Handoff: rejected
 
 Giving the rescuer the scout's rejected draft and the reason **cost 12% more** (it reads more text) and scored the same or 1 point lower on the 3 rescued tickets. It stays in the code as an option, off by default.
 

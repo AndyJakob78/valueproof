@@ -1,0 +1,418 @@
+{
+ "reviewer": "the product owner, blind (setups hidden, A/B shuffled per pair), November 2026",
+ "check_1": {
+  "cheap_setup": "Scout & Rescue, code checks only (run 2)",
+  "pairs": [
+   {
+    "pair": 1,
+    "ticket": "Order #48213 arrived with a cracked screen. Can I get a replacement?",
+    "case": 0,
+    "run": 2,
+    "A": "Opus medium alone",
+    "B": "cheap setup",
+    "preferred": "Opus medium alone",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 2,
+    "ticket": "I'd like to return the jacket from order 30551, never worn, still has tags.",
+    "case": 2,
+    "run": 2,
+    "A": "cheap setup",
+    "B": "Opus medium alone",
+    "preferred": "Opus medium alone",
+    "real_mistake_in": "cheap setup",
+    "note": "assumed original packaging and within 30 days"
+   },
+   {
+    "pair": 3,
+    "ticket": "Hi, I was charged twice for order 50911. Please fix.",
+    "case": 3,
+    "run": 2,
+    "A": "cheap setup",
+    "B": "Opus medium alone",
+    "preferred": "Opus medium alone",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 4,
+    "ticket": "Order 81007 still not here after 8 working days. What now?",
+    "case": 6,
+    "run": 2,
+    "A": "Opus medium alone",
+    "B": "cheap setup",
+    "preferred": "Opus medium alone",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 5,
+    "ticket": "How do I return shoes from order 44120? They are too small.",
+    "case": 7,
+    "run": 2,
+    "A": "Opus medium alone",
+    "B": "cheap setup",
+    "preferred": "Opus medium alone",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 6,
+    "ticket": "Order 70316 - the blender doesn't turn on at all. I want my money back.",
+    "case": 9,
+    "run": 2,
+    "A": "Opus medium alone",
+    "B": "cheap setup",
+    "preferred": "Opus medium alone",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 7,
+    "ticket": "If the double charge on order 92010 isn't refunded I'll file a chargeback with my bank.",
+    "case": 14,
+    "run": 2,
+    "A": "Opus medium alone",
+    "B": "cheap setup",
+    "preferred": "Opus medium alone",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 8,
+    "ticket": "The kettle from order 58822 is faulty. Do I really have to pay for the return shipping?",
+    "case": 15,
+    "run": 2,
+    "A": "Opus medium alone",
+    "B": "cheap setup",
+    "preferred": "cheap setup",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 9,
+    "ticket": "Hello, my package hasn't come and I was billed twice. Help.",
+    "case": 19,
+    "run": 2,
+    "A": "cheap setup",
+    "B": "Opus medium alone",
+    "preferred": "Opus medium alone",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 10,
+    "ticket": "Order 55120 arrived 11 working days late AND the lamp inside is broken. Also the invoice still has our old VAT number.",
+    "case": 20,
+    "run": 2,
+    "A": "cheap setup",
+    "B": "Opus medium alone",
+    "preferred": "Opus medium alone",
+    "real_mistake_in": "cheap setup",
+    "note": "offered a carrier trace for a parcel that had already arrived"
+   },
+   {
+    "pair": 11,
+    "ticket": "Third email!! The return for order 73001 is still not refunded. I'm contacting my lawyer.",
+    "case": 21,
+    "run": 2,
+    "A": "Opus medium alone",
+    "B": "cheap setup",
+    "preferred": "Opus medium alone",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 12,
+    "ticket": "Please put VAT number DE123456789 and company name Bergwerk AG on the invoice for order 64410.",
+    "case": 26,
+    "run": 2,
+    "A": "cheap setup",
+    "B": "Opus medium alone",
+    "preferred": "equal",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 13,
+    "ticket": "Order 37702 came in the wrong color and with a dent. Give me a 10% voucher or I return everything.",
+    "case": 28,
+    "run": 2,
+    "A": "cheap setup",
+    "B": "Opus medium alone",
+    "preferred": "cheap setup",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 14,
+    "ticket": "This is my third message about the double charge on order 81235.",
+    "case": 29,
+    "run": 2,
+    "A": "Opus medium alone",
+    "B": "cheap setup",
+    "preferred": "Opus medium alone",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 15,
+    "ticket": "The invoice for order 29081 shows the wrong amount, and I was charged twice.",
+    "case": 31,
+    "run": 2,
+    "A": "Opus medium alone",
+    "B": "cheap setup",
+    "preferred": "Opus medium alone",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 16,
+    "ticket": "Order 61102 is 12 working days late now. I want my shipping cost back.",
+    "case": 32,
+    "run": 2,
+    "A": "Opus medium alone",
+    "B": "cheap setup",
+    "preferred": "Opus medium alone",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 17,
+    "ticket": "Please take back order 47755. It's unused, but I threw away the box.",
+    "case": 33,
+    "run": 2,
+    "A": "cheap setup",
+    "B": "Opus medium alone",
+    "preferred": "Opus medium alone",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 18,
+    "ticket": "Order 30418: the drill is faulty. If I have to pay for the return shipping, I'll take you to court.",
+    "case": 34,
+    "run": 2,
+    "A": "Opus medium alone",
+    "B": "cheap setup",
+    "preferred": "cheap setup",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 19,
+    "ticket": "Can I get a discount on my next order because order 70721 was late?",
+    "case": 37,
+    "run": 2,
+    "A": "cheap setup",
+    "B": "Opus medium alone",
+    "preferred": "Opus medium alone",
+    "real_mistake_in": "cheap setup",
+    "note": "offered a carrier trace for a parcel that had already arrived"
+   },
+   {
+    "pair": 20,
+    "ticket": "Order 26114 must arrive by Saturday or I cancel. Can you promise that?",
+    "case": 39,
+    "run": 2,
+    "A": "cheap setup",
+    "B": "Opus medium alone",
+    "preferred": "Opus medium alone",
+    "real_mistake_in": null
+   }
+  ]
+ },
+ "check_2": {
+  "cheap_setup": "Scout & Rescue + policy check by Haiku (run 4)",
+  "pairs": [
+   {
+    "pair": 1,
+    "ticket": "Order #48213 arrived with a cracked screen. Can I get a replacement?",
+    "case": 0,
+    "run": 4,
+    "A": "Opus medium alone",
+    "B": "cheap setup",
+    "preferred": "Opus medium alone",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 2,
+    "ticket": "I'd like to return the jacket from order 30551, never worn, still has tags.",
+    "case": 2,
+    "run": 4,
+    "A": "cheap setup",
+    "B": "Opus medium alone",
+    "preferred": "equal",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 3,
+    "ticket": "Hi, I was charged twice for order 50911. Please fix.",
+    "case": 3,
+    "run": 4,
+    "A": "Opus medium alone",
+    "B": "cheap setup",
+    "preferred": "Opus medium alone",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 4,
+    "ticket": "Order 81007 still not here after 8 working days. What now?",
+    "case": 6,
+    "run": 4,
+    "A": "cheap setup",
+    "B": "Opus medium alone",
+    "preferred": "cheap setup",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 5,
+    "ticket": "How do I return shoes from order 44120? They are too small.",
+    "case": 7,
+    "run": 4,
+    "A": "Opus medium alone",
+    "B": "cheap setup",
+    "preferred": "Opus medium alone",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 6,
+    "ticket": "Order 70316 - the blender doesn't turn on at all. I want my money back.",
+    "case": 9,
+    "run": 4,
+    "A": "cheap setup",
+    "B": "Opus medium alone",
+    "preferred": "cheap setup",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 7,
+    "ticket": "If the double charge on order 92010 isn't refunded I'll file a chargeback with my bank.",
+    "case": 14,
+    "run": 4,
+    "A": "cheap setup",
+    "B": "Opus medium alone",
+    "preferred": "equal",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 8,
+    "ticket": "The kettle from order 58822 is faulty. Do I really have to pay for the return shipping?",
+    "case": 15,
+    "run": 4,
+    "A": "Opus medium alone",
+    "B": "cheap setup",
+    "preferred": "cheap setup",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 9,
+    "ticket": "Hello, my package hasn't come and I was billed twice. Help.",
+    "case": 19,
+    "run": 4,
+    "A": "Opus medium alone",
+    "B": "cheap setup",
+    "preferred": "equal",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 10,
+    "ticket": "Order 55120 arrived 11 working days late AND the lamp inside is broken. Also the invoice still has our old VAT number.",
+    "case": 20,
+    "run": 4,
+    "A": "Opus medium alone",
+    "B": "cheap setup",
+    "preferred": "Opus medium alone",
+    "real_mistake_in": "cheap setup",
+    "note": "opened a carrier trace for a parcel that had already arrived"
+   },
+   {
+    "pair": 11,
+    "ticket": "Third email!! The return for order 73001 is still not refunded. I'm contacting my lawyer.",
+    "case": 21,
+    "run": 4,
+    "A": "Opus medium alone",
+    "B": "cheap setup",
+    "preferred": "equal",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 12,
+    "ticket": "Please put VAT number DE123456789 and company name Bergwerk AG on the invoice for order 64410.",
+    "case": 26,
+    "run": 4,
+    "A": "Opus medium alone",
+    "B": "cheap setup",
+    "preferred": "cheap setup",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 13,
+    "ticket": "Order 37702 came in the wrong color and with a dent. Give me a 10% voucher or I return everything.",
+    "case": 28,
+    "run": 4,
+    "A": "cheap setup",
+    "B": "Opus medium alone",
+    "preferred": "equal",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 14,
+    "ticket": "This is my third message about the double charge on order 81235.",
+    "case": 29,
+    "run": 4,
+    "A": "cheap setup",
+    "B": "Opus medium alone",
+    "preferred": "cheap setup",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 15,
+    "ticket": "The invoice for order 29081 shows the wrong amount, and I was charged twice.",
+    "case": 31,
+    "run": 4,
+    "A": "cheap setup",
+    "B": "Opus medium alone",
+    "preferred": "equal",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 16,
+    "ticket": "Order 61102 is 12 working days late now. I want my shipping cost back.",
+    "case": 32,
+    "run": 4,
+    "A": "Opus medium alone",
+    "B": "cheap setup",
+    "preferred": "equal",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 17,
+    "ticket": "Please take back order 47755. It's unused, but I threw away the box.",
+    "case": 33,
+    "run": 4,
+    "A": "Opus medium alone",
+    "B": "cheap setup",
+    "preferred": "Opus medium alone",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 18,
+    "ticket": "Order 30418: the drill is faulty. If I have to pay for the return shipping, I'll take you to court.",
+    "case": 34,
+    "run": 4,
+    "A": "cheap setup",
+    "B": "Opus medium alone",
+    "preferred": "cheap setup",
+    "real_mistake_in": null
+   },
+   {
+    "pair": 19,
+    "ticket": "Can I get a discount on my next order because order 70721 was late?",
+    "case": 37,
+    "run": 4,
+    "A": "cheap setup",
+    "B": "Opus medium alone",
+    "preferred": "Opus medium alone",
+    "real_mistake_in": "cheap setup",
+    "note": "contradicts itself on whether the parcel arrived, and mentions a carrier trace"
+   },
+   {
+    "pair": 20,
+    "ticket": "Order 26114 must arrive by Saturday or I cancel. Can you promise that?",
+    "case": 39,
+    "run": 4,
+    "A": "cheap setup",
+    "B": "Opus medium alone",
+    "preferred": "Opus medium alone",
+    "real_mistake_in": null
+   }
+  ]
+ }
+}
