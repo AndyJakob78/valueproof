@@ -4,7 +4,7 @@
 
 **Prove an AI cost cut on your own traffic before you ship it. Let cheap and strong models work together, and measure cost per outcome — not cost per token.**
 
-It also tells you whether your eval checks catch the serious mistakes. Built for teams that don't have a full eval stack yet.
+A lightweight, opinionated FinOps playbook and proof tool for teams that still default to frontier models and need hard evidence to justify a cheaper setup. It also tells you whether your eval checks catch the serious mistakes.
 
 **In 30 seconds:**
 - **What it is:** a method and a small Python tool that cuts what AI features cost on live user traffic, and proves output quality before you ship the change. A cheap model does the work first; a strong model steps in only when a check in code rejects the result (*Scout & Rescue*). Every change is tested side by side against your current setup on your own requests, with a blind quality review.
@@ -257,6 +257,8 @@ The technique is not new: a cheap model first and a strong one on failure is a w
 | [cascadeflow](https://github.com/lemony-ai/cascadeflow) | A cascading runtime for agents, with streaming and tool-call routing | A runtime for production. Test it here first. |
 | [LiteLLM](https://github.com/BerriAI/litellm) | A gateway to 100+ model APIs | Infrastructure to call models. Works as the model behind a setup here. |
 | [promptfoo](https://github.com/promptfoo/promptfoo) | Broad testing of prompts, agents and RAG, plus red teaming | A general eval suite. This repo is narrower: one cost change at a time, judged by cost per outcome. |
+
+**Cost-first, not QA-first.** Eval suites such as promptfoo and Braintrust are built around quality regression and observability, and show cost alongside. Valueproof starts from the decision a product manager or CFO has to make: cost per usable outcome, with failed and rescued attempts counted, an estimate written down before the test, and a keep-or-drop lever ledger after it.
 
 **Use this when** you want evidence on your own requests before you commit to a router or gateway — or to show that a cheaper setup really holds quality. **Use the others when** you need production routing at scale.
 
