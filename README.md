@@ -11,9 +11,10 @@ The same cheap model answered 40 support tickets twice, with two different eval 
 | **Replies as good as the frontier model's** (blind human review, 20 tickets) | ❌ **4 of 20** | ✅ **13 of 20** |
 | **Serious mistakes that reached the customer** | 3 of 20 | 2 of 20 |
 | **Cost vs. the frontier model alone** | 82–92% cheaper | 69–73% cheaper |
+| **Response time vs. the frontier model alone** | 22–35% faster | 10–35% slower: the check is one more call on every reply |
 | **Verdict** | Biggest saving, worse outcomes: less value | **Higher value, for a somewhat smaller saving** |
 
-Claude Haiku 5.5 answers first, Claude Opus 5.5 steps in; compared with Opus 5.5 alone. **So choose the eval check first, then the model.**
+Claude Haiku 5.5 answers first, Claude Opus 5.5 steps in; compared with Opus 5.5 alone. The slower replies are fixable: with a mid-size model as the rescuer, the setup with the check was as fast as Opus alone and 87% cheaper (one run, not yet checked by a person). **So choose the eval check first, then the model.**
 
 Made-up tickets, one human reviewer: read it as a direction, not a rule. [Full results](#full-results)
 
@@ -59,11 +60,11 @@ A playbook and a small open-source Python package:
 
 **Support replies:** 40 made-up tickets, five runs, against Claude Opus 5.5 alone.
 
-| Setup | As good as Opus (blind human review, 20 tickets) | Serious mistakes | Quality, LLM judge | Cost per usable reply |
-|---|---|---|---|---|
-| Rules in code as the eval check | ❌ 4 of 20 | the rules caught 0 of 10 (four runs) | 2–6% lower | 82–92% cheaper |
-| + an eval check in plain language | ✅ 13 of 20 | caught the one in its run; 2 of 20 got past it in the human review | 3.5–4.9% lower | 69–73% cheaper |
-| + a mid-size model as the rescuer (one run) | not checked by a person | none occurred in that run | 5% lower | 87% cheaper |
+| Setup | As good as Opus (blind human review, 20 tickets) | Serious mistakes | Quality, LLM judge | Cost per usable reply | Response time vs. Opus alone |
+|---|---|---|---|---|---|
+| Rules in code as the eval check | ❌ 4 of 20 | the rules caught 0 of 10 (four runs) | 2–6% lower | 82–92% cheaper | 22–35% faster |
+| + an eval check in plain language | ✅ 13 of 20 | caught the one in its run; 2 of 20 got past it in the human review | 3.5–4.9% lower | 69–73% cheaper | 10–35% slower |
+| + a mid-size model as the rescuer (one run) | not checked by a person | none occurred in that run | 5% lower | 87% cheaper | about as fast |
 
 - **The LLM judge looked kinder than the person.** "2–6% lower" sounded close; a person preferred the frontier model almost every time. The judge and the person agreed on only one of the three real mistakes the person found with rules in code alone. Check the judge too.
 - **The mistake that got past the check twice:** offering a carrier trace for a parcel that had already arrived. That is the next line for the PM to add to the check.
