@@ -13,7 +13,7 @@ Valueproof is a playbook and a small open-source Python package that connects bo
 
 - **An LLM cascade.** A cheap model answers first. A frontier model steps in only when the answer fails an eval check at runtime. The technique is not new ([FrugalGPT](https://github.com/stanford-futuredata/FrugalGPT)); this repo calls it *Scout & Rescue*.
 - **Choose the eval check first, then the model.** In our test, the check decided the quality more than the choice of model did.
-- **The eval check is owned by product.** Rules in code catch form (empty, missing order number). An eval check in plain language catches substance: a cheap model reads the answer against the source that defines "right", such as the refund policy, the price list or the tone-of-voice guide.
+- **The eval check is owned by product.** It is the acceptance criteria, written so they run on every answer at runtime instead of waiting for a user acceptance test. [What that looks like](#what-an-eval-check-looks-like).
 - **Every change is tested before it ships,** on a fixed set of your own real requests (taken from your logs), against what you run today, with a blind review by an LLM judge or a person.
 - **The eval check itself is measured:** what it caught, what it missed, how many false alarms, what it cost.
 - **The metric is cost per usable outcome,** with failed and rescued attempts counted.
@@ -43,6 +43,23 @@ What it shows:
 **A live language-learning app:** the step that searches the web for a news story ran on Claude Sonnet 5.5 for every lesson, at 9.7 ¢ per article. With Haiku first and Sonnet only when a code check finds no usable or only an old story, it cost **4.6–7.7 ¢** across runs. An LLM judge scored 18 articles 472 vs 434 for the cheaper setup. A person compared 14 German article pairs blind: 6 for the cheaper search, 7 for the old one, 1 equal, which is a tie. Here the cheap model only finds the story; a strong model still writes the lesson. → [Case study](https://github.com/AndyJakob78/valueproof/blob/main/docs/case-study.md)
 
 **Twelve cost ideas, tested one at a time:** 7 made things worse or saved nothing. A shorter prompt made the model search *more*. → [Lessons](https://github.com/AndyJakob78/valueproof/blob/main/docs/lessons.md)
+
+## What an eval check looks like
+
+The product manager names the source that defines "right" for this task. From it come two kinds of check, and most tasks need both:
+
+- **Rules in code** for everything you can test exactly: a field is there, a number matches, a value is on an allowed list. Free and instant.
+- **A check in plain language** for everything that needs judgement: a cheap model gets the answer and the source, and answers "does this follow it?" with a reason. It costs one more call.
+
+| The source that defines "right" | Rules in code | Check in plain language |
+|---|---|---|
+| A **refund policy** (support replies) | The order number is mentioned; no voucher or exact date is promised | Is the policy applied correctly to *this* ticket? Does the reply assume facts the ticket doesn't give? |
+| A **price list** | Every price in the answer matches the list | Does the answer suggest a discount or deal that doesn't exist? |
+| What makes a **good sports article** | Score, team names and scorers match the match data | Is the story of the match told correctly? Does it invent quotes or events? |
+| A **tone-of-voice guide** | No word from the banned list; length within limits | Does it sound like the brand: calm, friendly, no blame on the customer? |
+| A **design principle or checkout design document** (when AI writes screens or copy) | Required fields present; button labels from the allowed set; price shown with currency | Does the flow follow the principle, e.g. "no surprise costs at the last step"? |
+
+Start with the rules in code; they cost nothing. Add the check in plain language where a wrong answer is not acceptable, and measure both against a blind review before you rely on them. In our support test, rules in code alone caught none of the serious mistakes; the added check in plain language closed most of the gap.
 
 ## Quick start
 
