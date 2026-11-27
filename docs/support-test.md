@@ -111,6 +111,8 @@ What it shows:
 
 **Read with care:** this rests on **one** hard failure in 92 replies. It shows the direction, not a rate. Whether twice the cost is worth it depends on what a wrong statement costs you: for a refund or legal answer, likely yes; for a routine reply, likely not.
 
+**Run 5 repeated this setup:** 0.282 ¢ per outcome against 0.921 ¢ for Opus alone (69% cheaper), quality 4.9% lower, again no hard failure. No setup had a hard failure in that run, so it confirms the cost, not the catch.
+
 ### 4. Making it cheaper and faster: the lever ledger
 
 The policy check doubled the cost and the time. Run 5 tested five ways to get that back, one lever at a time against "Scout & Rescue + policy check", each with an estimate written down before the run. `valueproof compare` prints this ledger itself (since 0.6):
