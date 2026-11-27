@@ -84,17 +84,30 @@ pip install "valueproof[claude]"      # or [openai], [gemini], [all]
 from valueproof import scout_and_rescue
 from valueproof.claude import claude
 
-ticket = "Where is my order 48213?"
+POLICY = open("refund_policy.md").read()          # the source that defines "right"
+ticket = "Order 48213 arrived yesterday, but the box is damaged."
+checker = claude("claude-haiku-5-5")                # a cheap model reads each reply against the policy
+
+def check(reply):
+    if "48213" not in reply:                        # rule in code: free and instant
+        return "order number missing"
+    verdict = checker(                              # check in plain language: one more cheap call
+        f"Policy:\n{POLICY}\n\nTicket:\n{ticket}\n\nReply:\n{reply}\n\n"
+        "Does the reply apply the policy correctly to this ticket, without assuming facts "
+        "the ticket doesn't give? Answer OK, or NO and the reason."
+    ).text
+    return None if verdict.strip().startswith("OK") else verdict
+
 out = scout_and_rescue(
-    "Reply to this support ticket: " + ticket,
-    scout=claude("claude-haiku-5-5"),      # the cheap model answers first
-    rescue=claude("claude-opus-5-5"),      # the frontier model runs only if the check fails
-    check=lambda text: None if "48213" in text else "order number missing",
+    f"Reply to this support ticket, following this policy:\n{POLICY}\n\nTicket: {ticket}",
+    scout=claude("claude-haiku-5-5"),               # the cheap model answers first
+    rescue=claude("claude-opus-5-5"),               # the frontier model runs only if the check fails
+    check=check,
 )
-print(out.path, out.cost_usd)              # "scout" or "rescue", and what it cost
+print(out.path, out.cost_usd)                       # "scout" or "rescue", and what the answers cost
 ```
 
-A check returns `None` when the answer is fine, or a reason when it is not. It can be a rule in code, as here, or a call to a cheap model with your policy; see the [support test example](https://github.com/AndyJakob78/valueproof/blob/main/examples/test_levers_support.py).
+A check returns `None` when the answer is fine, or a reason when it is not. Start with the rules in code, and add the check in plain language where a wrong answer is not acceptable. `out.cost_usd` covers the answers; the check's own cost comes on top (about 0.02 ¢ per reply in our test). The [support test example](https://github.com/AndyJakob78/valueproof/blob/main/examples/test_levers_support.py) counts it, and caches it.
 
 ## Test a change before you ship it
 
