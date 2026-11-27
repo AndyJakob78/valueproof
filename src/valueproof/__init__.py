@@ -15,7 +15,7 @@ from .lever_runner import (Report, Run, Score, check_quality, estimate, is_outco
 from .pipeline import RunResult, Step, StepLog, run_pipeline
 from .scout_rescue import Check, Model, ModelResult, Outcome, handoff_prompt, scout_and_rescue
 
-__version__ = "0.6.0"
+__version__ = "0.6.1"
 
 __all__ = [
     "Check", "Model", "ModelResult", "Outcome", "handoff_prompt", "scout_and_rescue",

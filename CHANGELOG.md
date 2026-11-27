@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.6.1
+No code changes. The README is rewritten so PyPI shows the current version:
+- It leads with the outcome: in a blind human review, the same cheap model was as good as the frontier model on 4 of 20 tickets with rules in code only, and on 13 of 20 with the PM's acceptance criteria as a check in plain language.
+- New section: acceptance criteria that run on every answer, with use cases.
+- The quick start shows a rule in code and a check in plain language.
+- Background moved to docs/why.md. The support test and the case study have the human blind checks.
+
 ## 0.6.0
 - **Check quality** in `valueproof compare`: when a judge ran, the output shows how the eval checks did against it, over every distinct reply: hard failures caught and missed, false alarms, and how many clearly weaker replies a check flagged. Also as `check_quality(report, setups)`.
 - **Lever ledger**: add `"levers": {setup: {"baseline": other_setup, "estimate": "..."}}` to your test file and `valueproof compare` prints each lever against the setup it changes, with your estimate and a keep-or-drop verdict, and writes `ledger.md`. Also as `lever_ledger(...)`.

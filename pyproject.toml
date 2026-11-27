@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "valueproof"
-version = "0.6.0"
+version = "0.6.1"
 description = "Prove an AI cost cut on your own traffic before you ship it: cheap and strong models working together (Scout & Rescue), measured by cost per outcome with a blind quality review."
 readme = "README.md"
 requires-python = ">=3.10"
