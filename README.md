@@ -51,13 +51,14 @@ The product manager names the source that defines "right" for this task. From it
 - **Rules in code** for everything you can test exactly: a field is there, a number matches, a value is on an allowed list. Free and instant.
 - **A check in plain language** for everything that needs judgement: a cheap model gets the answer and the source, and answers "does this follow it?" with a reason. It costs one more call.
 
-| The source that defines "right" | Rules in code | Check in plain language |
-|---|---|---|
-| A **refund policy** (support replies) | The order number is mentioned; no voucher or exact date is promised | Is the policy applied correctly to *this* ticket? Does the reply assume facts the ticket doesn't give? |
-| A **price list** | Every price in the answer matches the list | Does the answer suggest a discount or deal that doesn't exist? |
-| What makes a **good sports article** | Score, team names and scorers match the match data | Is the story of the match told correctly? Does it invent quotes or events? |
-| A **tone-of-voice guide** | No word from the banned list; length within limits | Does it sound like the brand: calm, friendly, no blame on the customer? |
-| A **design principle or checkout design document** (when AI writes screens or copy) | Required fields present; button labels from the allowed set; price shown with currency | Does the flow follow the principle, e.g. "no surprise costs at the last step"? |
+| Use case (what the AI does) | The source that defines "right" | Rules in code | Check in plain language |
+|---|---|---|---|
+| A **support chatbot** answers customer tickets | The refund and delivery policy | The order number from the ticket is in the reply; no voucher is offered (the policy forbids them) | Does the reply apply the right rule to *this* case? Example from our test: it offered a carrier trace for a parcel the customer had already received. |
+| A **shop assistant** answers "what does this cost?" | The price list | Every price in the reply equals the list price for that product | Does it promise a discount, bundle or free shipping that the price list doesn't offer? |
+| An app **writes a match report** after every game | The match data, and what makes a good sports article | Score, team names and scorers match the match data | Is the match told correctly? Does it invent quotes or events? |
+| An AI **writes product descriptions** for a brand | The tone-of-voice guide | No word from the banned list; length within limits | Does it sound like the brand: calm, friendly, no exaggerated claims? |
+| An **AI app builder generates a checkout page** for a shop | The checkout design document and its principles | Address and payment fields are present; prices show a currency; button labels come from the allowed set | Does the flow follow "no surprise costs at the last step": are shipping costs shown before the final button? |
+| A **car service assistant** answers drivers' questions about a warning light | The service manual and the recall list for that model | The model and the warning code exist in the manual; any part number exists in the parts catalogue | Does the advice match the manual for this warning? Above all: does it ever say "keep driving" where the manual says "stop"? |
 
 Start with the rules in code; they cost nothing. Add the check in plain language where a wrong answer is not acceptable, and measure both against a blind review before you rely on them. In our support test, rules in code alone caught none of the serious mistakes; the added check in plain language closed most of the gap.
 
