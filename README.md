@@ -4,6 +4,8 @@
 
 **Prove an AI cost cut on your own traffic before you ship it. Let cheap and strong models work together, and measure cost per outcome — not cost per token.**
 
+It also tells you whether your eval checks catch the serious mistakes. Built for teams that don't have a full eval stack yet.
+
 **In 30 seconds:**
 - **What it is:** a method and a small Python tool that cuts what AI features cost on live user traffic, and proves output quality before you ship the change. A cheap model does the work first; a strong model steps in only when a check in code rejects the result (*Scout & Rescue*). Every change is tested side by side against your current setup on your own requests, with a blind quality review.
 - **What we measured:** on a live app's web-search step, cost per article fell from 9.7 ¢ to 4.6–7.7 ¢, and quality held in a blind review. On 40 support tickets, a usable reply cost 82–92% less than with Claude Opus 5.5 alone, over three runs.
